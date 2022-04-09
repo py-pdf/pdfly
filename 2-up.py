@@ -6,8 +6,9 @@ Pairs of two pages will be put on one page (left and right)
 usage: python 2-up.py input_file output_file
 """
 
-from PyPDF2 import PdfFileWriter, PdfFileReader
 import sys
+
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
 
 def main():

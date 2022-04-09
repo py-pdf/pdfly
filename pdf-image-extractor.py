@@ -6,6 +6,7 @@ http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-resam
 """
 
 import sys
+
 import PyPDF2
 from PIL import Image
 
