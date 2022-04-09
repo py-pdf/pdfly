@@ -17,39 +17,39 @@ if len(sys.argv) != 2:
 pdf = sys.argv[1]
 
 if __name__ == "__main__":
-    input1 = PyPDF2.PdfFileReader(open(pdf, "rb"))
-    page0 = input1.getPage(30)
+    reader = PyPDF2.PdfFileReader(open(pdf, "rb"))
+    page0 = reader.pages[30]
 
     if "/XObject" in page0["/Resources"]:
-        xObject = page0["/Resources"]["/XObject"].getObject()
+        x_object = page0["/Resources"]["/XObject"].getObject()
 
-        for obj in xObject:
-            if xObject[obj]["/Subtype"] == "/Image":
-                size = (xObject[obj]["/Width"], xObject[obj]["/Height"])
-                data = xObject[obj].getData()
-                if xObject[obj]["/ColorSpace"] == "/DeviceRGB":
+        for obj in x_object:
+            if x_object[obj]["/Subtype"] == "/Image":
+                size = (x_object[obj]["/Width"], x_object[obj]["/Height"])
+                data = x_object[obj].getData()
+                if x_object[obj]["/ColorSpace"] == "/DeviceRGB":
                     mode = "RGB"
                 else:
                     mode = "P"
 
-                if "/Filter" in xObject[obj]:
-                    if xObject[obj]["/Filter"] == "/FlateDecode":
+                if "/Filter" in x_object[obj]:
+                    if x_object[obj]["/Filter"] == "/FlateDecode":
                         img = Image.frombytes(mode, size, data)
-                        if "/SMask" in xObject[obj]:  # add alpha channel
+                        if "/SMask" in x_object[obj]:  # add alpha channel
                             alpha = Image.frombytes(
-                                "L", size, xObject[obj]["/SMask"].getData()
+                                "L", size, x_object[obj]["/SMask"].getData()
                             )
                             img.putalpha(alpha)
                         img.save(obj[1:] + ".png")
-                    elif xObject[obj]["/Filter"] == "/DCTDecode":
+                    elif x_object[obj]["/Filter"] == "/DCTDecode":
                         img = open(obj[1:] + ".jpg", "wb")
                         img.write(data)
                         img.close()
-                    elif xObject[obj]["/Filter"] == "/JPXDecode":
+                    elif x_object[obj]["/Filter"] == "/JPXDecode":
                         img = open(obj[1:] + ".jp2", "wb")
                         img.write(data)
                         img.close()
-                    elif xObject[obj]["/Filter"] == "/CCITTFaxDecode":
+                    elif x_object[obj]["/Filter"] == "/CCITTFaxDecode":
                         img = open(obj[1:] + ".tiff", "wb")
                         img.write(data)
                         img.close()

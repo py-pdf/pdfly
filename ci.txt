@@ -20,6 +20,7 @@ flake8==4.0.1
     #   flake8-isort
     #   flake8-no-implicit-concat
     #   flake8-simplify
+    #   pep8-naming
 flake8-bugbear==22.3.23
     # via -r ci.in
 flake8-comprehensions==3.8.0
@@ -28,6 +29,8 @@ flake8-isort==4.1.1
     # via -r ci.in
 flake8-no-implicit-concat==0.3.3
     # via -r ci.in
+flake8-polyfill==1.0.2
+    # via pep8-naming
 flake8-simplify==0.19.2
     # via -r ci.in
 isort==5.10.1
@@ -42,6 +45,8 @@ mypy-extensions==0.4.3
     #   mypy
 pathspec==0.9.0
     # via black
+pep8-naming==0.12.1
+    # via -r ci.in
 platformdirs==2.5.1
     # via black
 pycodestyle==2.8.0

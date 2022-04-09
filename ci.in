@@ -6,3 +6,4 @@ flake8-isort
 flake8-no-implicit-concat
 flake8-simplify
 mypy
+pep8-naming

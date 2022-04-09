@@ -16,15 +16,17 @@ def main():
         print("usage: python 2-up.py input_file output_file")
         sys.exit(1)
     print("2-up input " + sys.argv[1])
-    reader = PdfFileReader(open(sys.argv[1], "rb"))
+    fh_read = open(sys.argv[1], "rb")
+    reader = PdfFileReader(fh_read)
     writer = PdfFileWriter()
-    for iter in range(0, reader.getNumPages() - 1, 2):
-        lhs = reader.getPage(iter)
-        rhs = reader.getPage(iter + 1)
+    for i in range(0, reader.getNumPages() - 1, 2):
+        lhs = reader.pages[i]
+        rhs = reader.pages[i + 1]
         lhs.mergeTranslatedPage(rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
         writer.addPage(lhs)
-        print(str(iter) + " "),
+        print(str(i) + " "),
         sys.stdout.flush()
+    fh_read.close()
 
     print(f"writing {sys.argv[2]}")
     with open(sys.argv[2], "wb") as fp:
