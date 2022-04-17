@@ -5,18 +5,13 @@ Adapted from work by Sylvain Pelissier
 http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-resampling-in-python
 """
 
-import sys
+from pathlib import Path
 
 import PyPDF2
 from PIL import Image
 
-if len(sys.argv) != 2:
-    print(f"\nUsage: python {sys.argv[0]} input_file\n")
-    sys.exit(1)
 
-pdf = sys.argv[1]
-
-if __name__ == "__main__":
+def main(pdf: Path) -> None:
     reader = PyPDF2.PdfFileReader(open(pdf, "rb"))
     page0 = reader.pages[30]
 
