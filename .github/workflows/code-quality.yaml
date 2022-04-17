@@ -32,6 +32,10 @@ jobs:
       run: |
         pip install -r requirements/ci.txt
 
+    - name: Install cpdf
+      run: |
+        pip install .
+
     - name: Test with black
       run: black --check .
 
