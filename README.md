@@ -23,8 +23,27 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  2-up
-  extract-images
+  2-up            Create a booklet-style PDF from a single input.
+  cat             Concatenate pages from pdf files into a single pdf file.
+  extract-images  Extract images from PDF without resampling or altering.
+```
 
-$ cpdf
+You can see the help of every subcommand by typing:
+
+```bash
+$ cpdf 2-up --help
+Usage: cpdf 2-up [OPTIONS] PDF OUT
+
+  Create a booklet-style PDF from a single input.
+
+  Pairs of two pages will be put on one page (left and right)
+
+  usage: python 2-up.py input_file output_file
+
+Arguments:
+  PDF  [required]
+  OUT  [required]
+
+Options:
+  --help  Show this message and exit.
 ```

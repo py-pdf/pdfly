@@ -2,10 +2,9 @@ from pathlib import Path
 from typing import List
 
 import typer
-from PyPDF2.pagerange import PAGE_RANGE_HELP
 
 import cpdf.cat
-import cpdf.image_extractor
+import cpdf.extract_images
 import cpdf.up2
 
 
@@ -31,7 +30,7 @@ def common(
 
 @entry_point.command(name="extract-images")  # type: ignore[misc]
 def extract_images(pdf: Path) -> None:
-    cpdf.image_extractor.main(pdf)
+    cpdf.extract_images.main(pdf)
 
 
 @entry_point.command(name="2-up")  # type: ignore[misc]
@@ -49,4 +48,6 @@ def cat(
     cpdf.cat.main(filename, fn_pgrgs, output, verbose)
 
 
-cat.__doc__ = cpdf.cat.__doc__.format(page_range_help=PAGE_RANGE_HELP)
+up2.__doc__ = cpdf.up2.__doc__
+extract_images.__doc__ = cpdf.extract_images.__doc__
+cat.__doc__ = cpdf.cat.__doc__
