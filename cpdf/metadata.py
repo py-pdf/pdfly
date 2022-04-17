@@ -1,10 +1,11 @@
 """Show metadata of a PDF file"""
 
-from pathlib import Path
-from PyPDF2 import PdfFileReader
-from pydantic import BaseModel
-from typing import Optional, Tuple
 from enum import Enum
+from pathlib import Path
+from typing import Optional, Tuple
+
+from pydantic import BaseModel
+from PyPDF2 import PdfFileReader
 
 
 class MetaInfo(BaseModel):

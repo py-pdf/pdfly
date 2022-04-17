@@ -5,8 +5,8 @@ import typer
 
 import cpdf.cat
 import cpdf.extract_images
-import cpdf.up2
 import cpdf.metadata
+import cpdf.up2
 
 
 def version_callback(value: bool) -> None:
@@ -63,7 +63,7 @@ def metadata(
         help="output format",
         show_default=True,
     ),
-):
+) -> None:
     cpdf.metadata.main(pdf, output)
 
 
