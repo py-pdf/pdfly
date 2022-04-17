@@ -41,8 +41,8 @@ jobs:
 
     - name: Test with flake8
       run: |
-        flake8
+        flake8 . --exclude build
 
     - name: Test with mypy
       run: |
-        mypy . --ignore-missing-imports
+        mypy . --ignore-missing-imports --exclude build
