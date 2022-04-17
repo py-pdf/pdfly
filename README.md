@@ -13,6 +13,8 @@ cpdf is a pure-python cli application for manipulating PDF files.
 pip install -U cpdf
 ```
 
+As `cpdf` is an application, you might want to install it with [`pipx`](https://pypi.org/project/pipx/).
+
 ## Usage
 
 ```console
