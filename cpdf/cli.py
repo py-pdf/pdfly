@@ -23,7 +23,7 @@ entry_point = typer.Typer(
 @entry_point.callback()  # type: ignore[misc]
 def common(
     ctx: typer.Context,
-    version: bool = typer.Option(None, "--version", callback=version_callback),
+    version: bool = typer.Option(None, "--version", callback=version_callback),  # noqa
 ) -> None:
     pass
 
@@ -41,9 +41,13 @@ def up2(pdf: Path, out: Path) -> None:
 @entry_point.command(name="cat")  # type: ignore[misc]
 def cat(
     filename: Path,
-    output: Path = typer.Option(..., "-o", "--output"),
-    fn_pgrgs: List[str] = typer.Argument(..., help="filenames and/or page ranges"),
-    verbose: bool = typer.Option(False, help="show page ranges as they are being read"),
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    fn_pgrgs: List[str] = typer.Argument(  # noqa
+        ..., help="filenames and/or page ranges"
+    ),
+    verbose: bool = typer.Option(  # noqa
+        False, help="show page ranges as they are being read"
+    ),
 ) -> None:
     cpdf.cat.main(filename, fn_pgrgs, output, verbose)
 

@@ -64,7 +64,7 @@ def main(filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool) -> No
         output_fh = os.fdopen(stdout.fileno(), "wb")
 
     merger = PdfFileMerger()
-    in_fs = dict()
+    in_fs = {}
     try:
         for (filename, page_range) in filename_page_ranges:
             if verbose:
