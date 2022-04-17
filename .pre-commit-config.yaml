@@ -31,6 +31,8 @@ repos:
     rev: v0.942
     hooks:
     -   id: mypy
+        additional_dependencies:
+          - 'pydantic'
 -   repo: https://github.com/asottile/seed-isort-config
     rev: v2.2.0
     hooks:
