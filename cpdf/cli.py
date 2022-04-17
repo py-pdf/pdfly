@@ -57,7 +57,7 @@ def cat(
 def metadata(
     pdf: Path,
     output: cpdf.metadata.OutputOptions = typer.Option(  # noqa
-        ...,
+        cpdf.metadata.OutputOptions.text,
         "--output",
         "-o",
         help="output format",

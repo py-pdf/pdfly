@@ -16,6 +16,8 @@ class MetaInfo(BaseModel):
     file_size: int  # in bytes
     page_size: Tuple[float, float]  # (width, height)
     pdf_file_version: str
+    page_mode: Optional[str]
+    page_layout: Optional[str]
 
 
 class OutputOptions(Enum):
@@ -40,6 +42,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
             file_size=pdf.stat().st_size,
             page_size=(x2 - x1, y2 - y1),
             pdf_file_version=pdf_file_version,
+            page_mode=reader.getPageMode(),
+            page_layout=reader.getPageLayout(),
         )
 
     if output == OutputOptions.json:
@@ -61,6 +65,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
             "Page size", f"{meta.page_size[0]} x {meta.page_size[1]} pts (w x h)"
         )
         table.add_row("PDF File Version", meta.pdf_file_version)
+        table.add_row("Page Layout", meta.page_layout)
+        table.add_row("Page Mode", meta.page_mode)
 
         console = Console()
         console.print(table)
