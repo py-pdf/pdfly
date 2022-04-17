@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Concatenate pages from pdf files into a single pdf file.
+Concatenate pages from PDF files into a single PDF file.
 
 Page ranges refer to the previously-named file.
 A file not followed by a page range means all the pages of the file.

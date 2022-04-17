@@ -12,7 +12,7 @@ pip install -U cpdf
 
 ## Usage
 
-```bash
+```console
 $ cpdf --help
 Usage: cpdf [OPTIONS] COMMAND [ARGS]...
 
@@ -24,13 +24,13 @@ Options:
 
 Commands:
   2-up            Create a booklet-style PDF from a single input.
-  cat             Concatenate pages from pdf files into a single pdf file.
+  cat             Concatenate pages from PDF files into a single PDF file.
   extract-images  Extract images from PDF without resampling or altering.
 ```
 
 You can see the help of every subcommand by typing:
 
-```bash
+```console
 $ cpdf 2-up --help
 Usage: cpdf 2-up [OPTIONS] PDF OUT
 
