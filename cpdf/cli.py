@@ -67,6 +67,18 @@ def metadata(
     cpdf.metadata.main(pdf, output)
 
 
+@entry_point.command(name="extract-text")  # type: ignore[misc]
+def extract_text(
+    pdf: Path,
+):
+    """Extract text from a PDF file."""
+    from PyPDF2 import PdfReader
+
+    reader = PdfReader(str(pdf))
+    for page in reader.pages:
+        print(page.extract_text())
+
+
 up2.__doc__ = cpdf.up2.__doc__
 extract_images.__doc__ = cpdf.extract_images.__doc__
 cat.__doc__ = cpdf.cat.__doc__
