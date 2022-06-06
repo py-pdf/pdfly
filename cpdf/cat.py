@@ -50,23 +50,23 @@ from pathlib import Path
 from sys import exit, stderr, stdout
 from typing import List
 
-from PyPDF2 import PdfFileMerger, parse_filename_page_ranges
+from PyPDF2 import PdfMerger, parse_filename_page_ranges
 
 
 def main(filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool) -> None:
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
-    filename_page_ranges = parse_filename_page_ranges(fn_pgrgs_l)
+    filename_page_ranges = parse_filename_page_ranges(fn_pgrgs_l)  # type: ignore
     if output:
         output_fh = open(output, "wb")
     else:
         stdout.flush()
         output_fh = os.fdopen(stdout.fileno(), "wb")
 
-    merger = PdfFileMerger()
+    merger = PdfMerger()
     in_fs = {}
     try:
-        for (filename, page_range) in filename_page_ranges:
+        for (filename, page_range) in filename_page_ranges:  # type: ignore
             if verbose:
                 print(filename, page_range, file=stderr)
             if filename not in in_fs:

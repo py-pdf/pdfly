@@ -12,11 +12,11 @@ from PIL import Image
 
 
 def main(pdf: Path) -> None:
-    reader = PyPDF2.PdfFileReader(open(pdf, "rb"))
-    page0 = reader.pages[30]
+    reader = PyPDF2.PdfReader(open(pdf, "rb"))
+    page0 = reader.pages[0]
 
-    if "/XObject" in page0["/Resources"]:
-        x_object = page0["/Resources"]["/XObject"].getObject()
+    if "/XObject" in page0["/Resources"]:  # type: ignore
+        x_object = page0["/Resources"]["/XObject"].getObject()  # type: ignore
 
         for obj in x_object:
             if x_object[obj]["/Subtype"] == "/Image":

@@ -9,18 +9,18 @@ usage: python 2-up.py input_file output_file
 import sys
 from pathlib import Path
 
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 
 
 def main(pdf: Path, output: Path) -> None:
     fh_read = open(pdf, "rb")
-    reader = PdfFileReader(fh_read)
-    writer = PdfFileWriter()
-    for i in range(0, reader.getNumPages() - 1, 2):
+    reader = PdfReader(fh_read)
+    writer = PdfWriter()
+    for i in range(0, len(reader.pages) - 1, 2):
         lhs = reader.pages[i]
         rhs = reader.pages[i + 1]
-        lhs.mergeTranslatedPage(rhs, lhs.mediaBox.getUpperRight_x(), 0, True)
-        writer.addPage(lhs)
+        lhs.mergeTranslatedPage(rhs, float(lhs.mediabox.right), 0, True)
+        writer.add_page(lhs)
         print(str(i) + " "),
         sys.stdout.flush()
     fh_read.close()
