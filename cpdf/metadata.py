@@ -26,25 +26,24 @@ class OutputOptions(Enum):
 
 
 def main(pdf: Path, output: OutputOptions) -> None:
-    with open(pdf, "rb") as f:
-        reader = PdfReader(f)
-        info = reader.metadata
-        x1, y1, x2, y2 = reader.pages[0].mediabox
+    reader = PdfReader(str(pdf))
+    info = reader.metadata
+    x1, y1, x2, y2 = reader.pages[0].mediabox
 
-        reader.stream.seek(0)
-        pdf_file_version = reader.stream.readline().decode()
-        meta = MetaInfo(
-            pages=len(reader.pages),
-            encrypted=reader.is_encrypted,
-            file_size=pdf.stat().st_size,
-            page_size=(x2 - x1, y2 - y1),
-            page_mode=reader.page_mode,
-            pdf_file_version=pdf_file_version,
-            page_layout=reader.page_layout,
-        )
-        if info is not None:
-            meta.title = info.title
-            meta.producer = info.producer
+    reader.stream.seek(0)
+    pdf_file_version = reader.stream.readline().decode()
+    meta = MetaInfo(
+        pages=len(reader.pages),
+        encrypted=reader.is_encrypted,
+        file_size=pdf.stat().st_size,
+        page_size=(x2 - x1, y2 - y1),
+        page_mode=reader.page_mode,
+        pdf_file_version=pdf_file_version,
+        page_layout=reader.page_layout,
+    )
+    if info is not None:
+        meta.title = info.title
+        meta.producer = info.producer
 
     if output == OutputOptions.json:
         print(meta.json())

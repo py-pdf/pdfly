@@ -7,12 +7,12 @@ http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-resam
 
 from pathlib import Path
 
-import PyPDF2
 from PIL import Image
+from PyPDF2 import PdfReader
 
 
 def main(pdf: Path) -> None:
-    reader = PyPDF2.PdfReader(open(pdf, "rb"))
+    reader = PdfReader(str(pdf))
     page0 = reader.pages[0]
 
     if "/XObject" in page0["/Resources"]:  # type: ignore
