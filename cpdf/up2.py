@@ -13,8 +13,7 @@ from PyPDF2 import PdfReader, PdfWriter
 
 
 def main(pdf: Path, output: Path) -> None:
-    fh_read = open(pdf, "rb")
-    reader = PdfReader(fh_read)
+    reader = PdfReader(str(pdf))
     writer = PdfWriter()
     for i in range(0, len(reader.pages) - 1, 2):
         lhs = reader.pages[i]
@@ -23,7 +22,6 @@ def main(pdf: Path, output: Path) -> None:
         writer.add_page(lhs)
         print(str(i) + " "),
         sys.stdout.flush()
-    fh_read.close()
 
     print(f"writing {output}")
     with open(output, "wb") as fp:
