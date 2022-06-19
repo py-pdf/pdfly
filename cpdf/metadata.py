@@ -31,7 +31,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
     x1, y1, x2, y2 = reader.pages[0].mediabox
 
     reader.stream.seek(0)
-    pdf_file_version = reader.stream.readline().decode()
+    pdf_file_version = reader.stream.read(8).decode("utf-8")
     meta = MetaInfo(
         pages=len(reader.pages),
         encrypted=reader.is_encrypted,
