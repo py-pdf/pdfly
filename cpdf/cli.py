@@ -4,6 +4,7 @@ from typing import List
 import typer
 
 import cpdf.cat
+import cpdf.compress
 import cpdf.extract_images
 import cpdf.metadata
 import cpdf.up2
@@ -57,7 +58,7 @@ def cat(
 def metadata(
     pdf: Path,
     output: cpdf.metadata.OutputOptions = typer.Option(  # noqa
-        cpdf.metadata.OutputOptions.text,
+        cpdf.metadata.OutputOptions.text.value,
         "--output",
         "-o",
         help="output format",
@@ -68,9 +69,7 @@ def metadata(
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]
-def extract_text(
-    pdf: Path,
-):
+def extract_text(pdf: Path):
     """Extract text from a PDF file."""
     from PyPDF2 import PdfReader
 
@@ -79,7 +78,13 @@ def extract_text(
         print(page.extract_text())
 
 
+@entry_point.command(name="compress")  # type: ignore[misc]
+def compress(pdf: Path, output: Path):
+    cpdf.compress.main(pdf, output)
+
+
 up2.__doc__ = cpdf.up2.__doc__
 extract_images.__doc__ = cpdf.extract_images.__doc__
 cat.__doc__ = cpdf.cat.__doc__
 metadata.__doc__ = cpdf.metadata.__doc__
+compress.__doc__ = cpdf.compress.__doc__

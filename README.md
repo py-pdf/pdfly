@@ -30,7 +30,11 @@ Options:
 Commands:
   2-up            Create a booklet-style PDF from a single input.
   cat             Concatenate pages from PDF files into a single PDF file.
+  compress        Compress a PDF.
   extract-images  Extract images from PDF without resampling or altering.
+  extract-text    Extract text from a PDF file.
+  meta            Show metadata of a PDF file
+
 ```
 
 You can see the help of every subcommand by typing:
