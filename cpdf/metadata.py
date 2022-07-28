@@ -1,8 +1,9 @@
 """Show metadata of a PDF file"""
 
+import os
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Set, Tuple
 
 from pydantic import BaseModel
 from PyPDF2 import PdfReader
@@ -55,6 +56,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
         table.add_column("Value", style="white")
 
+        table.add_row("File Size", f"{os.path.getsize(pdf):,} Bytes")
         table.add_row("Title", meta.title)
         table.add_row("Producer", meta.producer)
         table.add_row("Pages", f"{meta.pages:,}")
@@ -66,6 +68,14 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
+        embedded_fonts: Set[str] = set()
+        unemedded_fonts: Set[str] = set()
+        for page in reader.pages:
+            emb, unemb = page._get_fonts()
+            embedded_fonts = embedded_fonts.union(set(emb))
+            unemedded_fonts = unemedded_fonts.union(set(unemb))
+        table.add_row("Fonts (unembedded)", ", ".join(sorted(unemedded_fonts)))
+        table.add_row("Fonts (embedded)", ", ".join(sorted(embedded_fonts)))
 
         console = Console()
         console.print(table)
