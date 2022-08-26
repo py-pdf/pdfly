@@ -8,6 +8,7 @@ import cpdf.compress
 import cpdf.extract_images
 import cpdf.metadata
 import cpdf.up2
+import cpdf.offset_updater
 
 
 def version_callback(value: bool) -> None:
@@ -83,8 +84,22 @@ def compress(pdf: Path, output: Path):
     cpdf.compress.main(pdf, output)
 
 
+@entry_point.command(name="offset-updater")  # type: ignore[misc]
+def offset_updater(
+    file_in: Path,
+    file_out: Path,
+    encoding: str = typer.Option(
+        "UTF-8",
+        help="Encoding used to read and write the files, e.g. ISO-8859-1.",
+    ),  # noqa
+    verbose: bool = typer.Option(False, help="Show progress while processing."),  # noqa
+) -> None:
+    cpdf.offset_updater.main(file_in, file_out, encoding, verbose)
+
+
 up2.__doc__ = cpdf.up2.__doc__
 extract_images.__doc__ = cpdf.extract_images.__doc__
 cat.__doc__ = cpdf.cat.__doc__
 metadata.__doc__ = cpdf.metadata.__doc__
 compress.__doc__ = cpdf.compress.__doc__
+offset_updater.__doc__ = cpdf.offset_updater.__doc__
