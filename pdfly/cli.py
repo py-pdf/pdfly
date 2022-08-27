@@ -3,22 +3,22 @@ from typing import List
 
 import typer
 
-import cpdf.cat
-import cpdf.compress
-import cpdf.extract_images
-import cpdf.metadata
-import cpdf.up2
+import pdfly.cat
+import pdfly.compress
+import pdfly.extract_images
+import pdfly.metadata
+import pdfly.up2
 
 
 def version_callback(value: bool) -> None:
     if value:
-        typer.echo(f"cpdf {cpdf.__version__}")
+        typer.echo(f"pdfly {pdfly.__version__}")
         raise typer.Exit()
 
 
 entry_point = typer.Typer(
     add_completion=False,
-    help=("cpdf is a pure-python cli application for manipulating PDF files."),
+    help=("pdfly is a pure-python cli application for manipulating PDF files."),
 )
 
 
@@ -32,12 +32,12 @@ def common(
 
 @entry_point.command(name="extract-images")  # type: ignore[misc]
 def extract_images(pdf: Path) -> None:
-    cpdf.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf)
 
 
 @entry_point.command(name="2-up")  # type: ignore[misc]
 def up2(pdf: Path, out: Path) -> None:
-    cpdf.up2.main(pdf, out)
+    pdfly.up2.main(pdf, out)
 
 
 @entry_point.command(name="cat")  # type: ignore[misc]
@@ -51,21 +51,21 @@ def cat(
         False, help="show page ranges as they are being read"
     ),
 ) -> None:
-    cpdf.cat.main(filename, fn_pgrgs, output, verbose)
+    pdfly.cat.main(filename, fn_pgrgs, output, verbose)
 
 
 @entry_point.command(name="meta")  # type: ignore[misc]
 def metadata(
     pdf: Path,
-    output: cpdf.metadata.OutputOptions = typer.Option(  # noqa
-        cpdf.metadata.OutputOptions.text.value,
+    output: pdfly.metadata.OutputOptions = typer.Option(  # noqa
+        pdfly.metadata.OutputOptions.text.value,
         "--output",
         "-o",
         help="output format",
         show_default=True,
     ),
 ) -> None:
-    cpdf.metadata.main(pdf, output)
+    pdfly.metadata.main(pdf, output)
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]
@@ -80,11 +80,11 @@ def extract_text(pdf: Path):
 
 @entry_point.command(name="compress")  # type: ignore[misc]
 def compress(pdf: Path, output: Path):
-    cpdf.compress.main(pdf, output)
+    pdfly.compress.main(pdf, output)
 
 
-up2.__doc__ = cpdf.up2.__doc__
-extract_images.__doc__ = cpdf.extract_images.__doc__
-cat.__doc__ = cpdf.cat.__doc__
-metadata.__doc__ = cpdf.metadata.__doc__
-compress.__doc__ = cpdf.compress.__doc__
+up2.__doc__ = pdfly.up2.__doc__
+extract_images.__doc__ = pdfly.extract_images.__doc__
+cat.__doc__ = pdfly.cat.__doc__
+metadata.__doc__ = pdfly.metadata.__doc__
+compress.__doc__ = pdfly.compress.__doc__

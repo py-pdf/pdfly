@@ -4,7 +4,7 @@ import re
 
 from setuptools import find_packages, setup
 
-VERSIONFILE = "cpdf/_version.py"
+VERSIONFILE = "pdfly/_version.py"
 with open(VERSIONFILE) as fp:
     verstrline = fp.read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
