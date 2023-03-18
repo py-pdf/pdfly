@@ -71,7 +71,7 @@ def metadata(
 @entry_point.command(name="extract-text")  # type: ignore[misc]
 def extract_text(pdf: Path):
     """Extract text from a PDF file."""
-    from PyPDF2 import PdfReader
+    from pypdf import PdfReader
 
     reader = PdfReader(str(pdf))
     for page in reader.pages:

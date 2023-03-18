@@ -8,7 +8,7 @@ http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-resam
 from pathlib import Path
 
 from PIL import Image
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 
 def main(pdf: Path) -> None:

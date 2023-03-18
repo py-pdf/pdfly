@@ -9,7 +9,7 @@ usage: python 2-up.py input_file output_file
 import sys
 from pathlib import Path
 
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 
 
 def main(pdf: Path, output: Path) -> None:
