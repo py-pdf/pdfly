@@ -41,7 +41,7 @@ EXAMPLES
 """
 # Copyright (c) 2014, Steve Witham <switham_github@mac-guyver.com>.
 # All rights reserved. This software is available under a BSD license;
-# see https://github.com/py-pdf/PyPDF2/LICENSE
+# see https://github.com/py-pdf/pypdf/LICENSE
 
 
 import os
@@ -50,7 +50,7 @@ from pathlib import Path
 from sys import exit, stderr, stdout
 from typing import List
 
-from PyPDF2 import PdfMerger, parse_filename_page_ranges
+from pypdf import PdfMerger, parse_filename_page_ranges
 
 
 def main(filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool) -> None:
