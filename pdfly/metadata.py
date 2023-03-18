@@ -1,10 +1,10 @@
 """Show metadata of a PDF file"""
 
 import stat
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Optional, Set, Tuple
-from datetime import datetime
 
 from pydantic import BaseModel
 from pypdf import PdfReader
