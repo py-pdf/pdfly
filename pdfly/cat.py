@@ -66,7 +66,7 @@ def main(filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool) -> No
     merger = PdfMerger()
     in_fs = {}
     try:
-        for (filename, page_range) in filename_page_ranges:  # type: ignore
+        for filename, page_range in filename_page_ranges:  # type: ignore
             if verbose:
                 print(filename, page_range, file=stderr)
             if filename not in in_fs:

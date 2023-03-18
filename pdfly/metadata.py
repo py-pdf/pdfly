@@ -67,7 +67,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         from rich.console import Console
         from rich.table import Table
 
-        table = Table(title=f"PDF Data")
+        table = Table(title="PDF Data")
         table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
         table.add_column("Value", style="white")
 
@@ -98,9 +98,10 @@ def main(pdf: Path, output: OutputOptions) -> None:
         os_table.add_row("File Permissions", f"{meta.file_permissions}")
         os_table.add_row("File Size", f"{meta.file_size:,} bytes")
         os_table.add_row("Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}")
-        os_table.add_row("Modification Time", f"{meta.modification_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row(
+            "Modification Time", f"{meta.modification_time:%Y-%m-%d %H:%M:%S}"
+        )
         os_table.add_row("Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}")
-
 
         console = Console()
         console.print(os_table)
