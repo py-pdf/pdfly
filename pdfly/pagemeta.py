@@ -43,10 +43,30 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         )
         table.add_column("Value", style="white")
 
-        table.add_row("mediabox", str(meta.mediabox))
-        table.add_row("cropbox", str(meta.cropbox))
-        table.add_row("artbox", str(meta.artbox))
-        table.add_row("bleedbox", str(meta.bleedbox))
+        table.add_row(
+            "mediabox",
+            f"{meta.mediabox}: "
+            f"with={meta.mediabox[2] - meta.mediabox[0]} "
+            f"x height={meta.mediabox[3] - meta.mediabox[1]}",
+        )
+        table.add_row(
+            "cropbox",
+            f"{meta.cropbox}: "
+            f"with={meta.cropbox[2] - meta.cropbox[0]} "
+            f"x height={meta.cropbox[3] - meta.cropbox[1]}",
+        )
+        table.add_row(
+            "artbox",
+            f"{meta.artbox}: "
+            f"with={meta.artbox[2] - meta.artbox[0]} "
+            f"x height={meta.artbox[3] - meta.artbox[1]}",
+        )
+        table.add_row(
+            "bleedbox",
+            f"{meta.bleedbox}: "
+            f"with={meta.bleedbox[2] - meta.bleedbox[0]} "
+            f"x height={meta.bleedbox[3] - meta.bleedbox[1]}",
+        )
 
         table.add_row("annotations", str(meta.annotations))
 
