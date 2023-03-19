@@ -7,6 +7,7 @@ from typing import Optional, Set, Tuple
 
 from pydantic import BaseModel
 from pypdf import PdfReader
+
 from ._utils import OutputOptions
 
 
@@ -63,7 +64,9 @@ def main(pdf: Path, output: OutputOptions) -> None:
         from rich.table import Table
 
         table = Table(title="PDF Data")
-        table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
+        table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
         table.add_column("Value", style="white")
 
         table.add_row("Title", meta.title)
@@ -72,7 +75,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Pages", f"{meta.pages:,}")
         table.add_row("Encrypted", f"{meta.encrypted}")
         table.add_row(
-            "Page size", f"{meta.page_size[0]} x {meta.page_size[1]} pts (w x h)"
+            "Page size",
+            f"{meta.page_size[0]} x {meta.page_size[1]} pts (w x h)",
         )
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
@@ -87,16 +91,22 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Fonts (embedded)", ", ".join(sorted(embedded_fonts)))
 
         os_table = Table(title="Operating System Data")
-        os_table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
+        os_table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
         os_table.add_column("Value", style="white")
         os_table.add_row("File Name", f"{pdf}")
         os_table.add_row("File Permissions", f"{meta.file_permissions}")
         os_table.add_row("File Size", f"{meta.file_size:,} bytes")
-        os_table.add_row("Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row(
+            "Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}"
+        )
         os_table.add_row(
             "Modification Time", f"{meta.modification_time:%Y-%m-%d %H:%M:%S}"
         )
-        os_table.add_row("Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row(
+            "Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}"
+        )
 
         console = Console()
         console.print(os_table)

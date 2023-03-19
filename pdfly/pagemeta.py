@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import Tuple
+
 from pydantic import BaseModel
 from pypdf import PdfReader
 
@@ -16,7 +17,7 @@ class PageMeta(BaseModel):
     annotations: int
 
 
-def main(pdf: Path, page_index: int, output: OutputOptions):
+def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
     reader = PdfReader(pdf)
     page = reader.pages[page_index]
     meta = PageMeta(
@@ -31,13 +32,15 @@ def main(pdf: Path, page_index: int, output: OutputOptions):
         print(meta.json())
     else:
         from rich.console import Console
-        from rich.table import Table
         from rich.markdown import Markdown
+        from rich.table import Table
 
         console = Console()
 
         table = Table(title=f"{pdf}, page index {page_index}")
-        table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
+        table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
         table.add_column("Value", style="white")
 
         table.add_row("mediabox", str(meta.mediabox))

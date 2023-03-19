@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Concatenate pages from PDF files into a single PDF file.
 
@@ -23,8 +22,7 @@ PAGE RANGES are like Python slices.
             1:10:2    1 3 5 7 9                2::-1     2 1 0.
             ::-1      all pages in reverse order.
 
-EXAMPLES
-
+Examples
     pdfcat -o output.pdf head.pdf content.pdf :6 7: tail.pdf -1
 
         Concatenate all of head.pdf, all but page seven of content.pdf,
@@ -53,7 +51,9 @@ from typing import List
 from pypdf import PdfMerger, parse_filename_page_ranges
 
 
-def main(filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool) -> None:
+def main(
+    filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool
+) -> None:
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges = parse_filename_page_ranges(fn_pgrgs_l)  # type: ignore

@@ -20,7 +20,7 @@ def main(pdf: Path, output: Path) -> None:
         rhs = reader.pages[i + 1]
         lhs.mergeTranslatedPage(rhs, float(lhs.mediabox.right), 0, True)
         writer.add_page(lhs)
-        print(str(i) + " "),
+        print(str(i) + " ")
         sys.stdout.flush()
 
     print(f"writing {output}")

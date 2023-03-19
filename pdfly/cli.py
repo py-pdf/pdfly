@@ -1,3 +1,9 @@
+"""
+Define how the CLI should behave.
+
+Subcommands are added here.
+"""
+
 from pathlib import Path
 from typing import List
 
@@ -14,19 +20,23 @@ import pdfly.up2
 def version_callback(value: bool) -> None:
     if value:
         typer.echo(f"pdfly {pdfly.__version__}")
-        raise typer.Exit()
+        raise typer.Exit
 
 
 entry_point = typer.Typer(
     add_completion=False,
-    help=("pdfly is a pure-python cli application for manipulating PDF files."),
+    help=(
+        "pdfly is a pure-python cli application for manipulating PDF files."
+    ),
 )
 
 
 @entry_point.callback()  # type: ignore[misc]
 def common(
     ctx: typer.Context,
-    version: bool = typer.Option(None, "--version", callback=version_callback),  # noqa
+    version: bool = typer.Option(  # noqa: B008
+        None, "--version", callback=version_callback
+    ),
 ) -> None:
     pass
 
@@ -89,7 +99,7 @@ def pagemeta(
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]
-def extract_text(pdf: Path):
+def extract_text(pdf: Path) -> None:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
 
@@ -99,7 +109,7 @@ def extract_text(pdf: Path):
 
 
 @entry_point.command(name="compress")  # type: ignore[misc]
-def compress(pdf: Path, output: Path):
+def compress(pdf: Path, output: Path) -> None:
     pdfly.compress.main(pdf, output)
 
 
