@@ -117,4 +117,5 @@ up2.__doc__ = pdfly.up2.__doc__
 extract_images.__doc__ = pdfly.extract_images.__doc__
 cat.__doc__ = pdfly.cat.__doc__
 metadata.__doc__ = pdfly.metadata.__doc__
+pagemeta.__doc__ = pdfly.pagemeta.__doc__
 compress.__doc__ = pdfly.compress.__doc__

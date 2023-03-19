@@ -19,40 +19,42 @@ As `pdfly` is an application, you might want to install it with [`pipx`](https:/
 
 ```console
 $ pdfly --help
-Usage: pdfly [OPTIONS] COMMAND [ARGS]...
 
-  pdfly is a pure-python cli application for manipulating PDF files.
+ Usage: pdfly [OPTIONS] COMMAND [ARGS]...
 
-Options:
-  --version
-  --help     Show this message and exit.
+ pdfly is a pure-python cli application for manipulating PDF files.
 
-Commands:
-  2-up            Create a booklet-style PDF from a single input.
-  cat             Concatenate pages from PDF files into a single PDF file.
-  compress        Compress a PDF.
-  extract-images  Extract images from PDF without resampling or altering.
-  extract-text    Extract text from a PDF file.
-  meta            Show metadata of a PDF file
-
+╭─ Options ───────────────────────────────────────────────────────────────────╮
+│ --version                                                                   │
+│ --help             Show this message and exit.                              │
+╰─────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────╮
+│ 2-up             Create a booklet-style PDF from a single input.            │
+│ cat              Concatenate pages from PDF files into a single PDF file.   │
+│ compress         Compress a PDF.                                            │
+│ extract-images   Extract images from PDF without resampling or altering.    │
+│ extract-text     Extract text from a PDF file.                              │
+│ meta             Show metadata of a PDF file                                │
+│ pagemeta         Give details about a single page.                          │
+╰─────────────────────────────────────────────────────────────────────────────╯
 ```
 
 You can see the help of every subcommand by typing:
 
 ```console
 $ pdfly 2-up --help
-Usage: pdfly 2-up [OPTIONS] PDF OUT
 
-  Create a booklet-style PDF from a single input.
+ Usage: pdfly 2-up [OPTIONS] PDF OUT
 
-  Pairs of two pages will be put on one page (left and right)
+ Create a booklet-style PDF from a single input.
+ Pairs of two pages will be put on one page (left and right)
+ usage: python 2-up.py input_file output_file
 
-  usage: python 2-up.py input_file output_file
-
-Arguments:
-  PDF  [required]
-  OUT  [required]
-
-Options:
-  --help  Show this message and exit.
+╭─ Arguments ─────────────────────────────────────────────────────────────────╮
+│ *    pdf      PATH  [default: None] [required]                              │
+│ *    out      PATH  [default: None] [required]                              │
+╰─────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                 │
+╰─────────────────────────────────────────────────────────────────────────────╯
 ```
