@@ -2,12 +2,12 @@
 
 import stat
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from typing import Optional, Set, Tuple
 
 from pydantic import BaseModel
 from pypdf import PdfReader
+from ._utils import OutputOptions
 
 
 class MetaInfo(BaseModel):
@@ -27,11 +27,6 @@ class MetaInfo(BaseModel):
     creation_time: datetime
     modification_time: datetime
     access_time: datetime
-
-
-class OutputOptions(Enum):
-    json = "json"
-    text = "text"
 
 
 def main(pdf: Path, output: OutputOptions) -> None:
@@ -106,3 +101,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
         console = Console()
         console.print(os_table)
         console.print(table)
+        console.print(
+            "Use the 'pagemeta' subcommand to get details about a single page"
+        )

@@ -7,6 +7,7 @@ import pdfly.cat
 import pdfly.compress
 import pdfly.extract_images
 import pdfly.metadata
+import pdfly.pagemeta
 import pdfly.up2
 
 
@@ -66,6 +67,25 @@ def metadata(
     ),
 ) -> None:
     pdfly.metadata.main(pdf, output)
+
+
+@entry_point.command(name="pagemeta")  # type: ignore[misc]
+def pagemeta(
+    pdf: Path,
+    page_index: int,
+    output: pdfly.metadata.OutputOptions = typer.Option(  # noqa
+        pdfly.metadata.OutputOptions.text.value,
+        "--output",
+        "-o",
+        help="output format",
+        show_default=True,
+    ),
+) -> None:
+    pdfly.pagemeta.main(
+        pdf,
+        page_index,
+        output,
+    )
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]
