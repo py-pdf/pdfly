@@ -2,12 +2,13 @@
 
 import stat
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
-from typing import Optional, Set, Tuple
+from typing import Optional, Set
 
 from pydantic import BaseModel
 from pypdf import PdfReader
+
+from ._utils import OutputOptions
 
 
 class MetaInfo(BaseModel):
@@ -16,7 +17,6 @@ class MetaInfo(BaseModel):
     author: Optional[str] = None
     pages: int
     encrypted: bool
-    page_size: Tuple[float, float]  # (width, height)
     pdf_file_version: str
     page_mode: Optional[str]
     page_layout: Optional[str]
@@ -29,15 +29,9 @@ class MetaInfo(BaseModel):
     access_time: datetime
 
 
-class OutputOptions(Enum):
-    json = "json"
-    text = "text"
-
-
 def main(pdf: Path, output: OutputOptions) -> None:
     reader = PdfReader(str(pdf))
     info = reader.metadata
-    x1, y1, x2, y2 = reader.pages[0].mediabox
 
     reader.stream.seek(0)
     pdf_file_version = reader.stream.read(8).decode("utf-8")
@@ -45,7 +39,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
     meta = MetaInfo(
         pages=len(reader.pages),
         encrypted=reader.is_encrypted,
-        page_size=(x2 - x1, y2 - y1),
         page_mode=reader.page_mode,
         pdf_file_version=pdf_file_version,
         page_layout=reader.page_layout,
@@ -68,7 +61,9 @@ def main(pdf: Path, output: OutputOptions) -> None:
         from rich.table import Table
 
         table = Table(title="PDF Data")
-        table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
+        table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
         table.add_column("Value", style="white")
 
         table.add_row("Title", meta.title)
@@ -76,9 +71,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Author", meta.author)
         table.add_row("Pages", f"{meta.pages:,}")
         table.add_row("Encrypted", f"{meta.encrypted}")
-        table.add_row(
-            "Page size", f"{meta.page_size[0]} x {meta.page_size[1]} pts (w x h)"
-        )
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
@@ -92,17 +84,26 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Fonts (embedded)", ", ".join(sorted(embedded_fonts)))
 
         os_table = Table(title="Operating System Data")
-        os_table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
+        os_table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
         os_table.add_column("Value", style="white")
         os_table.add_row("File Name", f"{pdf}")
         os_table.add_row("File Permissions", f"{meta.file_permissions}")
         os_table.add_row("File Size", f"{meta.file_size:,} bytes")
-        os_table.add_row("Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row(
+            "Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}"
+        )
         os_table.add_row(
             "Modification Time", f"{meta.modification_time:%Y-%m-%d %H:%M:%S}"
         )
-        os_table.add_row("Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row(
+            "Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}"
+        )
 
         console = Console()
         console.print(os_table)
         console.print(table)
+        console.print(
+            "Use the 'pagemeta' subcommand to get details about a single page"
+        )

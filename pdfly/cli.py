@@ -1,3 +1,9 @@
+"""
+Define how the CLI should behave.
+
+Subcommands are added here.
+"""
+
 from pathlib import Path
 from typing import List
 
@@ -7,25 +13,30 @@ import pdfly.cat
 import pdfly.compress
 import pdfly.extract_images
 import pdfly.metadata
+import pdfly.pagemeta
 import pdfly.up2
 
 
 def version_callback(value: bool) -> None:
     if value:
         typer.echo(f"pdfly {pdfly.__version__}")
-        raise typer.Exit()
+        raise typer.Exit
 
 
 entry_point = typer.Typer(
     add_completion=False,
-    help=("pdfly is a pure-python cli application for manipulating PDF files."),
+    help=(
+        "pdfly is a pure-python cli application for manipulating PDF files."
+    ),
 )
 
 
 @entry_point.callback()  # type: ignore[misc]
 def common(
     ctx: typer.Context,
-    version: bool = typer.Option(None, "--version", callback=version_callback),  # noqa
+    version: bool = typer.Option(  # noqa: B008
+        None, "--version", callback=version_callback
+    ),
 ) -> None:
     pass
 
@@ -68,8 +79,27 @@ def metadata(
     pdfly.metadata.main(pdf, output)
 
 
+@entry_point.command(name="pagemeta")  # type: ignore[misc]
+def pagemeta(
+    pdf: Path,
+    page_index: int,
+    output: pdfly.metadata.OutputOptions = typer.Option(  # noqa
+        pdfly.metadata.OutputOptions.text.value,
+        "--output",
+        "-o",
+        help="output format",
+        show_default=True,
+    ),
+) -> None:
+    pdfly.pagemeta.main(
+        pdf,
+        page_index,
+        output,
+    )
+
+
 @entry_point.command(name="extract-text")  # type: ignore[misc]
-def extract_text(pdf: Path):
+def extract_text(pdf: Path) -> None:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
 
@@ -79,7 +109,7 @@ def extract_text(pdf: Path):
 
 
 @entry_point.command(name="compress")  # type: ignore[misc]
-def compress(pdf: Path, output: Path):
+def compress(pdf: Path, output: Path) -> None:
     pdfly.compress.main(pdf, output)
 
 
@@ -87,4 +117,5 @@ up2.__doc__ = pdfly.up2.__doc__
 extract_images.__doc__ = pdfly.extract_images.__doc__
 cat.__doc__ = pdfly.cat.__doc__
 metadata.__doc__ = pdfly.metadata.__doc__
+pagemeta.__doc__ = pdfly.pagemeta.__doc__
 compress.__doc__ = pdfly.compress.__doc__

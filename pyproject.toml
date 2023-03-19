@@ -50,6 +50,9 @@ ignore = [
     # As long as we are not on Python 3.11+
     "UP006", "UP007",
     # for the moment, fix it later:
+    "T201",  # print
+    "DTZ006",  # datetime without timezone
+    "SIM115",  # context handler for opening files
     "A",  # Variable is shadowing a built-in
     "B904", # Within an `except` clause, raise exceptions with
     "B905",  # `zip()` without an explicit `strict=` parameter

@@ -6,7 +6,7 @@ from pathlib import Path
 from pypdf import PdfReader, PdfWriter
 
 
-def main(pdf: Path, output: Path):
+def main(pdf: Path, output: Path) -> None:
     reader = PdfReader(pdf)
     writer = PdfWriter()
     for page in reader.pages:
