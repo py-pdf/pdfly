@@ -11,16 +11,21 @@ from pypdf import PdfReader
 from ._utils import OutputOptions
 
 
+class EncryptionData(BaseModel):
+    revision: int
+    v_value: int
+
+
 class MetaInfo(BaseModel):
+    encryption: Optional[EncryptionData]
+    pdf_file_version: str
     title: Optional[str] = None
     producer: Optional[str] = None
     author: Optional[str] = None
-    pages: int
-    encrypted: bool
-    pdf_file_version: str
-    page_mode: Optional[str]
-    page_layout: Optional[str]
-    attachments: str
+    pages: Optional[int] = None
+    page_mode: Optional[str] = None
+    page_layout: Optional[str] = None
+    attachments: str = "unknown"
 
     # OS Information
     file_permissions: str
@@ -32,29 +37,52 @@ class MetaInfo(BaseModel):
 
 def main(pdf: Path, output: OutputOptions) -> None:
     reader = PdfReader(str(pdf))
-    info = reader.metadata
+    if reader.is_encrypted:
+        pdf_stat = pdf.stat()
+        meta = MetaInfo(
+            encryption=EncryptionData(
+                v_value=reader._encryption.algV,
+                revision=reader._encryption.algR,
+            )
+            if reader.is_encrypted
+            else None,
+            pdf_file_version=reader.stream.read(8).decode("utf-8"),
+            # OS Info
+            file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
+            file_size=pdf_stat.st_size,
+            creation_time=datetime.fromtimestamp(pdf_stat.st_ctime),
+            modification_time=datetime.fromtimestamp(pdf_stat.st_mtime),
+            access_time=datetime.fromtimestamp(pdf_stat.st_atime),
+        )
+    else:
+        info = reader.metadata
 
-    reader.stream.seek(0)
-    pdf_file_version = reader.stream.read(8).decode("utf-8")
-    pdf_stat = pdf.stat()
-    meta = MetaInfo(
-        pages=len(reader.pages),
-        encrypted=reader.is_encrypted,
-        page_mode=reader.page_mode,
-        pdf_file_version=pdf_file_version,
-        page_layout=reader.page_layout,
-        attachments=str(list(reader.attachments.keys())),
-        # OS Info
-        file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
-        file_size=pdf_stat.st_size,
-        creation_time=datetime.fromtimestamp(pdf_stat.st_ctime),
-        modification_time=datetime.fromtimestamp(pdf_stat.st_mtime),
-        access_time=datetime.fromtimestamp(pdf_stat.st_atime),
-    )
-    if info is not None:
-        meta.title = info.title
-        meta.producer = info.producer
-        meta.author = info.author
+        reader.stream.seek(0)
+        pdf_file_version = reader.stream.read(8).decode("utf-8")
+        pdf_stat = pdf.stat()
+        meta = MetaInfo(
+            pages=len(reader.pages),
+            encryption=EncryptionData(
+                v_value=reader._encryption.algV,
+                revision=reader._encryption.algR,
+            )
+            if reader.is_encrypted
+            else None,
+            page_mode=reader.page_mode,
+            pdf_file_version=pdf_file_version,
+            page_layout=reader.page_layout,
+            attachments=str(list(reader.attachments.keys())),
+            # OS Info
+            file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
+            file_size=pdf_stat.st_size,
+            creation_time=datetime.fromtimestamp(pdf_stat.st_ctime),
+            modification_time=datetime.fromtimestamp(pdf_stat.st_mtime),
+            access_time=datetime.fromtimestamp(pdf_stat.st_atime),
+        )
+        if info is not None:
+            meta.title = info.title
+            meta.producer = info.producer
+            meta.author = info.author
 
     if output == OutputOptions.json:
         print(meta.json())
@@ -71,20 +99,37 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Title", meta.title)
         table.add_row("Producer", meta.producer)
         table.add_row("Author", meta.author)
-        table.add_row("Pages", f"{meta.pages:,}")
-        table.add_row("Encrypted", f"{meta.encrypted}")
+        table.add_row("Pages", f"{meta.pages:,}" if meta.pages else "unknown")
+        table.add_row("Encrypted", f"{meta.encryption}")
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
         embedded_fonts: Set[str] = set()
         unemedded_fonts: Set[str] = set()
-        for page in reader.pages:
-            emb, unemb = page._get_fonts()
-            embedded_fonts = embedded_fonts.union(set(emb))
-            unemedded_fonts = unemedded_fonts.union(set(unemb))
-        table.add_row("Fonts (unembedded)", ", ".join(sorted(unemedded_fonts)))
-        table.add_row("Fonts (embedded)", ", ".join(sorted(embedded_fonts)))
+        if not reader.is_encrypted:
+            for page in reader.pages:
+                emb, unemb = page._get_fonts()
+                embedded_fonts = embedded_fonts.union(set(emb))
+                unemedded_fonts = unemedded_fonts.union(set(unemb))
+            table.add_row(
+                "Fonts (unembedded)", ", ".join(sorted(unemedded_fonts))
+            )
+            table.add_row(
+                "Fonts (embedded)", ", ".join(sorted(embedded_fonts))
+            )
         table.add_row("Attachments", meta.attachments)
+
+        enc_table = Table(title="Encryption information")
+        enc_table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
+        enc_table.add_column("Value", style="white")
+        if meta.encryption:
+            enc_table.add_row(
+                "Security Handler Revision Number",
+                str(meta.encryption.revision),
+            )
+            enc_table.add_row("V value", str(meta.encryption.v_value))
 
         os_table = Table(title="Operating System Data")
         os_table.add_column(
@@ -107,6 +152,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
         console = Console()
         console.print(os_table)
         console.print(table)
+        if meta.encryption:
+            console.print(enc_table)
         console.print(
             "Use the 'pagemeta' subcommand to get details about a single page"
         )
