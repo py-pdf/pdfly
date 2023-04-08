@@ -26,6 +26,8 @@ class MetaInfo(BaseModel):
     page_mode: Optional[str] = None
     page_layout: Optional[str] = None
     attachments: str = "unknown"
+    id1: Optional[bytes] = None
+    id2: Optional[bytes] = None
 
     # OS Information
     file_permissions: str
@@ -60,6 +62,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         reader.stream.seek(0)
         pdf_file_version = reader.stream.read(8).decode("utf-8")
         pdf_stat = pdf.stat()
+        pdf_id = reader.trailer.get("/ID")
         meta = MetaInfo(
             pages=len(reader.pages),
             encryption=EncryptionData(
@@ -72,6 +75,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
             pdf_file_version=pdf_file_version,
             page_layout=reader.page_layout,
             attachments=str(list(reader.attachments.keys())),
+            id1=pdf_id[0] if pdf_id is not None else None,
+            id2=pdf_id[1] if pdf_id is not None and len(pdf_id) >= 2 else None,
             # OS Info
             file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
             file_size=pdf_stat.st_size,
@@ -104,6 +109,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
+        table.add_row("PDF ID", f"ID1={meta.id1} ID2={meta.id2}")
         embedded_fonts: Set[str] = set()
         unemedded_fonts: Set[str] = set()
         if not reader.is_encrypted:
