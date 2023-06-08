@@ -3,7 +3,7 @@
 import stat
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Set
+from typing import List, Optional, Set
 
 from pydantic import BaseModel
 from pypdf import PdfReader
@@ -28,6 +28,7 @@ class MetaInfo(BaseModel):
     attachments: str = "unknown"
     id1: Optional[bytes] = None
     id2: Optional[bytes] = None
+    images: List[int] = None
 
     # OS Information
     file_permissions: str
@@ -83,6 +84,11 @@ def main(pdf: Path, output: OutputOptions) -> None:
             creation_time=datetime.fromtimestamp(pdf_stat.st_ctime),
             modification_time=datetime.fromtimestamp(pdf_stat.st_mtime),
             access_time=datetime.fromtimestamp(pdf_stat.st_atime),
+            images=[
+                len(image.data)
+                for page in reader.pages
+                for image in page.images
+            ],
         )
         if info is not None:
             meta.title = info.title
@@ -124,6 +130,9 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 "Fonts (embedded)", ", ".join(sorted(embedded_fonts))
             )
         table.add_row("Attachments", meta.attachments)
+        table.add_row(
+            "Images", f"{len(meta.images)} images ({sum(meta.images):,} bytes)"
+        )
 
         enc_table = Table(title="Encryption information")
         enc_table.add_column(
