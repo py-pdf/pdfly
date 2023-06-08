@@ -28,7 +28,7 @@ class MetaInfo(BaseModel):
     attachments: str = "unknown"
     id1: Optional[bytes] = None
     id2: Optional[bytes] = None
-    images: List[int] = None
+    images: List[int] = []
 
     # OS Information
     file_permissions: str
@@ -44,8 +44,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
         pdf_stat = pdf.stat()
         meta = MetaInfo(
             encryption=EncryptionData(
-                v_value=reader._encryption.algV,
-                revision=reader._encryption.algR,
+                v_value=reader._encryption.V,
+                revision=reader._encryption.R,
             )
             if reader.is_encrypted
             else None,
@@ -67,8 +67,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
         meta = MetaInfo(
             pages=len(reader.pages),
             encryption=EncryptionData(
-                v_value=reader._encryption.algV,
-                revision=reader._encryption.algR,
+                v_value=reader._encryption.V,
+                revision=reader._encryption.R,
             )
             if reader.is_encrypted
             else None,
@@ -115,7 +115,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
-        table.add_row("PDF ID", f"ID1={meta.id1} ID2={meta.id2}")
+        table.add_row("PDF ID", f"ID1={meta.id1!r} ID2={meta.id2!r}")
         embedded_fonts: Set[str] = set()
         unemedded_fonts: Set[str] = set()
         if not reader.is_encrypted:
