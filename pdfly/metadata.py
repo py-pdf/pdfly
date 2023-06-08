@@ -3,7 +3,7 @@
 import stat
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Set
+from typing import List, Optional, Set
 
 from pydantic import BaseModel
 from pypdf import PdfReader
@@ -28,6 +28,7 @@ class MetaInfo(BaseModel):
     attachments: str = "unknown"
     id1: Optional[bytes] = None
     id2: Optional[bytes] = None
+    images: List[int] = []
 
     # OS Information
     file_permissions: str
@@ -43,10 +44,10 @@ def main(pdf: Path, output: OutputOptions) -> None:
         pdf_stat = pdf.stat()
         meta = MetaInfo(
             encryption=EncryptionData(
-                v_value=reader._encryption.algV,
-                revision=reader._encryption.algR,
+                v_value=reader._encryption.V,
+                revision=reader._encryption.R,
             )
-            if reader.is_encrypted
+            if reader.is_encrypted and reader._encryption
             else None,
             pdf_file_version=reader.stream.read(8).decode("utf-8"),
             # OS Info
@@ -66,10 +67,10 @@ def main(pdf: Path, output: OutputOptions) -> None:
         meta = MetaInfo(
             pages=len(reader.pages),
             encryption=EncryptionData(
-                v_value=reader._encryption.algV,
-                revision=reader._encryption.algR,
+                v_value=reader._encryption.V,  # type: ignore
+                revision=reader._encryption.R,  # type: ignore
             )
-            if reader.is_encrypted
+            if reader.is_encrypted and reader._encryption
             else None,
             page_mode=reader.page_mode,
             pdf_file_version=pdf_file_version,
@@ -83,6 +84,11 @@ def main(pdf: Path, output: OutputOptions) -> None:
             creation_time=datetime.fromtimestamp(pdf_stat.st_ctime),
             modification_time=datetime.fromtimestamp(pdf_stat.st_mtime),
             access_time=datetime.fromtimestamp(pdf_stat.st_atime),
+            images=[
+                len(image.data)
+                for page in reader.pages
+                for image in page.images
+            ],
         )
         if info is not None:
             meta.title = info.title
@@ -109,7 +115,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
-        table.add_row("PDF ID", f"ID1={meta.id1} ID2={meta.id2}")
+        table.add_row("PDF ID", f"ID1={meta.id1!r} ID2={meta.id2!r}")
         embedded_fonts: Set[str] = set()
         unemedded_fonts: Set[str] = set()
         if not reader.is_encrypted:
@@ -124,6 +130,9 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 "Fonts (embedded)", ", ".join(sorted(embedded_fonts))
             )
         table.add_row("Attachments", meta.attachments)
+        table.add_row(
+            "Images", f"{len(meta.images)} images ({sum(meta.images):,} bytes)"
+        )
 
         enc_table = Table(title="Encryption information")
         enc_table.add_column(
