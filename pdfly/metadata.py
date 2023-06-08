@@ -47,7 +47,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 v_value=reader._encryption.V,
                 revision=reader._encryption.R,
             )
-            if reader.is_encrypted
+            if reader.is_encrypted and reader._encryption
             else None,
             pdf_file_version=reader.stream.read(8).decode("utf-8"),
             # OS Info
@@ -67,10 +67,10 @@ def main(pdf: Path, output: OutputOptions) -> None:
         meta = MetaInfo(
             pages=len(reader.pages),
             encryption=EncryptionData(
-                v_value=reader._encryption.V,
-                revision=reader._encryption.R,
+                v_value=reader._encryption.V,  # type: ignore
+                revision=reader._encryption.R,  # type: ignore
             )
-            if reader.is_encrypted
+            if reader.is_encrypted and reader._encryption
             else None,
             page_mode=reader.page_mode,
             pdf_file_version=pdf_file_version,
