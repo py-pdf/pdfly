@@ -1,3 +1,51 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pdfly"
+authors = [{ name = "Martin Thoma", email = "info@martin-thoma.de" }]
+maintainers = [{ name = "Martin Thoma", email = "info@martin-thoma.de" }]
+description = "A pure-python CLI application to manipulate PDF files"
+readme = "README.md"
+dynamic = ["version"]
+license = { file = "LICENSE" }
+requires-python = ">=3.6.1"
+
+# https://pypi.org/pypi?%3Aaction=list_classifiers
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+dependencies = [
+    "pypdf>=3.8.2",
+    "typer>=0.9.0",
+    "pillow",
+    "pydantic",
+    "rich",
+]
+
+[project.urls]
+Source = "https://github.com/py-pdf/pdfly"
+
+[project.scripts]
+pdfly = "pdfly.cli:entry_point"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --cov=. --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
+doctest_encoding = "utf-8"
+
 [tool.black]
 line-length = 79
 

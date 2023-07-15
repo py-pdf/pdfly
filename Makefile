@@ -5,7 +5,7 @@ maint:
 
 upload:
 	make clean
-	python setup.py sdist bdist_wheel && twine upload -s dist/*
+	flit publish
 
 clean:
 	python setup.py clean --all
