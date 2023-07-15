@@ -36,7 +36,7 @@ jobs:
           FLIT_USERNAME: '__token__'
           FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
         run: |
-          git fetch --tags
+          git fetch --tags --force
           latest_tag=$(git describe --tags --abbrev=0)
           flit publish --repository pypi --tag $latest_tag
 

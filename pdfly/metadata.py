@@ -17,7 +17,7 @@ class EncryptionData(BaseModel):
 
 
 class MetaInfo(BaseModel):
-    encryption: Optional[EncryptionData]
+    encryption: Optional[EncryptionData] = None
     pdf_file_version: str
     title: Optional[str] = None
     producer: Optional[str] = None
