@@ -38,7 +38,7 @@ jobs:
         run: |
           git fetch --tags --force
           latest_tag=$(git describe --tags --abbrev=0)
-          flit publish --repository pypi --tag $latest_tag
+          flit publish
 
       # Create the Github Page
       - name: Prepare variables
