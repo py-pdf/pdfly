@@ -42,6 +42,7 @@ jobs:
 
       # Create the Github Page
       - name: Prepare variables
+        id: prepare_variables
         run: |
           latest_tag=$(git describe --tags --abbrev=0)
           tag_body=$(git tag -l "${latest_tag}" --format='%(contents:body)')
@@ -49,7 +50,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          name: Version ${{ github.ref }}, $(date -u +'%Y-%m-%d')
+          name: Version ${{ steps.prepare_variables.outputs.latest_tag }}, $(date -u +'%Y-%m-%d')
           draft: false
           prerelease: false
-          body: Body is ${{ steps.build_and_publish.outputs.tag_body }}
+          body: Body is ${{ steps.prepare_variables.outputs.tag_body }}
