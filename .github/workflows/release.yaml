@@ -19,10 +19,10 @@ jobs:
     steps:
       # Ensure it's on PyPI
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.x
 
@@ -49,8 +49,10 @@ jobs:
           echo "$(git tag -l \"${latest_tag}\" --format='%(contents:body)')" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+          echo "tag_body2=$(git tag -l \"${latest_tag}\" --format='%(contents:body)')" >> $GITHUB_ENV
+          echo "tag_body3=$(git tag -l "${latest_tag}" --format='%(contents:body)')" >> $GITHUB_ENV
       - name: Create GitHub Release 🚀
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref }}
           name: Version ${{ env.latest_tag }}, ${{ env.date }}
