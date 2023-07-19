@@ -34,6 +34,7 @@ jobs:
           git fetch --tags --force
           latest_tag="0.2.14"
           echo "latest_tag=0.2.14" >> "$GITHUB_ENV"
+          echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
           tag_body=$(git tag -l "${latest_tag}" --format='%(contents:body)')
           echo "tag_body<<EOF" >> $GITHUB_OUTPUT
           echo "${tag_body}" >> $GITHUB_OUTPUT
@@ -45,4 +46,4 @@ jobs:
           name: Version ${{ env.latest_tag }}, ${{ env.date }}
           draft: false
           prerelease: false
-          body: ${{ steps.prepare_variables.outputs.tag_body }}
+          body: "${{ steps.prepare_variables.outputs.tag_body }}"
