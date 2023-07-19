@@ -35,9 +35,9 @@ jobs:
           latest_tag="0.2.14"
           echo "latest_tag=0.2.14" >> "$GITHUB_ENV"
           tag_body=$(git tag -l "${latest_tag}" --format='%(contents:body)')
-          echo "tag_body<<$EOF" >> "$GITHUB_ENV"
-          git tag -l "${latest_tag}" --format='%(contents:body)' >> "$GITHUB_ENV"
-          echo "$EOF" >> "$GITHUB_ENV"
+          echo "tag_body<<EOF" >> $GITHUB_OUTPUT
+          echo "${tag_body}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
       - name: Create GitHub Release 🚀
         uses: softprops/action-gh-release@v1
         with:
@@ -45,4 +45,4 @@ jobs:
           name: Version ${{ env.latest_tag }}, ${{ env.date }}
           draft: false
           prerelease: false
-          body: ${{ env.tag_body }}
+          body: ${{ steps.prepare_variables.outputs.tag_body }}
