@@ -31,8 +31,8 @@ jobs:
         id: prepare_variables
         run: |
           git fetch --tags --force
-          latest_tag=$(git describe --tags --abbrev=0)
-          echo "latest_tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
+          latest_tag="0.2.14"
+          echo "latest_tag=0.2.14" >> "$GITHUB_ENV"
           echo "tag_body<<$EOF" >> "$GITHUB_ENV"
           git tag -l "${latest_tag}" --format='%(contents:body)' >> "$GITHUB_ENV"
           echo "$EOF" >> "$GITHUB_ENV"
