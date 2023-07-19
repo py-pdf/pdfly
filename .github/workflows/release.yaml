@@ -49,7 +49,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          name: Version ${{ GITHUB_REF_NAME }}, ${{ env.date }}
+          name: Version ${{ env.GITHUB_REF_NAME }}, ${{ env.date }}
           draft: false
           prerelease: false
           body: Body is ${{ env.tag_body }}
