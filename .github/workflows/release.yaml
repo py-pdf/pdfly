@@ -36,8 +36,8 @@ jobs:
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "tag_body<<$EOF" >> "$GITHUB_ENV"
-          echo "Foo\nbar\nbaz" >> "$GITHUB_ENV"
-          echo "$EOF"  >> $GITHUB_ENV
+          git tag -l "${latest_tag}" --format='%(contents:body)' >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
       - name: Create GitHub Release 🚀
         uses: softprops/action-gh-release@v1
         with:
