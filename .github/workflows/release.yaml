@@ -31,12 +31,16 @@ jobs:
         id: prepare_variables
         run: |
           git fetch --tags --force
-          echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+          latest_tag=$(git describe --tags --abbrev=0)
+          echo "latest_tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
+          echo "tag_body<<$EOF" >> "$GITHUB_ENV"
+          git tag -l "${latest_tag}" --format='%(contents:body)' >> "$GITHUB_ENV"
+          echo "$EOF" >> "$GITHUB_ENV"
       - name: Create GitHub Release 🚀
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          name: Version ${{ env.GITHUB_REF_NAME }}, ${{ env.date }}
+          name: Version ${{ env.latest_tag }}, ${{ env.date }}
           draft: false
           prerelease: false
           body: Body is ${{ env.tag_body }}
