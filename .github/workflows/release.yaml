@@ -31,7 +31,7 @@ jobs:
         id: prepare_variables
         run: |
           git fetch --tags --force
-          latest_tag="0.2.14"
+          latest_tag=0.2.14
           echo "latest_tag=0.2.14" >> "$GITHUB_ENV"
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
