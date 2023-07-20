@@ -6,50 +6,40 @@
 name: Publish Python Package to PyPI
 on:
   push:
-    tags:
-      - '*.*.*'
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build_and_publish:
     name: Publish a new version
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
-      # Ensure it's on PyPI
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.x
-
-      - name: Install Flit
-        run: |
-          python -m pip install --upgrade pip
-          pip install flit
-
-      - name: Publish Package to PyPI🚀
-        env:
-          FLIT_USERNAME: '__token__'
-          FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
-        run: |
-          flit publish
-
-      # Create the Github Page
       - name: Prepare variables
         id: prepare_variables
         run: |
           git fetch --tags --force
+          latest_tag=0.2.13
+          echo "latest_tag=0.2.13" >> "$GITHUB_ENV"
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+          git --no-pager tag -l ${latest_tag} --format='%(contents:body)' >> tmpCHANGELOG.txt
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "tag_body<<$EOF" >> "$GITHUB_ENV"
-          git tag -l "${GITHUB_REF_NAME}" --format='%(contents:body)' >> "$GITHUB_ENV"
+          git tag -l "${latest_tag}" --format='%(contents:body)' >> "$GITHUB_ENV"
           echo "$EOF" >> "$GITHUB_ENV"
       - name: Create GitHub Release 🚀
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          name: Version ${{ env.GITHUB_REF_NAME }}, ${{ env.date }}
+          tag_name: ${{ env.latest_tag }}
+          release_name: Version ${{ env.latest_tag }}, ${{ env.date }}
           draft: false
           prerelease: false
-          body: Body is ${{ env.tag_body }}
+          body: ${{ env.tag_body }}
