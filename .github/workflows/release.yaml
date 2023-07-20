@@ -25,8 +25,8 @@ jobs:
         id: prepare_variables
         run: |
           git fetch --tags --force
-          latest_tag=0.2.14
-          echo "latest_tag=0.2.14" >> "$GITHUB_ENV"
+          latest_tag=0.2.13
+          echo "latest_tag=0.2.13" >> "$GITHUB_ENV"
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
           git --no-pager tag -l ${latest_tag} --format='%(contents:body)' >> tmpCHANGELOG.txt
           echo "foo" >> tmpCHANGELOG.txt
