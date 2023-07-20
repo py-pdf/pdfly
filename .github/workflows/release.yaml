@@ -15,6 +15,9 @@ jobs:
     name: Publish a new version
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       # Ensure it's on PyPI
       - name: Checkout Repository
