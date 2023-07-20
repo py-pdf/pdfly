@@ -34,8 +34,8 @@ jobs:
           latest_tag=0.2.14
           echo "latest_tag=0.2.14" >> "$GITHUB_ENV"
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
-          echo "$(git --no-pager tag -l ${latest_tag} --format='%(contents:body)')" > tmpCHANGELOG.txt
-          echo "version=$(cat tmpCHANGELOG.txt)" >> $GITHUB_OUTPUT
+          git --no-pager tag -l ${latest_tag} --format='%(contents:body)' > tmpCHANGELOG.txt
+          cat tmpCHANGELOG.txt
       - name: Create GitHub Release 🚀
         uses: softprops/action-gh-release@v1
         with:
