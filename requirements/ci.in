@@ -5,3 +5,4 @@ flake8-comprehensions
 flake8-isort
 flake8-simplify
 mypy
+ruff
