@@ -22,6 +22,7 @@ pdfly is a command line tool to get informaiton about PDF documents and to manip
 
    meta/CHANGELOG
    meta/CONTRIBUTORS
+   meta/project-governance
 
 Indices and tables
 ==================
