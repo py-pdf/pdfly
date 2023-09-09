@@ -33,14 +33,14 @@ that no other applications interferes with its defpendencies.
 
 ## Python Version Support
 
-If ✓ is givien, it works.
+If ✓ is givien, it works. It is tested via CI.
 If ✖ is given, it is guaranteed not to work.
 If it's not filled, we don't guarantee support, but it might still work.
 
 
-| Python                 | 3.11 | 3.10 | 3.9 | 3.8 | 3.7 | 3.6 | 2.7 |
-| ---------------------- | ---- | ---- | --- | --- | --- | --- | --- |
-| pdfly                  | YES  | YES  | YES | YES |     |     |  ✖  |
+| Python                 | 3.12 | 3.11 | 3.10 | 3.9 | 3.8 | 3.7 | 3.6 | 2.7 |
+| ---------------------- | ---- | ---- | ---- | --- | --- | --- | --- | --- |
+| pdfly                  |  ✓   |  ✓   |  ✓   |  ✓  |  ✓  |     |     |  ✖  |
 
 
 ## Development Version

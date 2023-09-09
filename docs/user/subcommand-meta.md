@@ -29,7 +29,7 @@ $pdfly meta Allianz-Versicherungsunterlagen.pdf
 ┏━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃         Attribute ┃ Value                                                     ┃
 ┡━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│         File Name │ /home/moose/Documents/Allianz-Versicherungsunterlagen.pdf │
+│         File Name │ /home/user/Documents/Allianz-Versicherungsunterlagen.pdf  │
 │  File Permissions │ -rw-rw-r--                                                │
 │         File Size │ 874,781 bytes                                             │
 │     Creation Time │ 2023-09-02 10:00:51                                       │
