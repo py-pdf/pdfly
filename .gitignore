@@ -130,3 +130,7 @@ dmypy.json
 
 *.pdf
 .envrc
+
+# Documentation files copied when building:
+docs/meta/CHANGELOG.md
+docs/meta/CONTRIBUTORS.md

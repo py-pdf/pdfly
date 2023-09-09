@@ -22,27 +22,27 @@ repos:
 #     hooks:
 #     -   id: mypy
 -   repo: https://github.com/psf/black
-    rev: 23.1.0
+    rev: 23.9.0
     hooks:
     -   id: black
         args: [--target-version, py36]
 -   repo: https://github.com/asottile/blacken-docs
-    rev: 1.13.0
+    rev: 1.16.0
     hooks:
     -   id: blacken-docs
         additional_dependencies: [black==22.1.0]
 -   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.0.254'
+    rev: 'v0.0.287'
     hooks:
     -   id: ruff
         args: [--fix]
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+    rev: v3.10.1
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]
 -   repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: 6.1.0
     hooks:
     -   id: flake8
         args: ["--ignore", "E,W,F"]
