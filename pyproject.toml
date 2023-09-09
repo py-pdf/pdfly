@@ -125,4 +125,5 @@ ignore = [
     "PTH123", # `open()` should be replaced by `Path.open()`
     "S101",  # Use of `assert` detected
     "SLF001",  # Private member accessed
+    "INP001",  # File `docs/conf.py` is part of an implicit namespace package. Add an `__init__.py`.
 ]
