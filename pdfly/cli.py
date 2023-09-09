@@ -80,7 +80,17 @@ def up2(
 
 @entry_point.command(name="cat")  # type: ignore[misc]
 def cat(
-    filename: Path,
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            writable=False,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
     fn_pgrgs: List[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
