@@ -59,3 +59,31 @@ pdfly cat --help
 │    --help                               Show this message and exit.          │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
+
+## Examples
+
+### Split a PDF
+
+Get the second, third, and fourth page of a PDF:
+
+```
+pdfly cat input.pdf 1:4 -o out.pdf
+```
+
+### Extract a Page
+
+Get the sixt page of a PDF:
+
+```
+pdfly cat input.pdf 5 -o out.pdf
+```
+
+Note that it is `5`, because the page indices always start at 0.
+
+### Concatenate two PDFs
+
+Just combine two PDF files so that the pages come right after each other:
+
+```
+pdfly cat input1.pdf input2.pdf -o out.pdf
+```
