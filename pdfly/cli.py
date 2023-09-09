@@ -38,9 +38,7 @@ entry_point = typer.Typer(
 @entry_point.callback()  # type: ignore[misc]
 def common(
     ctx: typer.Context,
-    version: bool = typer.Option(  # noqa: B008
-        None, "--version", callback=version_callback
-    ),
+    version: bool = typer.Option(None, "--version", callback=version_callback),
 ) -> None:
     pass
 
@@ -87,7 +85,7 @@ def cat(
     fn_pgrgs: List[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
     ),
-    verbose: bool = typer.Option(  # noqa
+    verbose: bool = typer.Option(
         False, help="show page ranges as they are being read"
     ),
 ) -> None:
