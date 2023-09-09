@@ -2,6 +2,8 @@
 [![PyPI version](https://badge.fury.io/py/pdfly.svg)](https://pypi.org/project/pdfly/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/py-pdf/pdfly)](https://github.com/py-pdf/pdfly)
 [![Python Support](https://img.shields.io/pypi/pyversions/pdfly.svg)](https://pypi.org/project/pdfly/)
+[![Documentation Status](https://readthedocs.org/projects/pdfly/badge/?version=latest)](https://pdfly.readthedocs.io/en/latest/?badge=latest)
+[![](https://img.shields.io/badge/-documentation-green)](https://pdfly.readthedocs.io/en/latest/)
 
 # pdfly
 
