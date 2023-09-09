@@ -23,16 +23,16 @@ PAGE RANGES are like Python slices.
             ::-1      all pages in reverse order.
 
 Examples
-    pdfcat -o output.pdf head.pdf content.pdf :6 7: tail.pdf -1
+    pdfly cat -o output.pdf head.pdf content.pdf :6 7: tail.pdf -1
 
         Concatenate all of head.pdf, all but page seven of content.pdf,
         and the last page of tail.pdf, producing output.pdf.
 
-    pdfcat chapter*.pdf >book.pdf
+    pdfly cat chapter*.pdf >book.pdf
 
         You can specify the output file by redirection.
 
-    pdfcat chapter?.pdf chapter10.pdf >book.pdf
+    pdfly cat chapter?.pdf chapter10.pdf >book.pdf
 
         In case you don't want chapter 10 before chapter 2.
 

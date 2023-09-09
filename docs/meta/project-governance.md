@@ -75,8 +75,7 @@ The community can expect the following:
   not harmed. They give their technical permissions back if they don't need them
   any longer. Any long-time contributor can become a maintainer. Maintainers
   can - and should! - step down from their role when they realize that they
-  can no longer commit that time. Their contribution will be honored in the
-  {doc}`history`.
+  can no longer commit that time.
 * Every **contributor** is aware that the time of maintainers and the benevolent dictator is
   limited. Short pull requests that briefly describe the solved issue and have
   a unit test have a higher chance to get merged soon - simply because it's
