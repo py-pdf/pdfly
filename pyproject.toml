@@ -43,8 +43,10 @@ Source = "https://github.com/py-pdf/pdfly"
 pdfly = "pdfly.cli:entry_point"
 
 [tool.pytest.ini_options]
-addopts = "--doctest-modules --cov=. --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
+addopts = "--disable-socket --doctest-modules --cov=. --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
+filterwarnings = ["error"]
 doctest_encoding = "utf-8"
+testpaths = ["tests"]
 
 [tool.black]
 line-length = 79
