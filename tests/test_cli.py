@@ -24,6 +24,7 @@ def test_x2pdf(tmp_path: Path) -> None:
         [
             "x2pdf",
             "sample-files/003-pdflatex-image/page-0-Im1.jpg",
+            "--output",
             str(output),
         ],
     )

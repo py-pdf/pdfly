@@ -191,25 +191,29 @@ def compress(
             resolve_path=True,
         ),
     ],
-    output: Path,
+    output: Annotated[
+        Path,
+        typer.Argument(
+            exists=False,
+            writable=True,
+        ),
+    ],
 ) -> None:
     pdfly.compress.main(pdf, output)
 
 
 @entry_point.command(name="x2pdf")  # type: ignore[misc]
 def x2pdf(
-    x: Annotated[
+    x: List[Path],
+    output: Annotated[
         Path,
-        typer.Argument(
-            exists=True,
-            file_okay=True,
-            dir_okay=False,
-            writable=False,
-            readable=True,
-            resolve_path=True,
+        typer.Option(
+            "-o",
+            "--output",
+            exists=False,
+            writable=True,
         ),
     ],
-    output: Path,
 ) -> int:
     return pdfly.x2pdf.main(x, output)
 
