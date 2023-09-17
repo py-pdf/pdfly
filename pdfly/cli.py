@@ -16,6 +16,7 @@ import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.up2
+import pdfly.x2pdf
 
 
 def version_callback(value: bool) -> None:
@@ -195,9 +196,28 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
+@entry_point.command(name="x2pdf")  # type: ignore[misc]
+def x2pdf(
+    x: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            writable=False,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Path,
+) -> int:
+    return pdfly.x2pdf.main(x, output)
+
+
 up2.__doc__ = pdfly.up2.__doc__
 extract_images.__doc__ = pdfly.extract_images.__doc__
 cat.__doc__ = pdfly.cat.__doc__
 metadata.__doc__ = pdfly.metadata.__doc__
 pagemeta.__doc__ = pdfly.pagemeta.__doc__
 compress.__doc__ = pdfly.compress.__doc__
+x2pdf.__doc__ = pdfly.x2pdf.__doc__
