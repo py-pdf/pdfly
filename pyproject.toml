@@ -130,3 +130,7 @@ ignore = [
     "INP001",  # File `docs/conf.py` is part of an implicit namespace package. Add an `__init__.py`.
     "FA100", # Missing `from __future__ import annotations`, but uses `typing.Optional`
 ]
+
+
+[tool.ruff.per-file-ignores]
+"sample-files/*" = ["D100", "INP001"]
