@@ -15,6 +15,7 @@ pdfly is a command line tool to get informaiton about PDF documents and to manip
    user/installation
    user/subcommand-meta
    user/subcommand-cat
+   user/subcommand-x2pdf
 
 
 .. toctree::
