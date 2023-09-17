@@ -1,5 +1,8 @@
 # cat
 
+The cat command can split / extract pages from a PDF. It can also
+join/merge/combine multiple PDF documents into a single one.
+
 
 ## Usage
 
