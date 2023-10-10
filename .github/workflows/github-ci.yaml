@@ -27,6 +27,8 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
