@@ -1,21 +1,12 @@
 """Utilities and fixtures that are available automatically for all tests."""
 
-import os
+import io, os
 from pathlib import Path
 
+from fpdf import FPDF
+import pytest
+
 from pdfly.cli import entry_point
-
-TESTS_ROOT = Path(__file__).parent.resolve()
-PROJECT_ROOT = TESTS_ROOT.parent
-RESOURCES_ROOT = PROJECT_ROOT / "resources"
-
-
-def run_cli(args):
-    try:
-        entry_point(args)
-    except SystemExit as error:
-        return error.code
-
 
 try:
     from contextlib import chdir  # type: ignore
@@ -31,3 +22,28 @@ except ImportError:  # Fallback when not available (< Python 3.11):
             yield
         finally:
             os.chdir(cwd)
+
+
+TESTS_ROOT = Path(__file__).parent.resolve()
+PROJECT_ROOT = TESTS_ROOT.parent
+RESOURCES_ROOT = PROJECT_ROOT / "resources"
+
+
+def run_cli(args):
+    try:
+        entry_point(args)
+    except SystemExit as error:
+        return error.code
+
+
+@pytest.fixture
+def two_pages_pdf_filepath(tmp_path):
+    "A PDF with 2 pages, and a different image on each page"
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.image(RESOURCES_ROOT / "baleines.jpg")
+    pdf.add_page()
+    pdf.image(RESOURCES_ROOT / "pythonknight.png")
+    pdf_filepath = tmp_path / "two_pages.pdf"
+    pdf.output(pdf_filepath)
+    return pdf_filepath

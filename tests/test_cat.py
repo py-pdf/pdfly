@@ -83,3 +83,42 @@ def test_cat_subset_warn_on_missing_pages(capsys, tmp_path):
     captured = capsys.readouterr()
     assert exit_code == 0, captured
     assert "WARN" in captured.out
+
+
+@pytest.mark.xfail()  # There is currently a bug there
+def test_cat_subset_ensure_reduced_size(tmp_path, two_pages_pdf_filepath):
+    exit_code = run_cli(
+        [
+            "cat",
+            str(two_pages_pdf_filepath),
+            "0",
+            "--output",
+            str(tmp_path / "page1.pdf"),
+        ]
+    )
+    assert exit_code == 0
+    # The extracted PDF should only contain ONE image:
+    embedded_images = extract_embedded_images(tmp_path / "page1.pdf")
+    assert len(embedded_images) == 1
+
+    exit_code = run_cli(
+        [
+            "cat",
+            str(two_pages_pdf_filepath),
+            "1",
+            "--output",
+            str(tmp_path / "page2.pdf"),
+        ]
+    )
+    assert exit_code == 0
+    # The extracted PDF should only contain ONE image:
+    embedded_images = extract_embedded_images(tmp_path / "page2.pdf")
+    assert len(embedded_images) == 1
+
+
+def extract_embedded_images(pdf_filepath):
+    images = []
+    reader = PdfReader(pdf_filepath)
+    for page in reader.pages:
+        images.extend(page.images)
+    return images
