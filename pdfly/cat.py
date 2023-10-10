@@ -43,40 +43,61 @@ Examples
 
 
 import os
+import sys
 import traceback
 from pathlib import Path
-from sys import exit, stderr, stdout
-from typing import List
+from typing import List, Tuple
 
-from pypdf import PdfMerger, parse_filename_page_ranges
+from pypdf import PageRange, PdfMerger, parse_filename_page_ranges
 
 
 def main(
     filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool
 ) -> None:
-    fn_pgrgs_l = list(fn_pgrgs)
-    fn_pgrgs_l.insert(0, str(filename))
-    filename_page_ranges = parse_filename_page_ranges(fn_pgrgs_l)  # type: ignore
+    filename_page_ranges = parse_filepaths_and_pagerange_args(
+        filename, fn_pgrgs
+    )
     if output:
         output_fh = open(output, "wb")
     else:
-        stdout.flush()
-        output_fh = os.fdopen(stdout.fileno(), "wb")
+        sys.stdout.flush()
+        output_fh = os.fdopen(sys.stdout.fileno(), "wb")
 
     merger = PdfMerger()
     in_fs = {}
     try:
         for filename, page_range in filename_page_ranges:  # type: ignore
             if verbose:
-                print(filename, page_range, file=stderr)
+                print(filename, page_range, file=sys.stderr)
             if filename not in in_fs:
                 in_fs[filename] = open(filename, "rb")
             merger.append(in_fs[filename], pages=page_range)
+        merger.write(output_fh)
     except Exception:
-        print(traceback.format_exc(), file=stderr)
-        print(f"Error while reading {filename}", file=stderr)
-        exit(1)
-    merger.write(output_fh)
-    output_fh.close()
+        print(traceback.format_exc(), file=sys.stderr)
+        print(f"Error while reading {filename}", file=sys.stderr)
+        sys.exit(1)
+    finally:
+        output_fh.close()
     # In 3.0, input files must stay open until output is written.
     # Not closing the in_fs because this script exits now.
+
+
+def parse_filepaths_and_pagerange_args(
+    filename: Path, fn_pgrgs: List[str]
+) -> List[Tuple[Path, PageRange]]:
+    fn_pgrgs_l = list(fn_pgrgs)
+    fn_pgrgs_l.insert(0, str(filename))
+    filename_page_ranges, invalid_filepaths = [], []
+    for filename, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
+        if Path(filename).is_file():
+            filename_page_ranges.append((filename, page_range))
+        else:
+            invalid_filepaths.append(str(filename))
+    if invalid_filepaths:
+        print(
+            f"Invalid file path or page range provided: {' '.join(invalid_filepaths)}",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    return filename_page_ranges

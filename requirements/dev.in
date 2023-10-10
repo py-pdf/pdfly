@@ -1,6 +1,9 @@
 black
 pip-tools
 pre-commit
+pytest
 pytest-cov
+pytest-socket
+pytest-timeout
 twine
 wheel

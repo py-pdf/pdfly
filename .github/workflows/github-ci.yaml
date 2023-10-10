@@ -33,22 +33,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Upgrade pip
-      run: |
-        python -m pip install --upgrade pip
+      run: python -m pip install --upgrade pip
     - name: Install requirements (Python 3)
-      run: |
-        pip install -r requirements/ci.txt
-
+      run: pip install -r requirements/ci.txt -r requirements/dev.txt
     - name: Install pdfly
-      run: |
-        pip install .
+      run: pip install .
 
-    - name: Test with black
-      run: black --check .
+    - name: Run tests
+      run: pytest -vv
 
-    - name: Test with mypy
-      run: |
-        mypy . --ignore-missing-imports --exclude build
   codestyle:
     name: Check code style issues
     runs-on: ubuntu-20.04
@@ -63,19 +56,22 @@ jobs:
       with:
         path: '**/tests/pdf_cache/*'
         key: cache-downloaded-files
+
     - name: Upgrade pip
-      run: |
-        python -m pip install --upgrade pip
+      run: python -m pip install --upgrade pip
     - name: Install requirements
-      run: |
-        pip install -r requirements/ci.txt
+      run: pip install -r requirements/ci.txt
     - name: Install pdfly
-      run: |
-        pip install .
+      run: pip install .
+
+    - name: Lint with black
+      run: black --check --extend-exclude sample-files .
+    - name: Lint with mypy
+      run: mypy . --ignore-missing-imports --exclude build
     - name: Test with ruff
       run: |
         echo `ruff --version`
-        ruff .
+        ruff pdfly/
 
   package:
     name: Build & verify package
