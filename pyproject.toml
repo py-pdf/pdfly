@@ -34,6 +34,7 @@ dependencies = [
     "pillow",
     "pydantic",
     "rich",
+    "fpdf2",
 ]
 
 [project.urls]
