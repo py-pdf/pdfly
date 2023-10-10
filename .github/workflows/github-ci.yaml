@@ -46,7 +46,7 @@ jobs:
         pip install .
 
     - name: Test with black
-      run: black --check .
+      run: black --check . --exclude sample-files
 
     - name: Test with mypy
       run: |
