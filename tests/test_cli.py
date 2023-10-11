@@ -1,35 +1,25 @@
-"""
-Every CLI command is called here with a typer CliRunner.
+import sys
+from subprocess import check_output
 
-Here should only be end-to-end tests.
-"""
+from pypdf import __version__ as pypdf_version
 
-from pathlib import Path
-
-from typer.testing import CliRunner
-
-from pdfly.cli import entry_point
-
-runner = CliRunner()
+from .conftest import run_cli
 
 
-def test_x2pdf(tmp_path: Path) -> None:
-    # Arrange
-    output = tmp_path / "out.pdf"
-    assert not output.exists()
-
-    # Act
-    result = runner.invoke(
-        entry_point,
-        [
-            "x2pdf",
-            "sample-files/003-pdflatex-image/page-0-Im1.jpg",
-            "--output",
-            str(output),
-        ],
+def test_pypdf_cli_can_be_invoked_as_a_module():
+    stdout = check_output(
+        [sys.executable, "-m", "pdfly", "--help"]  # noqa: S603
+    ).decode()
+    assert "pdfly [OPTIONS] COMMAND [ARGS]..." in stdout
+    assert (
+        "pdfly is a pure-python cli application for manipulating PDF files."
+        in stdout
     )
 
-    # Assert
-    assert result.exit_code == 0, result.stdout
-    assert result.stdout == ""
-    assert output.exists()
+
+def test_pypdf_cli_version(capsys):
+    exit_code = run_cli(["--version"])
+    captured = capsys.readouterr()
+    assert not captured.err
+    assert pypdf_version in captured.out
+    assert exit_code == 0
