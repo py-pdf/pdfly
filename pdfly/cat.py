@@ -72,7 +72,7 @@ def main(
             if filename not in in_fs:
                 in_fs[filename] = open(filename, "rb")
 
-            reader = PdfReader(filename)
+            reader = PdfReader(in_fs[filename])
             for page_num in range(*page_range.indices(len(reader.pages))):
                 writer.add_page(reader.pages[page_num - 1])
         writer.write(output_fh)
