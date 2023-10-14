@@ -48,8 +48,7 @@ import traceback
 from pathlib import Path
 from typing import List, Tuple
 
-from pypdf import PageRange, PdfMerger, parse_filename_page_ranges
-from pypdf import PdfReader, PdfWriter
+from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
 
 def main(
