@@ -36,7 +36,6 @@
               
 """
 
-# Stanislav Ulrych <stanislav.ulrych@gmail.com>.
 
 import os
 import sys
@@ -60,7 +59,7 @@ def main(
     ysize = PaperSize.A4.height
 
     writer = PdfWriter()
-    destPage = writer.add_blank_page(width=xsize, height=ysize)
+    dest_page = writer.add_blank_page(width=xsize, height=ysize)
     try:
         for i in range(len(fn_pgrgs)):
             f = fn_pgrgs[i]
@@ -73,9 +72,8 @@ def main(
                     "tx": (i % xcount)*(xsize/xcount),
                     "ty": -(i // xcount)*(ysize/ycount) 
                 }
-                print(t)
                 p.add_transformation(Transformation().translate(**t))
-                destPage.merge_page(p)
+                dest_page.merge_page(p)
 
         writer.write(output_fh)
     except Exception:
@@ -84,8 +82,6 @@ def main(
         sys.exit(1)
     finally:
         output_fh.close()
-    # In 3.0, input files must stay open until output is written.
-    # Not closing the in_fs because this script exits now.
 
 
 
