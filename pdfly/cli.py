@@ -17,6 +17,7 @@ import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.up2
 import pdfly.x2pdf
+import pdfly.tiles
 
 
 def version_callback(value: bool) -> None:
@@ -218,6 +219,17 @@ def x2pdf(
     return pdfly.x2pdf.main(x, output)
 
 
+@entry_point.command(name="tiles")  # type: ignore[misc]
+def tiles(
+    output: Path = typer.Option(..., "-o", "--output"),
+    xcount: int = typer.Option(2, "-x", "--xcount"),
+    ycount: int = typer.Option(2, "-y", "--ycount"),
+    files: List[str] = typer.Argument(  # noqa
+        ..., help="filenames and/or page ranges"
+    ),
+) -> None:
+    return pdfly.tiles.main(output, xcount, ycount, files,)
+
 up2.__doc__ = pdfly.up2.__doc__
 extract_images.__doc__ = pdfly.extract_images.__doc__
 cat.__doc__ = pdfly.cat.__doc__
@@ -225,3 +237,4 @@ metadata.__doc__ = pdfly.metadata.__doc__
 pagemeta.__doc__ = pdfly.pagemeta.__doc__
 compress.__doc__ = pdfly.compress.__doc__
 x2pdf.__doc__ = pdfly.x2pdf.__doc__
+tiles.__doc__ = pdfly.tiles.__doc__

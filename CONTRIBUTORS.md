@@ -9,6 +9,7 @@ history and [GitHubs 'Contributors' feature](https://github.com/py-pdf/pdfly/gra
 ## Contributors to the pdfly project
 
 * [Thoma, Martin](https://github.com/MartinThoma): Creator of pdfly. [LinkedIn](https://www.linkedin.com/in/martin-thoma/) | [StackOverflow](https://stackoverflow.com/users/562769/martin-thoma) | [Blog](https://martin-thoma.com/)
+* [Ulrych, Stanislav](https://github.com/stanislavulrych)
 
 ## Adding a new contributor
 
