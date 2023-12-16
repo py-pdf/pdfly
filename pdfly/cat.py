@@ -48,7 +48,7 @@ import traceback
 from pathlib import Path
 from typing import List, Tuple
 
-from pypdf import PageRange, PdfMerger, parse_filename_page_ranges
+from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
 
 def main(
@@ -63,7 +63,7 @@ def main(
         sys.stdout.flush()
         output_fh = os.fdopen(sys.stdout.fileno(), "wb")
 
-    merger = PdfMerger()
+    writer = PdfWriter()
     in_fs = {}
     try:
         for filename, page_range in filename_page_ranges:  # type: ignore
@@ -71,8 +71,11 @@ def main(
                 print(filename, page_range, file=sys.stderr)
             if filename not in in_fs:
                 in_fs[filename] = open(filename, "rb")
-            merger.append(in_fs[filename], pages=page_range)
-        merger.write(output_fh)
+
+            reader = PdfReader(in_fs[filename])
+            for page_num in range(*page_range.indices(len(reader.pages))):
+                writer.add_page(reader.pages[page_num])
+        writer.write(output_fh)
     except Exception:
         print(traceback.format_exc(), file=sys.stderr)
         print(f"Error while reading {filename}", file=sys.stderr)
