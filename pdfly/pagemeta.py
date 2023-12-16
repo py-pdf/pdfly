@@ -10,10 +10,10 @@ from ._utils import OutputOptions
 
 
 class PageMeta(BaseModel):
-    mediabox: Tuple[int, int, int, int]
-    cropbox: Tuple[int, int, int, int]
-    artbox: Tuple[int, int, int, int]
-    bleedbox: Tuple[int, int, int, int]
+    mediabox: Tuple[float, float, float, float]
+    cropbox: Tuple[float, float, float, float]
+    artbox: Tuple[float, float, float, float]
+    bleedbox: Tuple[float, float, float, float]
     annotations: int
 
 
