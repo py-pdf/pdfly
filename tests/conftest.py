@@ -55,9 +55,24 @@ def pdf_file_100(tmp_path):
 
     for i in range(100):
         pdf.add_page()
-        pdf.set_font("Arial", size=12)
+        pdf.set_font("helvetica", size=12)
         pdf.cell(200, 10, txt=f"{i}", ln=True, align="C")
 
-    pdf_filepath = tmp_path / "two_pages.pdf"
+    pdf_filepath = tmp_path / "pdf_file_100.pdf"
+    pdf.output(pdf_filepath)
+    return pdf_filepath
+
+
+@pytest.fixture
+def pdf_file_abc(tmp_path):
+    """A PDF with 100 pages; each has only the page index on it."""
+    pdf = FPDF()
+
+    for char in [chr(i) for i in range(ord("a"), ord("z") + 1)]:
+        pdf.add_page()
+        pdf.set_font("helvetica", size=12)
+        pdf.cell(200, 10, txt=f"{char}", ln=True, align="C")
+
+    pdf_filepath = tmp_path / "abc.pdf"
     pdf.output(pdf_filepath)
     return pdf_filepath
