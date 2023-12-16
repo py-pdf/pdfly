@@ -5,7 +5,6 @@ from pathlib import Path
 
 from fpdf import FPDF
 import pytest
-
 from pdfly.cli import entry_point
 
 try:
@@ -44,6 +43,21 @@ def two_pages_pdf_filepath(tmp_path):
     pdf.image(RESOURCES_ROOT / "baleines.jpg")
     pdf.add_page()
     pdf.image(RESOURCES_ROOT / "pythonknight.png")
+    pdf_filepath = tmp_path / "two_pages.pdf"
+    pdf.output(pdf_filepath)
+    return pdf_filepath
+
+
+@pytest.fixture
+def pdf_file_100(tmp_path):
+    """A PDF with 100 pages; each has only the page index on it."""
+    pdf = FPDF()
+
+    for i in range(100):
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt=f"{i}", ln=True, align="C")
+
     pdf_filepath = tmp_path / "two_pages.pdf"
     pdf.output(pdf_filepath)
     return pdf_filepath
