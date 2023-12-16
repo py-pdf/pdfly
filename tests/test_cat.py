@@ -13,6 +13,7 @@ def test_cat_incorrect_number_of_args(capsys, tmp_path):
 
 
 def test_cat_two_files_ok(capsys, tmp_path):
+    # Act
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -24,6 +25,8 @@ def test_cat_two_files_ok(capsys, tmp_path):
             ]
         )
     captured = capsys.readouterr()
+
+    # Assert
     assert exit_code == 0, captured
     assert not captured.err
     reader = PdfReader(tmp_path / "out.pdf")
@@ -122,3 +125,45 @@ def extract_embedded_images(pdf_filepath):
     for page in reader.pages:
         images.extend(page.images)
     return images
+
+
+@pytest.mark.parametrize(
+    ("page_range", "expected"),
+    [
+        ("22", ["22"]),
+        ("0:3", ["0", "1", "2"]),
+        (":3", ["0", "1", "2"]),
+        (":", [str(el) for el in range(100)]),
+        ("5:", [str(el) for el in list(range(100))[5:]]),
+        ("::2", [str(el) for el in list(range(100))[::2]]),
+        ("1:10:2", [str(el) for el in list(range(100))[1:10:2]]),
+        ("::1", [str(el) for el in list(range(100))[::1]]),
+        ("::-1", [str(el) for el in list(range(100))[::-1]]),
+    ],
+)
+def test_cat_commands(pdf_file_100, capsys, tmp_path, page_range, expected):
+    with chdir(tmp_path):
+        output_pdf_path = tmp_path / "out.pdf"
+
+        # Run pdfly cat command
+        exit_code = run_cli(
+            [
+                "cat",
+                str(pdf_file_100),
+                page_range,
+                "--output",
+                str(output_pdf_path),
+            ]
+        )
+
+        # Check if the command was successful
+        assert exit_code == 0
+
+        # Extract text from the original and modified PDFs
+        extracted_pages = []
+        reader = PdfReader(output_pdf_path)
+        for page in reader.pages:
+            extracted_pages.append(page.extract_text())
+
+        # Compare the extracted text
+        assert extracted_pages == expected
