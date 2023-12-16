@@ -127,6 +127,71 @@ def extract_embedded_images(pdf_filepath):
     return images
 
 
+def test_cat_combine_files(pdf_file_100, pdf_file_abc, tmp_path, capsys):
+    with chdir(tmp_path):
+        output_pdf_path = tmp_path / "out.pdf"
+
+        # Run pdfly cat command
+        exit_code = run_cli(
+            [
+                "cat",
+                str(pdf_file_100),
+                "1:10:2",
+                str(pdf_file_abc),
+                "::2",
+                str(pdf_file_abc),
+                "1::2",
+                "--output",
+                str(output_pdf_path),
+            ]
+        )
+        captured = capsys.readouterr()
+
+        # Check if the command was successful
+        assert exit_code == 0, captured.out
+
+        # Extract text from the original and modified PDFs
+        extracted_pages = []
+        reader = PdfReader(output_pdf_path)
+        for page in reader.pages:
+            extracted_pages.append(page.extract_text())
+
+        # Compare the extracted text
+        assert extracted_pages == [
+            "1",
+            "3",
+            "5",
+            "7",
+            "9",
+            "a",
+            "c",
+            "e",
+            "g",
+            "i",
+            "k",
+            "m",
+            "o",
+            "q",
+            "s",
+            "u",
+            "w",
+            "y",
+            "b",
+            "d",
+            "f",
+            "h",
+            "j",
+            "l",
+            "n",
+            "p",
+            "r",
+            "t",
+            "v",
+            "x",
+            "z",
+        ]
+
+
 @pytest.mark.parametrize(
     ("page_range", "expected"),
     [
