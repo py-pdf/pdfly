@@ -74,7 +74,7 @@ def main(
 
             reader = PdfReader(in_fs[filename])
             for page_num in range(*page_range.indices(len(reader.pages))):
-                writer.add_page(reader.pages[page_num - 1])
+                writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
     except Exception:
         print(traceback.format_exc(), file=sys.stderr)
