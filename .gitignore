@@ -134,3 +134,7 @@ dmypy.json
 # Documentation files copied when building:
 docs/meta/CHANGELOG.md
 docs/meta/CONTRIBUTORS.md
+
+# 'make release' creates those files:
+RELEASE_COMMIT_MSG.md
+RELEASE_TAG_MSG.md

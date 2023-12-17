@@ -137,7 +137,9 @@ requests-toolbelt==1.0.0
 rfc3986==2.0.0
     # via twine
 rich==13.7.0
-    # via twine
+    # via
+    #   -r requirements/dev.in
+    #   twine
 secretstorage==3.3.3
     # via keyring
 tomli==2.0.1
