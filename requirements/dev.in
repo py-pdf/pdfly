@@ -1,6 +1,6 @@
 black
 pip-tools
-pre-commit
+pre-commit>=3.2.0
 pytest
 pytest-cov
 pytest-socket
