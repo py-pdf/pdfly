@@ -1,6 +1,7 @@
 black
 pip-tools
 pre-commit>=3.2.0
+pydantic
 pytest
 pytest-cov
 pytest-socket

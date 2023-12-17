@@ -48,5 +48,7 @@ repos:
     rev: 'v1.7.1'
     hooks:
       - id: mypy
-        files: ^pypdf/.*
+        files: ^pdfly/.*
         args: [--ignore-missing-imports]
+        additional_dependencies:
+        - "pydantic>=1.10.4"

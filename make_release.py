@@ -5,7 +5,7 @@ import subprocess
 import urllib.request
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 from rich.prompt import Prompt
 
@@ -193,7 +193,7 @@ def get_formatted_changes(git_tag: str) -> Tuple[str, str]:
     commits = get_git_commits_since_tag(git_tag)
 
     # Group by prefix
-    grouped = {}
+    grouped: Dict[str, List[Dict[str, Any]]] = {}
     for commit in commits:
         if commit.prefix not in grouped:
             grouped[commit.prefix] = []
@@ -240,9 +240,11 @@ def get_formatted_changes(git_tag: str) -> Tuple[str, str]:
         tmp = f"\n### {abbrev2long[prefix]} ({prefix})\n"  # header
         output += tmp
         output_with_user += tmp
-        for commit in grouped[prefix]:
-            output += f"- {commit['msg']}\n"
-            output_with_user += f"- {commit['msg']} by @{commit['author']}\n"
+        for commit_dict in grouped[prefix]:
+            output += f"- {commit_dict['msg']}\n"
+            output_with_user += (
+                f"- {commit_dict['msg']} by @{commit_dict['author']}\n"
+            )
         del grouped[prefix]
 
     if grouped:
