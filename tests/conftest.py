@@ -38,6 +38,8 @@ def run_cli(args):
 @pytest.fixture
 def two_pages_pdf_filepath(tmp_path):
     "A PDF with 2 pages, and a different image on each page"
+    # Note: prior to v2.7.9, fpdf2 produced incorrect /Resources dicts for each page (cf. fpdf2 PR #1133),
+    # leading to an "anormal" two_pages.pdf generated there, and for test_cat_subset_ensure_reduced_size() to fail.
     pdf = FPDF()
     pdf.add_page()
     pdf.image(RESOURCES_ROOT / "baleines.jpg")
