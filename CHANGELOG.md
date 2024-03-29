@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## Version 0.3.1, 2024-03-29
+
+### Maintenance (MAINT)
+-  Update pypdf usage (#48)
+
+### Developer Experience (DEV)
+-  Release via REL commit (#48)
+-  Fix mypy issues
+-  Add make_release.py
+
+[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.0...0.3.1)
+
 ## Version 0.3.0, 2023-12-17
 
 ### New Features (ENH)
