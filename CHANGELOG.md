@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Version 0.3.2, 2024-04-14
+
+### Developer Experience (DEV)
+-  Decouple git tag / PyPI release / Github release page (#49, #50)
+
+
+[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.1...0.3.2)
+
 ## Version 0.3.1, 2024-03-29
 
 ### Maintenance (MAINT)
