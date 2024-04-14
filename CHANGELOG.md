@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 0.3.3, 2024-04-14
+
+### Developer Experience (DEV)
+-  Chain workflows
+
+[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.1...0.3.2)
+
 ## Version 0.3.2, 2024-04-14
 
 ### Developer Experience (DEV)
