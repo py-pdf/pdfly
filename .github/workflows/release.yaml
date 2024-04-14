@@ -3,7 +3,7 @@
 # and it's decided what should be in the release.
 # This action only ensures the release is done with the proper contents
 # and that it's announced with a Github release.
-name: Publish Python Package to PyPI
+name: Create git tag
 on:
   push:
     branches:

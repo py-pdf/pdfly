@@ -24,6 +24,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install flit
 
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Publish Package to PyPI🚀
         env:
           FLIT_USERNAME: '__token__'
