@@ -72,6 +72,8 @@ def update_lines(lines_in: Iterable[str], encoding: str) -> Iterable[str]:
             curr_obj = m_obj.group(1)
             logger.info(f"line {line_no}: object {curr_obj}")
             map_obj_offset[curr_obj] = int(offset_out)
+            len_stream = None
+
         if content == "xref":
             offset_xref = offset_out
             line_xref = line_no
