@@ -9,7 +9,7 @@ usage: python 2-up.py input_file output_file
 import sys
 from pathlib import Path
 
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 
 
 def main(pdf: Path, output: Path) -> None:
@@ -18,9 +18,9 @@ def main(pdf: Path, output: Path) -> None:
     for i in range(0, len(reader.pages) - 1, 2):
         lhs = reader.pages[i]
         rhs = reader.pages[i + 1]
-        lhs.mergeTranslatedPage(rhs, float(lhs.mediabox.right), 0, True)
+        lhs.merge_translated_page(rhs, float(lhs.mediabox.right), 0, True)
         writer.add_page(lhs)
-        print(str(i) + " "),
+        print(str(i) + " ")
         sys.stdout.flush()
 
     print(f"writing {output}")

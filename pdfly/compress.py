@@ -1,23 +1,24 @@
 """Compress a PDF."""
 
-import os
 from pathlib import Path
 
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 
 
-def main(pdf: Path, output: Path):
+def main(pdf: Path, output: Path) -> None:
     reader = PdfReader(pdf)
     writer = PdfWriter()
     for page in reader.pages:
-        page.compress_content_streams()
         writer.add_page(page)
+
+    for page in writer.pages:
+        page.compress_content_streams()
 
     with open(output, "wb") as fp:
         writer.write(fp)
 
-    orig_size = os.path.getsize(pdf)
-    comp_size = os.path.getsize(output)
+    orig_size = pdf.stat().st_size
+    comp_size = output.stat().st_size
     ratio = comp_size / orig_size
 
     print(f"Original Size  : {orig_size:,}")
