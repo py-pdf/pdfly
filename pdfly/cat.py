@@ -37,6 +37,7 @@ Examples
         In case you don't want chapter 10 before chapter 2.
 
 """
+
 # Copyright (c) 2014, Steve Witham <switham_github@mac-guyver.com>.
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
@@ -52,7 +53,11 @@ from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
 
 def main(
-    filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool
+    filename: Path,
+    fn_pgrgs: List[str],
+    output: Path,
+    verbose: bool,
+    use_complements: bool = False,
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
@@ -73,8 +78,16 @@ def main(
                 in_fs[filename] = open(filename, "rb")
 
             reader = PdfReader(in_fs[filename])
-            for page_num in range(*page_range.indices(len(reader.pages))):
-                writer.add_page(reader.pages[page_num])
+            if not use_complements:
+                for page_num in range(*page_range.indices(len(reader.pages))):
+                    writer.add_page(reader.pages[page_num])
+            else:
+                all_page_nums = set(range(len(reader.pages)))
+                page_nums = set(range(*page_range.indices(len(reader.pages))))
+                compl_page_nums = all_page_nums - page_nums
+                for page_num in compl_page_nums:
+                    writer.add_page(reader.pages[page_num])
+
         writer.write(output_fh)
     except Exception:
         print(traceback.format_exc(), file=sys.stderr)
