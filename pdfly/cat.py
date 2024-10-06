@@ -73,6 +73,10 @@ def main(
                 in_fs[filename] = open(filename, "rb")
 
             reader = PdfReader(in_fs[filename])
+            num_pages = len(reader.pages)
+            start, end, step = page_range.indices(num_pages)
+            if start < 0 or end < 0 or start >= num_pages or end > num_pages or start > end:
+                print(f"WARNING: Page range {page_range} is out of bounds", file=sys.stderr)
             for page_num in range(*page_range.indices(len(reader.pages))):
                 writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
