@@ -87,7 +87,6 @@ def test_cat_subset_warn_on_missing_pages(capsys, tmp_path):
     assert "WARN" in captured.err
 
 
-@pytest.mark.xfail()  # There is currently a bug there
 def test_cat_subset_ensure_reduced_size(tmp_path, two_pages_pdf_filepath):
     exit_code = run_cli(
         [
