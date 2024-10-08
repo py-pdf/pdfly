@@ -71,7 +71,6 @@ def test_cat_subset_invalid_args(capsys, tmp_path, page_range):
     assert "Invalid file path or page range provided" in captured.err
 
 
-@pytest.mark.skip(reason="This check is not implemented yet")
 def test_cat_subset_warn_on_missing_pages(capsys, tmp_path):
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -85,7 +84,7 @@ def test_cat_subset_warn_on_missing_pages(capsys, tmp_path):
         )
     captured = capsys.readouterr()
     assert exit_code == 0, captured
-    assert "WARN" in captured.out
+    assert "WARN" in captured.err
 
 
 @pytest.mark.xfail()  # There is currently a bug there
