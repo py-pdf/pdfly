@@ -16,6 +16,7 @@ import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.up2
+import pdfly.update_offsets
 import pdfly.x2pdf
 
 
@@ -202,6 +203,19 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
+@entry_point.command(name="update-offsets")  # type: ignore[misc]
+def update_offsets(
+    file_in: Path,
+    file_out: Path,
+    encoding: str = typer.Option(
+        "UTF-8",
+        help="Encoding used to read and write the files, e.g. ISO-8859-1.",
+    ),  # noqa
+    verbose: bool = typer.Option(False, help="Show progress while processing."),  # noqa
+) -> None:
+    pdfly.update_offsets.main(file_in, file_out, encoding, verbose)
+
+
 @entry_point.command(name="x2pdf")  # type: ignore[misc]
 def x2pdf(
     x: List[Path],
@@ -224,4 +238,5 @@ cat.__doc__ = pdfly.cat.__doc__
 metadata.__doc__ = pdfly.metadata.__doc__
 pagemeta.__doc__ = pdfly.pagemeta.__doc__
 compress.__doc__ = pdfly.compress.__doc__
+update_offsets.__doc__ = pdfly.update_offsets.__doc__
 x2pdf.__doc__ = pdfly.x2pdf.__doc__
