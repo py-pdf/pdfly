@@ -103,6 +103,30 @@ def cat(
     pdfly.cat.main(filename, fn_pgrgs, output, verbose)
 
 
+@entry_point.command(name="rm")  # type: ignore[misc]
+def rm(
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            writable=False,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    fn_pgrgs: List[str] = typer.Argument(  # noqa
+        ..., help="filenames and/or page ranges"
+    ),
+    verbose: bool = typer.Option(
+        False, help="show page ranges as they are being read"
+    ),
+) -> None:
+    pdfly.cat.main(filename, fn_pgrgs, output, verbose, use_complements=True)
+
+
 @entry_point.command(name="meta")  # type: ignore[misc]
 def metadata(
     pdf: Annotated[
