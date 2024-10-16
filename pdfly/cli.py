@@ -33,6 +33,7 @@ entry_point = typer.Typer(
     help=(
         "pdfly is a pure-python cli application for manipulating PDF files."
     ),
+    rich_markup_mode="rich",  # Allows to pretty-print commands documentation
 )
 
 
@@ -44,7 +45,7 @@ def common(
     pass
 
 
-@entry_point.command(name="extract-images")  # type: ignore[misc]
+@entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)  # type: ignore[misc]
 def extract_images(
     pdf: Annotated[
         Path,
@@ -61,7 +62,7 @@ def extract_images(
     pdfly.extract_images.main(pdf)
 
 
-@entry_point.command(name="2-up")  # type: ignore[misc]
+@entry_point.command(name="2-up", help=pdfly.up2.__doc__)  # type: ignore[misc]
 def up2(
     pdf: Annotated[
         Path,
@@ -79,7 +80,7 @@ def up2(
     pdfly.up2.main(pdf, out)
 
 
-@entry_point.command(name="cat")  # type: ignore[misc]
+@entry_point.command(name="cat", help=pdfly.cat.__doc__)  # type: ignore[misc]
 def cat(
     filename: Annotated[
         Path,
@@ -103,7 +104,7 @@ def cat(
     pdfly.cat.main(filename, fn_pgrgs, output, verbose)
 
 
-@entry_point.command(name="meta")  # type: ignore[misc]
+@entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]
 def metadata(
     pdf: Annotated[
         Path,
@@ -127,7 +128,7 @@ def metadata(
     pdfly.metadata.main(pdf, output)
 
 
-@entry_point.command(name="pagemeta")  # type: ignore[misc]
+@entry_point.command(name="pagemeta", help=pdfly.pagemeta.__doc__)  # type: ignore[misc]
 def pagemeta(
     pdf: Annotated[
         Path,
@@ -178,7 +179,7 @@ def extract_text(
         print(page.extract_text())
 
 
-@entry_point.command(name="compress")  # type: ignore[misc]
+@entry_point.command(name="compress", help=pdfly.compress.__doc__)  # type: ignore[misc]
 def compress(
     pdf: Annotated[
         Path,
@@ -202,7 +203,7 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
-@entry_point.command(name="x2pdf")  # type: ignore[misc]
+@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
 def x2pdf(
     x: List[Path],
     output: Annotated[
@@ -216,12 +217,3 @@ def x2pdf(
     ],
 ) -> int:
     return pdfly.x2pdf.main(x, output)
-
-
-up2.__doc__ = pdfly.up2.__doc__
-extract_images.__doc__ = pdfly.extract_images.__doc__
-cat.__doc__ = pdfly.cat.__doc__
-metadata.__doc__ = pdfly.metadata.__doc__
-pagemeta.__doc__ = pdfly.pagemeta.__doc__
-compress.__doc__ = pdfly.compress.__doc__
-x2pdf.__doc__ = pdfly.x2pdf.__doc__
