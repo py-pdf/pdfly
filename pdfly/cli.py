@@ -99,8 +99,11 @@ def cat(
     verbose: bool = typer.Option(
         False, help="show page ranges as they are being read"
     ),
+    password: str = typer.Option(
+        None, help="Document's user or owner password."
+    ),
 ) -> None:
-    pdfly.cat.main(filename, fn_pgrgs, output, verbose)
+    pdfly.cat.main(filename, fn_pgrgs, output, verbose, password)
 
 
 @entry_point.command(name="meta")  # type: ignore[misc]
