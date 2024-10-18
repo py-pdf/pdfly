@@ -57,7 +57,7 @@ def main(
     fn_pgrgs: List[str],
     output: Path,
     verbose: bool,
-    use_complements: bool = False,
+    inverted_page_selection: bool = False,
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
@@ -91,14 +91,14 @@ def main(
                     f"WARNING: Page range {page_range} is out of bounds",
                     file=sys.stderr,
                 )
-            if not use_complements:
-                for page_num in range(*page_range.indices(len(reader.pages))):
-                    writer.add_page(reader.pages[page_num])
-            else:
+            if inverted_page_selection:
                 all_page_nums = set(range(len(reader.pages)))
                 page_nums = set(range(*page_range.indices(len(reader.pages))))
-                compl_page_nums = all_page_nums - page_nums
-                for page_num in compl_page_nums:
+                inverted_page_nums = all_page_nums - page_nums
+                for page_num in inverted_page_nums:
+                    writer.add_page(reader.pages[page_num])
+            else:
+                for page_num in range(*page_range.indices(len(reader.pages))):
                     writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
     except Exception:

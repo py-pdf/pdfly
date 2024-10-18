@@ -70,7 +70,7 @@ def test_rm_subset_warn_on_missing_pages(capsys, tmp_path):
     assert "WARN" in captured.out
 
 
-@pytest.mark.xfail()  # There is currently a bug there
+@pytest.mark.xfail()
 def test_rm_subset_ensure_reduced_size(tmp_path, two_pages_pdf_filepath):
     exit_code = run_cli(
         [

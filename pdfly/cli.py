@@ -124,7 +124,9 @@ def rm(
         False, help="show page ranges as they are being read"
     ),
 ) -> None:
-    pdfly.cat.main(filename, fn_pgrgs, output, verbose, use_complements=True)
+    pdfly.cat.main(
+        filename, fn_pgrgs, output, verbose, inverted_page_selection=True
+    )
 
 
 @entry_point.command(name="meta")  # type: ignore[misc]
