@@ -1,10 +1,19 @@
+"""Tests for the `rm` command."""
+
+from pathlib import Path
+from typing import List
+
 import pytest
+from _pytest.capture import CaptureFixture
 from pypdf import PdfReader
 
 from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .test_cat import extract_embedded_images
 
 
-def test_rm_incorrect_number_of_args(capsys, tmp_path):
+def test_rm_incorrect_number_of_args(
+    capsys: CaptureFixture, tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["rm", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
@@ -12,7 +21,7 @@ def test_rm_incorrect_number_of_args(capsys, tmp_path):
     assert "Missing argument" in captured.err
 
 
-def test_rm_subset_ok(capsys, tmp_path):
+def test_rm_subset_ok(capsys: CaptureFixture, tmp_path: Path) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -37,7 +46,9 @@ def test_rm_subset_ok(capsys, tmp_path):
     "page_range",
     ["a", "-", "1-", "1-1-1", "1:1:1:1"],
 )
-def test_rm_subset_invalid_args(capsys, tmp_path, page_range):
+def test_rm_subset_invalid_args(
+    capsys: CaptureFixture, tmp_path: Path, page_range: str
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -53,8 +64,9 @@ def test_rm_subset_invalid_args(capsys, tmp_path, page_range):
     assert "Invalid file path or page range provided" in captured.err
 
 
-@pytest.mark.skip(reason="This check is not implemented yet")
-def test_rm_subset_warn_on_missing_pages(capsys, tmp_path):
+def test_rm_subset_warn_on_missing_pages(
+    capsys: CaptureFixture, tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -67,11 +79,12 @@ def test_rm_subset_warn_on_missing_pages(capsys, tmp_path):
         )
     captured = capsys.readouterr()
     assert exit_code == 0, captured
-    assert "WARN" in captured.out
+    assert "WARN" in captured.err
 
 
-@pytest.mark.xfail()
-def test_rm_subset_ensure_reduced_size(tmp_path, two_pages_pdf_filepath):
+def test_rm_subset_ensure_reduced_size(
+    tmp_path: Path, two_pages_pdf_filepath: Path
+) -> None:
     exit_code = run_cli(
         [
             "rm",
@@ -101,15 +114,12 @@ def test_rm_subset_ensure_reduced_size(tmp_path, two_pages_pdf_filepath):
     assert len(embedded_images) == 1
 
 
-def extract_embedded_images(pdf_filepath):
-    images = []
-    reader = PdfReader(pdf_filepath)
-    for page in reader.pages:
-        images.extend(page.images)
-    return images
-
-
-def test_rm_combine_files(pdf_file_100, pdf_file_abc, tmp_path, capsys):
+def test_rm_combine_files(
+    pdf_file_100: Path,
+    pdf_file_abc: Path,
+    tmp_path: Path,
+    capsys: CaptureFixture,
+) -> None:
     with chdir(tmp_path):
         output_pdf_path = tmp_path / "out.pdf"
 
@@ -135,8 +145,7 @@ def test_rm_combine_files(pdf_file_100, pdf_file_abc, tmp_path, capsys):
         # Extract text from the original and modified PDFs
         extracted_pages = []
         reader = PdfReader(output_pdf_path)
-        for page in reader.pages:
-            extracted_pages.append(page.extract_text())
+        extracted_pages = [page.extract_text() for page in reader.pages]
 
         # Compare the extracted text
         l1 = [str(el) for el in list(range(0, 10, 2)) + list(range(10, 100))]
@@ -187,7 +196,13 @@ def test_rm_combine_files(pdf_file_100, pdf_file_abc, tmp_path, capsys):
         ("::-1", []),
     ],
 )
-def test_rm_commands(pdf_file_100, capsys, tmp_path, page_range, expected):
+def test_rm_commands(
+    pdf_file_100: Path,
+    capsys: CaptureFixture,
+    tmp_path: Path,
+    page_range: str,
+    expected: List[str],
+) -> None:
     with chdir(tmp_path):
         output_pdf_path = tmp_path / "out.pdf"
 
@@ -208,8 +223,7 @@ def test_rm_commands(pdf_file_100, capsys, tmp_path, page_range, expected):
         # Extract text from the original and modified PDFs
         extracted_pages = []
         reader = PdfReader(output_pdf_path)
-        for page in reader.pages:
-            extracted_pages.append(page.extract_text())
+        extracted_pages = [page.extract_text() for page in reader.pages]
 
         # Compare the extracted text
         assert extracted_pages == expected
