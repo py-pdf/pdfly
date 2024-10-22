@@ -15,6 +15,7 @@ import pdfly.compress
 import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
+import pdfly.rm
 import pdfly.up2
 import pdfly.x2pdf
 
@@ -102,6 +103,30 @@ def cat(
     ),
 ) -> None:
     pdfly.cat.main(filename, fn_pgrgs, output, verbose)
+
+
+@entry_point.command(name="rm", help=pdfly.rm.__doc__)
+def rm(
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            writable=False,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    fn_pgrgs: List[str] = typer.Argument(  # noqa
+        ..., help="filenames and/or page ranges"
+    ),
+    verbose: bool = typer.Option(
+        False, help="show page ranges as they are being read"
+    ),
+) -> None:
+    pdfly.rm.main(filename, fn_pgrgs, output, verbose)
 
 
 @entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]

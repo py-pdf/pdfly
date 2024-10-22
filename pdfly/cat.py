@@ -53,7 +53,11 @@ from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
 
 def main(
-    filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool
+    filename: Path,
+    fn_pgrgs: List[str],
+    output: Path,
+    verbose: bool,
+    inverted_page_selection: bool = False,
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
@@ -87,8 +91,15 @@ def main(
                     f"WARNING: Page range {page_range} is out of bounds",
                     file=sys.stderr,
                 )
-            for page_num in range(*page_range.indices(len(reader.pages))):
-                writer.add_page(reader.pages[page_num])
+            if inverted_page_selection:
+                all_page_nums = set(range(len(reader.pages)))
+                page_nums = set(range(*page_range.indices(len(reader.pages))))
+                inverted_page_nums = all_page_nums - page_nums
+                for page_num in inverted_page_nums:
+                    writer.add_page(reader.pages[page_num])
+            else:
+                for page_num in range(*page_range.indices(len(reader.pages))):
+                    writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
     except Exception:
         print(traceback.format_exc(), file=sys.stderr)
