@@ -15,6 +15,7 @@ import pdfly.compress
 import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
+import pdfly.rm
 import pdfly.up2
 import pdfly.x2pdf
 
@@ -104,7 +105,7 @@ def cat(
     pdfly.cat.main(filename, fn_pgrgs, output, verbose)
 
 
-@entry_point.command(name="rm")  # type: ignore[misc]
+@entry_point.command(name="rm", help=pdfly.rm.__doc__)
 def rm(
     filename: Annotated[
         Path,
@@ -125,9 +126,7 @@ def rm(
         False, help="show page ranges as they are being read"
     ),
 ) -> None:
-    pdfly.cat.main(
-        filename, fn_pgrgs, output, verbose, inverted_page_selection=True
-    )
+    pdfly.rm.main(filename, fn_pgrgs, output, verbose)
 
 
 @entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]
