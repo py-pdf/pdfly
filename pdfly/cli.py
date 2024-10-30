@@ -240,5 +240,11 @@ def x2pdf(
             writable=True,
         ),
     ],
+    format: str = typer.Option(
+        "A4-portrait",
+        "--format",
+        help="Page format for output PDF: Letter, A4-portrait, A4-landscape, or custom dimensions (e.g., 210x297)."
+    ),
 ) -> int:
-    return pdfly.x2pdf.main(x, output)
+    """Convert one or more files to PDF with the specified page format."""
+    return pdfly.x2pdf.main(x, output, format)
