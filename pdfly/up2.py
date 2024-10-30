@@ -27,3 +27,4 @@ def main(pdf: Path, output: Path) -> None:
     with open(output, "wb") as fp:
         writer.write(fp)
     print("done.")
+    
