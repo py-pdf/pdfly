@@ -1,11 +1,21 @@
 # CHANGELOG
 
+## Version 0.4.0, not released yet
+
+### New Features (ENH)
+- New rm command (#59)
+- Add warning for out-of-bounds page range in pdfly cat command (#58)
+
+[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.3...0.4.0)
+
+
 ## Version 0.3.3, 2024-04-14
 
 ### Developer Experience (DEV)
 -  Chain workflows
 
-[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.1...0.3.2)
+[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.2...0.3.3)
+
 
 ## Version 0.3.2, 2024-04-14
 

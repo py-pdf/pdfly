@@ -38,6 +38,7 @@ $ pdfly --help
 │ extract-text     Extract text from a PDF file.                              │
 │ meta             Show metadata of a PDF file                                │
 │ pagemeta         Give details about a single page.                          │
+│ rm               Remove pages from PDF files.                               │
 │ x2pdf            Convert one or more files to PDF. Each file is a page.     │
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
