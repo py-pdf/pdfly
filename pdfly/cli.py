@@ -227,8 +227,7 @@ def compress(
 ) -> None:
     pdfly.compress.main(pdf, output)
 
-
-@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
+@entry_point.command()
 def x2pdf(
     x: List[Path],
     output: Annotated[
@@ -241,10 +240,9 @@ def x2pdf(
         ),
     ],
     format: str = typer.Option(
-        "A4-portrait",
+        None,
         "--format",
-        help="Page format for output PDF: Letter, A4-portrait, A4-landscape, or custom dimensions (e.g., 210x297)."
+        help="Optional page format for output PDF: Letter, A4-portrait, A4-landscape, or custom dimensions (e.g., 210x297). If omitted, no format is enforced."
     ),
 ) -> int:
-    """Convert one or more files to PDF with the specified page format."""
     return pdfly.x2pdf.main(x, output, format)
