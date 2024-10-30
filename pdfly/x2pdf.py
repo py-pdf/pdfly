@@ -10,18 +10,19 @@ from PIL import Image
 from rich.console import Console
 
 def get_page_size(format: str):
-    if format.lower() == 'letter':
-        return (215.9, 279.4)
-    elif format.lower() == 'a4-portrait':
-        return (210, 297)
-    elif format.lower() == 'a4-landscape':
-        return (297, 210)
-    else:
-        match = re.match(r"(\d+)x(\d+)", format)
-        if match:
-            return float(match.group(1)), float(match.group(2))
-        else:
-            raise ValueError(f"Invalid format: {format}")
+    """Get page dimensions based on format."""
+    sizes = {
+        "A4": (210, 297), "A3": (297, 420), "A2": (420, 594),
+        "A1": (594, 841), "A0": (841, 1189), "Letter": (215.9, 279.4),
+        "Legal": (215.9, 355.6)
+    }
+    match = re.match(r"(A\d|B\d|C\d|Letter|Legal)(-landscape)?$", format, re.IGNORECASE)
+    if match:
+        size_key = match.group(1).upper()
+        if size_key in sizes:
+            width, height = sizes[size_key]
+            return (height, width) if match.group(2) else (width, height)
+    raise ValueError(f"Invalid or unsupported page format provided: {format}")
 
 def px_to_mm(px: float) -> float:
     px_in_inch = 72
@@ -52,13 +53,11 @@ def image_to_pdf(pdf: FPDF, x: Path, page_size: tuple) -> None:
 
 
 
-def main(xs: List[Path], output: Path, format: str = 'A4-portrait') -> int:
+def main(xs: List[Path], output: Path, format: str = None) -> int:
+    """Main function to generate PDF with images fitted to specified page format."""
     console = Console()
-    pdf = FPDF()
-
-    # Retrieve the page size based on format
-    page_size = get_page_size(format)
-
+    pdf = FPDF(unit="mm")
+    page_size = get_page_size(format) if format else None
     for x in xs:
         path_str = str(x).lower()
         if path_str.endswith(("doc", "docx", "odt")):
@@ -68,7 +67,7 @@ def main(xs: List[Path], output: Path, format: str = 'A4-portrait') -> int:
             image_to_pdf(pdf, x, page_size)
         except Exception as e:
             console.print(f"Error processing {x}: {e}", style="red")
-
+            return 1
     pdf.output(str(output))
     console.print(f"PDF created successfully at {output}", style="green")
     return 0
