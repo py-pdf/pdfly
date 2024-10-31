@@ -16,13 +16,20 @@ def get_page_size(format: str):
         "A1": (594, 841), "A0": (841, 1189), "Letter": (215.9, 279.4),
         "Legal": (215.9, 355.6)
     }
-    match = re.match(r"(A\d|B\d|C\d|Letter|Legal)(-landscape)?$", format, re.IGNORECASE)
+    match = re.match(r"(A\d|B\d|C\d|Letter|Legal)(-(landscape|portrait))?$", format, re.IGNORECASE)
     if match:
         size_key = match.group(1).upper()
         if size_key in sizes:
             width, height = sizes[size_key]
-            return (height, width) if match.group(2) else (width, height)
+            orientation = match.group(3)
+            if orientation == "landscape":
+                return (height, width)
+            elif orientation == "portrait":
+                return (width, height)
+            else:
+                return (width, height)
     raise ValueError(f"Invalid or unsupported page format provided: {format}")
+
 
 def px_to_mm(px: float) -> float:
     px_in_inch = 72
