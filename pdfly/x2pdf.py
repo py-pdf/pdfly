@@ -58,6 +58,9 @@ def main(xs: List[Path], output: Path, format: str = None) -> int:
     console = Console()
     pdf = FPDF(unit="mm")
     page_size = get_page_size(format) if format else None
+
+    error_occurred = False  # Flag to track if any errors happen
+
     for x in xs:
         path_str = str(x).lower()
         if path_str.endswith(("doc", "docx", "odt")):
@@ -67,7 +70,13 @@ def main(xs: List[Path], output: Path, format: str = None) -> int:
             image_to_pdf(pdf, x, page_size)
         except Exception as e:
             console.print(f"Error processing {x}: {e}", style="red")
-            return 1
+            error_occurred = True
+
     pdf.output(str(output))
-    console.print(f"PDF created successfully at {output}", style="green")
-    return 0
+    
+    if error_occurred:
+        console.print(f"PDF created at {output}, but some files encountered errors.", style="yellow")
+        return 1
+    else:
+        console.print(f"PDF created successfully at {output}", style="green")
+        return 0
