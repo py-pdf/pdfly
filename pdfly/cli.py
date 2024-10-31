@@ -227,7 +227,7 @@ def compress(
 ) -> None:
     pdfly.compress.main(pdf, output)
 
-@entry_point.command()
+@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)
 def x2pdf(
     x: List[Path],
     output: Annotated[
