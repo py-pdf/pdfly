@@ -227,8 +227,7 @@ def compress(
 ) -> None:
     pdfly.compress.main(pdf, output)
 
-
-@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
+@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)
 def x2pdf(
     x: List[Path],
     output: Annotated[
@@ -240,5 +239,10 @@ def x2pdf(
             writable=True,
         ),
     ],
+    format: str = typer.Option(
+        None,
+        "--format",
+        help="Optional page format for output PDF: Letter, A4-portrait, A4-landscape, or custom dimensions (e.g., 210x297). If omitted, no format is enforced."
+    ),
 ) -> int:
-    return pdfly.x2pdf.main(x, output)
+    return pdfly.x2pdf.main(x, output, format)
