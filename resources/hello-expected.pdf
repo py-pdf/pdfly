@@ -1,0 +1,52 @@
+%PDF-1.4
+%----
+1 0 obj
+<< /Pages 3 0 R
+   /Type /Catalog /Version /1.4 >>
+endobj
+2 0 obj
+<< /CreationDate (D:20241103211000+01'00') /Producer (vim) >>
+endobj
+3 0 obj
+<< /Count 1 /Kids [ 4 0 R ] /Type /Pages >>
+endobj
+4 0 obj
+<< /Contents [ 5 0 R ] /MediaBox [ 0 0 842 595 ] /Parent 3 0 R
+   /Resources << /Font << /F1 6 0 R >> >> /TrimBox [ 0 0 842 595 ]
+   /Type /Page >>
+endobj
+5 0 obj
+<< /Length 156 >>
+stream
+0.0 G
+0.8 0.8 1.0 rg 200 100 200 100 re B
+
+0.3 0.0 0.0 rg
+BT
+   % Move text to 210 110 via Td-operation
+   /F1 16 Tf
+   210 110 Td
+   (Hello PDF\041) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Font
+   /Subtype /Type1
+   /BaseFont /Helvetica-Bold
+>>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000081 00000 n 
+0000000158 00000 n 
+0000000217 00000 n 
+0000000380 00000 n 
+0000000586 00000 n 
+trailer << /Size 7 /Info 2 0 R /Root 1 0 R >>
+startxref
+667
+%%EOF
+
