@@ -21,7 +21,7 @@ It expects that the /Length-entries have default values containing
 enough digits, e.g. /Length 000 when the stream consists of 576 bytes.
 
 EXAMPLE
-   update-offsets -v --encoding UTF-8 issue-297.pdf issue-297.out.pdf
+   update-offsets --verbose --encoding UTF-8 issue-297.pdf issue-297.out.pdf
 """
 
 from collections.abc import Iterable
@@ -30,6 +30,9 @@ from rich.console import Console
 import re
 import sys
 
+RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
+RE_CONTENT = re.compile(r"^(.*)")
+RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)( .*)", re.DOTALL)
 
 def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbose: bool) -> Iterable[str]:
     """Iterates over the lines of a pdf-files and updates offsets.
@@ -43,9 +46,6 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
     :return The output is a list of lines to be written
             in the given encoding.
     """
-    re_obj = re.compile(r"^([0-9]+) ([0-9]+) obj *")
-    re_content = re.compile(r"^(.*)")
-    re_length = re.compile(r"^(.*/Length )([0-9]+)( .*)", re.DOTALL)
 
     lines_out = []  # lines to be written
     map_line_offset = {}  # map from line-number to offset
@@ -63,12 +63,12 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
     # of /Length-line
     for line in lines_in:
         line_no += 1
-        m_content = re_content.match(line)
+        m_content = RE_CONTENT.match(line)
         if m_content is None:
             raise RuntimeError(f"Line {line_no} without line-break.")
         content = m_content.group(1)
         map_line_offset[line_no] = offset_out
-        m_obj = re_obj.match(line)
+        m_obj = RE_OBJ.match(line)
         if m_obj is not None:
             curr_obj = m_obj.group(1)
             if verbose:
@@ -101,7 +101,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
         elif content == "endobj":
             curr_obj = None
         elif curr_obj is not None and len_stream is None:
-            mLength = re_length.match(line)
+            mLength = RE_LENGTH.match(line)
             if mLength is not None:
                 if verbose:
                     console.print(f"line {line_no}, /Length: {content}")
@@ -139,7 +139,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 f"obj {curr_obj} with stream-len {len}"
                 + f" has no object-length-line: {map_obj_length_line}"
             )
-        m_length = re_length.match(map_obj_length_line[curr_obj])
+        m_length = RE_LENGTH.match(map_obj_length_line[curr_obj])
         prev_length = m_length.group(2)
         len_digits = len(prev_length)
         len_format = "%%0%dd" % len_digits
