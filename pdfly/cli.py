@@ -229,7 +229,7 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
-@entry_point.command(name="update-offsets")  # type: ignore[misc]
+@entry_point.command(name="update-offsets", help=pdfly.update_offsets.__doc__)  # type: ignore[misc]
 def update_offsets(
     file_in: Path,
     file_out: Path,
