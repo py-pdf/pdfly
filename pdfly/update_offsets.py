@@ -26,22 +26,23 @@ EXAMPLE
 
 from collections.abc import Iterable
 from pathlib import Path
-import logging
+from rich.console import Console
 import re
 import sys
 
 
-def update_lines(lines_in: Iterable[str], encoding: str) -> Iterable[str]:
+def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbose: bool) -> Iterable[str]:
     """Iterates over the lines of a pdf-files and updates offsets.
 
     The input is expected to be a pdf without binary-sections.
 
     :param lines_in: An Iterable over the lines including line-breaks.
     :param encoding: The encoding, e.g. "iso-8859-1" or "UTF-8".
+    :param console: Console used to print messages.
+    :param verbose: True to activate logging of info-messages.
     :return The output is a list of lines to be written
             in the given encoding.
     """
-    logger = logging.getLogger("update_lines")
     re_obj = re.compile(r"^([0-9]+) ([0-9]+) obj *")
     re_content = re.compile(r"^(.*)")
     re_length = re.compile(r"^(.*/Length )([0-9]+)( .*)", re.DOTALL)
@@ -70,7 +71,8 @@ def update_lines(lines_in: Iterable[str], encoding: str) -> Iterable[str]:
         m_obj = re_obj.match(line)
         if m_obj is not None:
             curr_obj = m_obj.group(1)
-            logger.info(f"line {line_no}: object {curr_obj}")
+            if verbose:
+                console.print(f"line {line_no}: object {curr_obj}")
             map_obj_offset[curr_obj] = int(offset_out)
             len_stream = None
 
@@ -81,24 +83,28 @@ def update_lines(lines_in: Iterable[str], encoding: str) -> Iterable[str]:
             line_startxref = line_no
             line_xref = None
         elif content == "stream":
-            logger.info(f"line {line_no}: start stream")
+            if verbose:
+                console.print(f"line {line_no}: start stream")
             len_stream = 0
         elif content == "endstream":
-            logger.info(f"line {line_no}: end stream")
+            if verbose:
+                console.print(f"line {line_no}: end stream")
             if curr_obj is None:
                 raise RuntimeError(
                     f"Line {line_no}: " + "endstream without object-start."
                 )
             if len_stream is None:
                 raise RuntimeError(f"Line {line_no}: endstream without stream.")
-            logger.info(f"line {line_no}: /Length {len_stream}")
+            if verbose:
+                console.print(f"line {line_no}: /Length {len_stream}")
             map_stream_len[curr_obj] = len_stream
         elif content == "endobj":
             curr_obj = None
         elif curr_obj is not None and len_stream is None:
             mLength = re_length.match(line)
             if mLength is not None:
-                logger.info(f"line {line_no}, /Length: {content}")
+                if verbose:
+                    console.print(f"line {line_no}, /Length: {content}")
                 map_obj_length_line[curr_obj] = line
                 map_obj_length_line_no[curr_obj] = line_no
         elif curr_obj is not None and len_stream is not None:
@@ -108,7 +114,8 @@ def update_lines(lines_in: Iterable[str], encoding: str) -> Iterable[str]:
             if objNo <= len(map_obj_offset) and str(objNo) in map_obj_offset:
                 eol = line[-2:]
                 xrefUpd = ("%010d" % map_obj_offset[str(objNo)]) + " 00000 n"
-                logger.info(f"{content} -> {xrefUpd}")
+                if verbose:
+                    console.print(f"{content} -> {xrefUpd}")
                 line = xrefUpd + eol
         elif line_startxref is not None and line_no == line_startxref + 1:
             if offset_xref is None:
@@ -150,16 +157,14 @@ def update_lines(lines_in: Iterable[str], encoding: str) -> Iterable[str]:
 
 
 def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
-    if verbose:
-        logging.basicConfig(level=logging.INFO)
-        print(f"Read {file_in}")
+    console = Console()
+    console.print(f"Read {file_in}")
 
     with open(file_in, "r") as f:
-        lines_out = update_lines(f, encoding)
+        lines_out = update_lines(f, encoding, console, verbose)
 
     with open(file_out, "wb") as f:
         for line in lines_out:
             f.write(line.encode(encoding))
 
-    if verbose:
-        print(f"Wrote {file_out}")
+    console.print(f"Wrote {file_out}")
