@@ -65,7 +65,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
         line_no += 1
         m_content = RE_CONTENT.match(line)
         if m_content is None:
-            raise RuntimeError(f"Line {line_no} without line-break.")
+            raise RuntimeError(f"Invalid PDF file: line {line_no} without line-break.")
         content = m_content.group(1)
         map_line_offset[line_no] = offset_out
         m_obj = RE_OBJ.match(line)
@@ -91,10 +91,10 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 console.print(f"line {line_no}: end stream")
             if curr_obj is None:
                 raise RuntimeError(
-                    f"Line {line_no}: " + "endstream without object-start."
+                    f"Invalid PDF file: line {line_no}: endstream without object-start."
                 )
             if len_stream is None:
-                raise RuntimeError(f"Line {line_no}: endstream without stream.")
+                raise RuntimeError(f"Invalid PDF file: line {line_no}: endstream without stream.")
             if verbose:
                 console.print(f"line {line_no}: /Length {len_stream}")
             map_stream_len[curr_obj] = len_stream
@@ -119,7 +119,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 line = xrefUpd + eol
         elif line_startxref is not None and line_no == line_startxref + 1:
             if offset_xref is None:
-                raise RuntimeError("startxref without preceding xref-section")
+                raise NotImplementedError("Unsupported file: startxref without preceding xref-section (probable cross-reference stream)")
             line = "%d\n" % offset_xref
         lines_out.append(line)
 
@@ -127,16 +127,16 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
 
     # Some checks
     if len(map_obj_offset) == 0:
-        raise RuntimeError("The command didn't find any PDF objects.")
+        raise RuntimeError("Invalid PDF file: the command didn't find any PDF objects.")
     if offset_xref is None:
-        raise RuntimeError("The command didn't find a xref-section")
+        raise RuntimeError("Invalid PDF file: the command didn't find a xref-section")
     if line_startxref is None:
-        raise RuntimeError("The command didn't find a startxref-section")
+        raise RuntimeError("Invalid PDF file: the command didn't find a startxref-section")
 
     for curr_obj, stream_len in map_stream_len.items():
         if not curr_obj in map_obj_length_line:
             raise RuntimeError(
-                f"obj {curr_obj} with stream-len {len}"
+                f"obj {curr_obj} with stream-len {stream_len}"
                 + f" has no object-length-line: {map_obj_length_line}"
             )
         m_length = RE_LENGTH.match(map_obj_length_line[curr_obj])
@@ -146,7 +146,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
         updated_length = len_format % stream_len
         if len(updated_length) > len_digits:
             raise RuntimeError(
-                f"Not enough digits in /Length-entry {m_length.group(2)}"
+                f"Not enough digits in /Length-entry {prev_length}"
                 + f" of object {curr_obj}:"
                 + f" too short to take /Length {updated_length}"
             )
@@ -160,10 +160,10 @@ def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
     console = Console()
     console.print(f"Read {file_in}")
 
-    with open(file_in, "r") as f:
+    with open(file_in, "r", encoding=encoding) as f:
         lines_out = update_lines(f, encoding, console, verbose)
 
-    with open(file_out, "wb") as f:
+    with open(file_out, "wb", encoding=encoding) as f:
         for line in lines_out:
             f.write(line.encode(encoding))
 
