@@ -234,8 +234,8 @@ def update_offsets(
     file_in: Path,
     file_out: Path,
     encoding: str = typer.Option(
-        "UTF-8",
-        help="Encoding used to read and write the files, e.g. ISO-8859-1.",
+        "ISO-8859-1",
+        help="Encoding used to read and write the files, e.g. UTF-8.",
     ),  # noqa
     verbose: bool = typer.Option(False, help="Show progress while processing."),  # noqa
 ) -> None:

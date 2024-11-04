@@ -15,13 +15,13 @@ and the offsets in the xref-section automatically.
 
 It expects that the PDF file has ASCII encoding only. It may
 use ISO-8859-1 or UTF-8 in its comments.
-Therefore it expects that there a no binary streams.
+The current implementation incorrectly replaces CR (0x0d) by LF (0x0a) in binary data.
 It expects that there is one xref-section only.
 It expects that the /Length-entries have default values containing
 enough digits, e.g. /Length 000 when the stream consists of 576 bytes.
 
 EXAMPLE
-   update-offsets --verbose --encoding UTF-8 issue-297.pdf issue-297.out.pdf
+   update-offsets --verbose --encoding ISO-8859-1 issue-297.pdf issue-297.out.pdf
 """
 
 from collections.abc import Iterable
@@ -30,9 +30,12 @@ from rich.console import Console
 import re
 import sys
 
+# Here, only simple regular expressions are used.
+# Beyond a certain level of complexity, switching to a proper PDF dictionary parser would be better.
 RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
 RE_CONTENT = re.compile(r"^(.*)")
-RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)( .*)", re.DOTALL)
+RE_LENGTH_REF = re.compile(r"^(.*/Length )([0-9]+) ([0-9]+) R(.*)", re.DOTALL)
+RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ /].*)", re.DOTALL)
 
 def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbose: bool) -> Iterable[str]:
     """Iterates over the lines of a pdf-files and updates offsets.
@@ -50,6 +53,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
     lines_out = []  # lines to be written
     map_line_offset = {}  # map from line-number to offset
     map_obj_offset = {}  # map from object-number to offset
+    map_obj_line = {}  # map from object-number to line-number
     line_no = 0  # current line-number (starting at 0)
     offset_out = 0  # current offset in output-file
     line_xref = None  # line-number of xref-line (in xref-section only)
@@ -59,7 +63,8 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
     offset_xref = None  # offset of xref-section
     map_stream_len = {}  # map from object-number to /Length of stream
     map_obj_length_line = {}  # map from object-number to /Length-line
-    map_obj_length_line_no = {}  # map from object-number to line_no
+    map_obj_length_ref = {}  # map from object-number to /Length-reference (e.g. "3")
+    map_obj_length_line_no = {}  # map from object-number to line_no of length
     # of /Length-line
     for line in lines_in:
         line_no += 1
@@ -71,9 +76,13 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
         m_obj = RE_OBJ.match(line)
         if m_obj is not None:
             curr_obj = m_obj.group(1)
+            curr_gen = m_obj.group(2)
             if verbose:
                 console.print(f"line {line_no}: object {curr_obj}")
+            if curr_gen != "0":
+                raise RuntimeError(f"Invalid PDF file: generation {curr_gen} of object {curr_obj} in line {line_no} is not supported.")
             map_obj_offset[curr_obj] = int(offset_out)
+            map_obj_line[curr_obj] = line_no
             len_stream = None
 
         if content == "xref":
@@ -95,18 +104,28 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 )
             if len_stream is None:
                 raise RuntimeError(f"Invalid PDF file: line {line_no}: endstream without stream.")
+            if len_stream > 0:
+                len_stream = len_stream - 1 # ignore the last EOL
             if verbose:
-                console.print(f"line {line_no}: /Length {len_stream}")
+                console.print(f"line {line_no}: Computed /Length {len_stream} of obj {curr_obj}")
             map_stream_len[curr_obj] = len_stream
         elif content == "endobj":
             curr_obj = None
         elif curr_obj is not None and len_stream is None:
-            mLength = RE_LENGTH.match(line)
-            if mLength is not None:
+            m_length_ref = RE_LENGTH_REF.match(line)
+            if m_length_ref is not None:
+                len_obj = m_length_ref.group(2)
+                len_obj_gen = m_length_ref.group(3)
                 if verbose:
-                    console.print(f"line {line_no}, /Length: {content}")
-                map_obj_length_line[curr_obj] = line
-                map_obj_length_line_no[curr_obj] = line_no
+                    console.print(f"line {line_no}, /Length-reference {len_obj} {len_obj_gen} R: {content}")
+                map_obj_length_ref[curr_obj] = len_obj
+            else:
+                m_length = RE_LENGTH.match(line)
+                if m_length is not None:
+                    if verbose:
+                        console.print(f"line {line_no}, /Length: {content}")
+                    map_obj_length_line[curr_obj] = line
+                    map_obj_length_line_no[curr_obj] = line_no
         elif curr_obj is not None and len_stream is not None:
             len_stream += len(line.encode(encoding))
         elif line_xref is not None and line_no > line_xref + 2:
@@ -134,24 +153,44 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
         raise RuntimeError("Invalid PDF file: the command didn't find a startxref-section")
 
     for curr_obj, stream_len in map_stream_len.items():
-        if not curr_obj in map_obj_length_line:
+        if curr_obj in map_obj_length_line:
+            m_length = RE_LENGTH.match(map_obj_length_line[curr_obj])
+            prev_length = m_length.group(2)
+            len_digits = len(prev_length)
+            len_format = "%%0%dd" % len_digits
+            updated_length = len_format % stream_len
+            if len(updated_length) > len_digits:
+                raise RuntimeError(
+                    f"Not enough digits in /Length-entry {prev_length}"
+                    + f" of object {curr_obj}:"
+                    + f" too short to take /Length {updated_length}"
+                )
+            line = m_length.group(1) + updated_length + m_length.group(3)
+            lines_out[map_obj_length_line_no[curr_obj] - 1] = line
+        elif curr_obj in map_obj_length_ref:
+            len_obj = map_obj_length_ref[curr_obj]
+            if not len_obj in map_obj_line:
+                raise RuntimeError(f"obj {curr_obj} has unknown length-obj {len_obj}")
+            len_obj_line = map_obj_line[len_obj]
+            prev_length = lines_out[len_obj_line][:-1]
+            len_digits = len(prev_length)
+            len_format = "%%0%dd" % len_digits
+            updated_length = len_format % stream_len
+            if len(updated_length) > len_digits:
+                raise RuntimeError(
+                    f"Not enough digits in /Length-ref-entry {prev_length}"
+                    + f" of object {curr_obj} and len-object {len_obj}:"
+                    + f" too short to take /Length {updated_length}"
+                )
+            if prev_length != updated_length:
+                if verbose:
+                    console.print(f"line {line_no}, ref-len {len_obj} of {curr_obj}: {prev_length} -> {updated_length}")
+                lines_out[len_obj_line] = updated_length + '\n'
+        else:
             raise RuntimeError(
                 f"obj {curr_obj} with stream-len {stream_len}"
                 + f" has no object-length-line: {map_obj_length_line}"
             )
-        m_length = RE_LENGTH.match(map_obj_length_line[curr_obj])
-        prev_length = m_length.group(2)
-        len_digits = len(prev_length)
-        len_format = "%%0%dd" % len_digits
-        updated_length = len_format % stream_len
-        if len(updated_length) > len_digits:
-            raise RuntimeError(
-                f"Not enough digits in /Length-entry {prev_length}"
-                + f" of object {curr_obj}:"
-                + f" too short to take /Length {updated_length}"
-            )
-        line = m_length.group(1) + updated_length + m_length.group(3)
-        lines_out[map_obj_length_line_no[curr_obj] - 1] = line
 
     return lines_out
 
@@ -163,7 +202,7 @@ def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
     with open(file_in, "r", encoding=encoding) as f:
         lines_out = update_lines(f, encoding, console, verbose)
 
-    with open(file_out, "wb", encoding=encoding) as f:
+    with open(file_out, "wb") as f:
         for line in lines_out:
             f.write(line.encode(encoding))
 
