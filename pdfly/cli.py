@@ -242,7 +242,7 @@ def update_offsets(
     pdfly.update_offsets.main(file_in, file_out, encoding, verbose)
 
 
-@entry_point.command(name="x2pdf", help=x2pdf.update_offsets.__doc__)  # type: ignore[misc]
+@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
 def x2pdf(
     x: List[Path],
     output: Annotated[
