@@ -35,7 +35,7 @@ import sys
 RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
 RE_CONTENT = re.compile(r"^(.*)")
 RE_LENGTH_REF = re.compile(r"^(.*/Length )([0-9]+) ([0-9]+) R(.*)", re.DOTALL)
-RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ />\r\n].*)", re.DOTALL)
+RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ />\t\f\r\n].*)", re.DOTALL)
 
 def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbose: bool) -> Iterable[str]:
     """Iterates over the lines of a pdf-files and updates offsets.
