@@ -14,8 +14,8 @@ from .conftest import RESOURCES_ROOT, chdir, run_cli
 def test_update_offsets(capsys, tmp_path: Path) -> None:
     # Arrange
     input = str(RESOURCES_ROOT / "file-with-invalid-offsets.pdf")
-    file_expected = str(RESOURCES_ROOT / "hello-expected.pdf")
-    output = tmp_path / "hello-out.pdf"
+    file_expected = str(RESOURCES_ROOT / "file-with-fixed-offsets.pdf")
+    output = tmp_path / "file-with-offsets-out.pdf"
     assert not output.exists()
 
     # Act
