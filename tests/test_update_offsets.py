@@ -7,6 +7,7 @@ Here should only be end-to-end tests.
 from pathlib import Path
 
 import pytest
+import re
 
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
@@ -31,7 +32,7 @@ def test_update_offsets(capsys, tmp_path: Path) -> None:
     captured = capsys.readouterr()
     assert exit_code == 0, captured
     assert not captured.err
-    assert f"Wrote {output}" in captured.out
+    assert re.search(r"Wrote\s+" + re.escape(str(output)), captured.out)
     assert output.exists()
     with open(file_expected, 'r', encoding='iso-8859-1') as file_exp:
         lines_exp = file_exp.readlines()
