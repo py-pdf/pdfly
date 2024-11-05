@@ -35,7 +35,7 @@ import sys
 RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
 RE_CONTENT = re.compile(r"^(.*)")
 RE_LENGTH_REF = re.compile(r"^(.*/Length )([0-9]+) ([0-9]+) R(.*)", re.DOTALL)
-RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ />\t\f\r\n].*)", re.DOTALL)
+RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ />\x00\t\f\r\n].*)", re.DOTALL)
 
 def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbose: bool) -> Iterable[str]:
     """Iterates over the lines of a pdf-files and updates offsets.
@@ -194,13 +194,48 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
 
     return lines_out
 
+def read_binary_file(file_path: str, encoding: str) -> Iterable[str]:
+    """Reads a binary file line by line and returns these lines as a list of strings in the given encoding.
+    Encoding utf-8 can't be used to read random binary data.
+
+    :param file_path: file to be read line by line
+    :param encoding: encoding to be used (e.g. "iso-8859-1")
+    :return lines including line-breaks
+    """
+    chunks = []
+    with open(file_path, 'rb') as file:
+        buffer = bytearray()
+        while True:
+            chunk = file.read(4096)  # Read in chunks of 4096 bytes
+            if not chunk:
+                break  # End of file
+
+            buffer += chunk
+
+            # Split buffer into chunks based on LF, CR, or CRLF
+            while True:
+                match = re.search(b'(\x0D\x0A|\x0A|\x0D)', buffer)
+                if not match:
+                    break  # No more line breaks found, process the remaining buffer
+
+                start, end = match.start(), match.end()
+                chunk_str = buffer[:end].decode(encoding, errors='strict')
+                buffer = buffer[end:]
+
+                chunks.append(chunk_str)
+
+        # Handle the last chunk
+        if buffer:
+            chunks.append(buffer.decode(encoding, errors='strict'))
+
+    return chunks
 
 def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
     console = Console()
     console.print(f"Read {file_in}")
 
-    with open(file_in, "r", encoding=encoding) as f:
-        lines_out = update_lines(f, encoding, console, verbose)
+    lines_in = read_binary_file(file_in, encoding)
+    lines_out = update_lines(lines_in, encoding, console, verbose)
 
     with open(file_out, "wb") as f:
         for line in lines_out:
