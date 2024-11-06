@@ -34,15 +34,21 @@ def test_update_offsets(capsys, tmp_path: Path) -> None:
     assert not captured.err
     assert re.search(r"Wrote\s+" + re.escape(str(output)), captured.out)
     assert output.exists()
-    with open(file_expected, 'r', encoding='iso-8859-1') as file_exp:
+    with open(file_expected, "r", encoding="iso-8859-1") as file_exp:
         lines_exp = file_exp.readlines()
-    with open(output, 'r', encoding='iso-8859-1') as file_act:
+    with open(output, "r", encoding="iso-8859-1") as file_act:
         lines_act = file_act.readlines()
-    assert len(lines_exp) == len(lines_act), f"lines_exp=f{lines_exp}, lines_act=f{lines_act}"
-    for line_no, (line_exp, line_act) in enumerate(zip(lines_exp, lines_act), start = 1):
+    assert len(lines_exp) == len(
+        lines_act
+    ), f"lines_exp=f{lines_exp}, lines_act=f{lines_act}"
+    for line_no, (line_exp, line_act) in enumerate(
+        zip(lines_exp, lines_act), start=1
+    ):
         assert line_exp == line_act, f"Lines differ in line {line_no}"
 
+
 # The current implementation doesn't support valid PDF lines as "/Length 5470>> stream".
+
 
 @pytest.mark.parametrize(
     "input_pdf_filepath",
@@ -71,9 +77,11 @@ def test_update_offsets(capsys, tmp_path: Path) -> None:
         "sample-files/023-cmyk-image/cmyk-image.pdf",
         "sample-files/024-annotations/annotated_pdf.pdf",
         "sample-files/025-attachment/with-attachment.pdf",
-    ]
+    ],
 )
-def test_update_offsets_on_all_reference_files(capsys, tmp_path: Path, input_pdf_filepath: Path) -> None:
+def test_update_offsets_on_all_reference_files(
+    capsys, tmp_path: Path, input_pdf_filepath: Path
+) -> None:
     # Arrange
     output_pdf_filepath = tmp_path / "out.pdf"
 
@@ -81,7 +89,8 @@ def test_update_offsets_on_all_reference_files(capsys, tmp_path: Path, input_pdf
     exit_code = run_cli(
         [
             "update-offsets",
-            "--encoding", "iso-8859-1",
+            "--encoding",
+            "iso-8859-1",
             input_pdf_filepath,
             str(output_pdf_filepath),
         ]

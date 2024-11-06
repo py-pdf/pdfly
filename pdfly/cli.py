@@ -237,7 +237,9 @@ def update_offsets(
         "ISO-8859-1",
         help="Encoding used to read and write the files, e.g. UTF-8.",
     ),  # noqa
-    verbose: bool = typer.Option(False, help="Show progress while processing."),  # noqa
+    verbose: bool = typer.Option(
+        False, help="Show progress while processing."
+    ),  # noqa
 ) -> None:
     pdfly.update_offsets.main(file_in, file_out, encoding, verbose)
 

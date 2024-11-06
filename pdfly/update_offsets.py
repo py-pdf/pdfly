@@ -35,9 +35,14 @@ import sys
 RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
 RE_CONTENT = re.compile(r"^([^\r\n]*)", re.DOTALL)
 RE_LENGTH_REF = re.compile(r"^(.*/Length )([0-9]+) ([0-9]+) R(.*)", re.DOTALL)
-RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ />\x00\t\f\r\n].*)", re.DOTALL)
+RE_LENGTH = re.compile(
+    r"^(.*/Length )([0-9]+)([ />\x00\t\f\r\n].*)", re.DOTALL
+)
 
-def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbose: bool) -> Iterable[str]:
+
+def update_lines(
+    lines_in: Iterable[str], encoding: str, console: Console, verbose: bool
+) -> Iterable[str]:
     """Iterates over the lines of a pdf-files and updates offsets.
 
     The input is expected to be a pdf without binary-sections.
@@ -63,14 +68,18 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
     offset_xref = None  # offset of xref-section
     map_stream_len = {}  # map from object-number to /Length of stream
     map_obj_length_line = {}  # map from object-number to /Length-line
-    map_obj_length_ref = {}  # map from object-number to /Length-reference (e.g. "3")
+    map_obj_length_ref = (
+        {}
+    )  # map from object-number to /Length-reference (e.g. "3")
     map_obj_length_line_no = {}  # map from object-number to line_no of length
     # of /Length-line
     for idx, line in enumerate(lines_in):
         line_no = idx + 1
         m_content = RE_CONTENT.match(line)
         if m_content is None:
-            raise RuntimeError(f"Invalid PDF file: line {line_no} without line-break.")
+            raise RuntimeError(
+                f"Invalid PDF file: line {line_no} without line-break."
+            )
         content = m_content.group(1)
         map_line_offset[line_no] = offset_out
         m_obj = RE_OBJ.match(line)
@@ -80,7 +89,9 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
             if verbose:
                 console.print(f"line {line_no}: object {curr_obj}")
             if curr_gen != "0":
-                raise RuntimeError(f"Invalid PDF file: generation {curr_gen} of object {curr_obj} in line {line_no} is not supported.")
+                raise RuntimeError(
+                    f"Invalid PDF file: generation {curr_gen} of object {curr_obj} in line {line_no} is not supported."
+                )
             map_obj_offset[curr_obj] = int(offset_out)
             map_obj_line[curr_obj] = line_no
             len_stream = None
@@ -103,12 +114,20 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                     f"Invalid PDF file: line {line_no}: endstream without object-start."
                 )
             if len_stream is None:
-                raise RuntimeError(f"Invalid PDF file: line {line_no}: endstream without stream.")
+                raise RuntimeError(
+                    f"Invalid PDF file: line {line_no}: endstream without stream."
+                )
             if len_stream > 0:
                 # Ignore the last EOL
-                len_stream = len_stream - 2 if lines_in[idx - 1][-2:] == '\r\n' else len_stream - 1
+                len_stream = (
+                    len_stream - 2
+                    if lines_in[idx - 1][-2:] == "\r\n"
+                    else len_stream - 1
+                )
             if verbose:
-                console.print(f"line {line_no}: Computed /Length {len_stream} of obj {curr_obj}")
+                console.print(
+                    f"line {line_no}: Computed /Length {len_stream} of obj {curr_obj}"
+                )
             map_stream_len[curr_obj] = len_stream
         elif content == "endobj":
             curr_obj = None
@@ -118,7 +137,9 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 len_obj = m_length_ref.group(2)
                 len_obj_gen = m_length_ref.group(3)
                 if verbose:
-                    console.print(f"line {line_no}, /Length-reference {len_obj} {len_obj_gen} R: {content}")
+                    console.print(
+                        f"line {line_no}, /Length-reference {len_obj} {len_obj_gen} R: {content}"
+                    )
                 map_obj_length_ref[curr_obj] = len_obj
             else:
                 m_length = RE_LENGTH.match(line)
@@ -139,7 +160,9 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 line = xrefUpd + eol
         elif line_startxref is not None and line_no == line_startxref + 1:
             if offset_xref is None:
-                raise NotImplementedError("Unsupported file: startxref without preceding xref-section (probable cross-reference stream)")
+                raise NotImplementedError(
+                    "Unsupported file: startxref without preceding xref-section (probable cross-reference stream)"
+                )
             line = "%d\n" % offset_xref
         lines_out.append(line)
 
@@ -147,11 +170,17 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
 
     # Some checks
     if len(map_obj_offset) == 0:
-        raise RuntimeError("Invalid PDF file: the command didn't find any PDF objects.")
+        raise RuntimeError(
+            "Invalid PDF file: the command didn't find any PDF objects."
+        )
     if offset_xref is None:
-        raise RuntimeError("Invalid PDF file: the command didn't find a xref-section")
+        raise RuntimeError(
+            "Invalid PDF file: the command didn't find a xref-section"
+        )
     if line_startxref is None:
-        raise RuntimeError("Invalid PDF file: the command didn't find a startxref-section")
+        raise RuntimeError(
+            "Invalid PDF file: the command didn't find a startxref-section"
+        )
 
     for curr_obj, stream_len in map_stream_len.items():
         if curr_obj in map_obj_length_line:
@@ -171,7 +200,9 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
         elif curr_obj in map_obj_length_ref:
             len_obj = map_obj_length_ref[curr_obj]
             if not len_obj in map_obj_line:
-                raise RuntimeError(f"obj {curr_obj} has unknown length-obj {len_obj}")
+                raise RuntimeError(
+                    f"obj {curr_obj} has unknown length-obj {len_obj}"
+                )
             len_obj_line = map_obj_line[len_obj]
             prev_length = lines_out[len_obj_line][:-1]
             len_digits = len(prev_length)
@@ -185,8 +216,10 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
                 )
             if prev_length != updated_length:
                 if verbose:
-                    console.print(f"line {line_no}, ref-len {len_obj} of {curr_obj}: {prev_length} -> {updated_length}")
-                lines_out[len_obj_line] = updated_length + '\n'
+                    console.print(
+                        f"line {line_no}, ref-len {len_obj} of {curr_obj}: {prev_length} -> {updated_length}"
+                    )
+                lines_out[len_obj_line] = updated_length + "\n"
         else:
             raise RuntimeError(
                 f"obj {curr_obj} with stream-len {stream_len}"
@@ -194,6 +227,7 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
             )
 
     return lines_out
+
 
 def read_binary_file(file_path: str, encoding: str) -> Iterable[str]:
     """Reads a binary file line by line and returns these lines as a list of strings in the given encoding.
@@ -204,7 +238,7 @@ def read_binary_file(file_path: str, encoding: str) -> Iterable[str]:
     :return lines including line-breaks
     """
     chunks = []
-    with open(file_path, 'rb') as file:
+    with open(file_path, "rb") as file:
         buffer = bytearray()
         while True:
             chunk = file.read(4096)  # Read in chunks of 4096 bytes
@@ -215,21 +249,22 @@ def read_binary_file(file_path: str, encoding: str) -> Iterable[str]:
 
             # Split buffer into chunks based on LF, CR, or CRLF
             while True:
-                match = re.search(b'(\x0D\x0A|\x0A|\x0D)', buffer)
+                match = re.search(b"(\x0D\x0A|\x0A|\x0D)", buffer)
                 if not match:
                     break  # No more line breaks found, process the remaining buffer
 
                 start, end = match.start(), match.end()
-                chunk_str = buffer[:end].decode(encoding, errors='strict')
+                chunk_str = buffer[:end].decode(encoding, errors="strict")
                 buffer = buffer[end:]
 
                 chunks.append(chunk_str)
 
         # Handle the last chunk
         if buffer:
-            chunks.append(buffer.decode(encoding, errors='strict'))
+            chunks.append(buffer.decode(encoding, errors="strict"))
 
     return chunks
+
 
 def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
     console = Console()
@@ -243,4 +278,3 @@ def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
             f.write(line.encode(encoding))
 
     console.print(f"Wrote {file_out}")
-
