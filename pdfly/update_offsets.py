@@ -33,7 +33,7 @@ import sys
 # Here, only simple regular expressions are used.
 # Beyond a certain level of complexity, switching to a proper PDF dictionary parser would be better.
 RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
-RE_CONTENT = re.compile(r"^(.*)")
+RE_CONTENT = re.compile(r"^([^\r\n]*)", re.DOTALL)
 RE_LENGTH_REF = re.compile(r"^(.*/Length )([0-9]+) ([0-9]+) R(.*)", re.DOTALL)
 RE_LENGTH = re.compile(r"^(.*/Length )([0-9]+)([ />\x00\t\f\r\n].*)", re.DOTALL)
 
@@ -66,8 +66,8 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
     map_obj_length_ref = {}  # map from object-number to /Length-reference (e.g. "3")
     map_obj_length_line_no = {}  # map from object-number to line_no of length
     # of /Length-line
-    for line in lines_in:
-        line_no += 1
+    for idx, line in enumerate(lines_in):
+        line_no = idx + 1
         m_content = RE_CONTENT.match(line)
         if m_content is None:
             raise RuntimeError(f"Invalid PDF file: line {line_no} without line-break.")
@@ -105,7 +105,8 @@ def update_lines(lines_in: Iterable[str], encoding: str, console: Console, verbo
             if len_stream is None:
                 raise RuntimeError(f"Invalid PDF file: line {line_no}: endstream without stream.")
             if len_stream > 0:
-                len_stream = len_stream - 1 # ignore the last EOL
+                # Ignore the last EOL
+                len_stream = len_stream - 2 if lines_in[idx - 1][-2:] == '\r\n' else len_stream - 1
             if verbose:
                 console.print(f"line {line_no}: Computed /Length {len_stream} of obj {curr_obj}")
             map_stream_len[curr_obj] = len_stream
