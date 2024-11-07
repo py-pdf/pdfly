@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Updates offsets and lengths in a simple PDF file.
 
@@ -20,15 +19,21 @@ It expects that there is one xref-section only.
 It expects that the /Length-entries have default values containing
 enough digits, e.g. /Length 000 when the stream consists of 576 bytes.
 
-EXAMPLE
+Example:
    update-offsets --verbose --encoding ISO-8859-1 issue-297.pdf issue-297.out.pdf
+
 """
 
-from collections.abc import Iterable
-from pathlib import Path
-from rich.console import Console
 import re
 import sys
+from pathlib import Path
+
+if sys.version_info >= (3, 9):
+    List = list
+else:  # Support for Python 3.8
+    from typing import List
+
+from rich.console import Console
 
 # Here, only simple regular expressions are used.
 # Beyond a certain level of complexity, switching to a proper PDF dictionary parser would be better.
@@ -41,20 +46,20 @@ RE_LENGTH = re.compile(
 
 
 def update_lines(
-    lines_in: Iterable[str], encoding: str, console: Console, verbose: bool
-) -> Iterable[str]:
-    """Iterates over the lines of a pdf-files and updates offsets.
+    lines_in: List[str], encoding: str, console: Console, verbose: bool
+) -> List[str]:
+    """
+    Iterates over the lines of a pdf-files and updates offsets.
 
     The input is expected to be a pdf without binary-sections.
 
-    :param lines_in: An Iterable over the lines including line-breaks.
+    :param lines_in: A list over the lines including line-breaks.
     :param encoding: The encoding, e.g. "iso-8859-1" or "UTF-8".
     :param console: Console used to print messages.
     :param verbose: True to activate logging of info-messages.
     :return The output is a list of lines to be written
             in the given encoding.
     """
-
     lines_out = []  # lines to be written
     map_line_offset = {}  # map from line-number to offset
     map_obj_offset = {}  # map from object-number to offset
@@ -184,7 +189,12 @@ def update_lines(
 
     for curr_obj, stream_len in map_stream_len.items():
         if curr_obj in map_obj_length_line:
-            m_length = RE_LENGTH.match(map_obj_length_line[curr_obj])
+            line = map_obj_length_line[curr_obj]
+            m_length = RE_LENGTH.match(line)
+            if m_length is None:
+                raise RuntimeError(
+                    f"Invalid PDF file: line '{line}' does not contain a valid /Length."
+                )
             prev_length = m_length.group(2)
             len_digits = len(prev_length)
             len_format = "%%0%dd" % len_digits
@@ -192,14 +202,14 @@ def update_lines(
             if len(updated_length) > len_digits:
                 raise RuntimeError(
                     f"Not enough digits in /Length-entry {prev_length}"
-                    + f" of object {curr_obj}:"
-                    + f" too short to take /Length {updated_length}"
+                    f" of object {curr_obj}:"
+                    f" too short to take /Length {updated_length}"
                 )
             line = m_length.group(1) + updated_length + m_length.group(3)
             lines_out[map_obj_length_line_no[curr_obj] - 1] = line
         elif curr_obj in map_obj_length_ref:
             len_obj = map_obj_length_ref[curr_obj]
-            if not len_obj in map_obj_line:
+            if len_obj not in map_obj_line:
                 raise RuntimeError(
                     f"obj {curr_obj} has unknown length-obj {len_obj}"
                 )
@@ -211,8 +221,8 @@ def update_lines(
             if len(updated_length) > len_digits:
                 raise RuntimeError(
                     f"Not enough digits in /Length-ref-entry {prev_length}"
-                    + f" of object {curr_obj} and len-object {len_obj}:"
-                    + f" too short to take /Length {updated_length}"
+                    f" of object {curr_obj} and len-object {len_obj}:"
+                    f" too short to take /Length {updated_length}"
                 )
             if prev_length != updated_length:
                 if verbose:
@@ -223,22 +233,23 @@ def update_lines(
         else:
             raise RuntimeError(
                 f"obj {curr_obj} with stream-len {stream_len}"
-                + f" has no object-length-line: {map_obj_length_line}"
+                f" has no object-length-line: {map_obj_length_line}"
             )
 
     return lines_out
 
 
-def read_binary_file(file_path: str, encoding: str) -> Iterable[str]:
-    """Reads a binary file line by line and returns these lines as a list of strings in the given encoding.
+def read_binary_file(file_path: Path, encoding: str) -> List[str]:
+    """
+    Reads a binary file line by line and returns these lines as a list of strings in the given encoding.
     Encoding utf-8 can't be used to read random binary data.
 
     :param file_path: file to be read line by line
     :param encoding: encoding to be used (e.g. "iso-8859-1")
     :return lines including line-breaks
     """
-    chunks = []
-    with open(file_path, "rb") as file:
+    chunks: List[str] = []
+    with file_path.open("rb") as file:
         buffer = bytearray()
         while True:
             chunk = file.read(4096)  # Read in chunks of 4096 bytes
@@ -253,7 +264,7 @@ def read_binary_file(file_path: str, encoding: str) -> Iterable[str]:
                 if not match:
                     break  # No more line breaks found, process the remaining buffer
 
-                start, end = match.start(), match.end()
+                end = match.end()
                 chunk_str = buffer[:end].decode(encoding, errors="strict")
                 buffer = buffer[end:]
 
@@ -277,4 +288,4 @@ def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
         for line in lines_out:
             f.write(line.encode(encoding))
 
-    console.print(f"Wrote {file_out}")
+    console.print(f"Wrote {file_out}", soft_wrap=True)

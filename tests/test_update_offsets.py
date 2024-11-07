@@ -34,9 +34,9 @@ def test_update_offsets(capsys, tmp_path: Path) -> None:
     assert not captured.err
     assert re.search(r"Wrote\s+" + re.escape(str(output)), captured.out)
     assert output.exists()
-    with open(file_expected, "r", encoding="iso-8859-1") as file_exp:
+    with open(file_expected, encoding="iso-8859-1") as file_exp:
         lines_exp = file_exp.readlines()
-    with open(output, "r", encoding="iso-8859-1") as file_act:
+    with open(output, encoding="iso-8859-1") as file_act:
         lines_act = file_act.readlines()
     assert len(lines_exp) == len(
         lines_act
