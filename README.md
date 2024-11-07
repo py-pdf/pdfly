@@ -39,6 +39,7 @@ $ pdfly --help
 │ meta             Show metadata of a PDF file                                │
 │ pagemeta         Give details about a single page.                          │
 │ rm               Remove pages from PDF files.                               │
+│ update-offsets   Updates offsets and lengths in a simple PDF file.          │
 │ x2pdf            Convert one or more files to PDF. Each file is a page.     │
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
