@@ -5,7 +5,7 @@ Subcommands are added here.
 """
 
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import typer
 from typing_extensions import Annotated
@@ -19,6 +19,7 @@ import pdfly.rm
 import pdfly.up2
 import pdfly.update_offsets
 import pdfly.x2pdf
+import pdfly.sign  # 导入 sign 模块
 
 
 def version_callback(value: bool) -> None:
@@ -37,6 +38,29 @@ entry_point = typer.Typer(
     ),
     rich_markup_mode="rich",  # Allows to pretty-print commands documentation
 )
+@entry_point.command(name="sign", help="Sign a PDF file using a PKCS12 (.p12) certificate.")
+def sign(
+    input_pdf: Path = typer.Argument(..., help="Input PDF file."),
+    output_pdf: Path = typer.Option(..., "--output", "-o", help="Output signed PDF."),
+    p12: Optional[Path] = typer.Option(None, "--p12", help="PKCS12 certificate file."),
+    password: Optional[str] = typer.Option(None, "--password", help="Password for the certificate."),
+) -> None:
+    """
+    Sign a PDF file using a PKCS12 (.p12) certificate.
+    """
+    print(f"input_pdf: {input_pdf}")
+    print(f"output_pdf: {output_pdf}")
+    print(f"p12: {p12}")
+    print(f"password: {password}")
+
+    # Ensure that the PKCS12 certificate file exists
+    if not p12 or not p12.exists():
+        typer.echo("Error: Please provide a valid PKCS12 (.p12) certificate file using --p12.")
+        raise typer.Exit(1)
+
+    # Call the signing function in the sign module, using the .p12 certificate for signing
+    pdfly.sign.sign_pdf_with_p12(input_pdf, output_pdf, p12, password)
+    typer.echo(f"Successfully signed PDF saved at {output_pdf}")
 
 
 @entry_point.callback()  # type: ignore[misc]
