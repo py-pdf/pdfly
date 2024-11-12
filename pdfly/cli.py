@@ -52,11 +52,8 @@ def extract_images(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ]
@@ -69,11 +66,8 @@ def up2(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -87,11 +81,8 @@ def cat(
     filename: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -111,11 +102,8 @@ def rm(
     filename: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -135,11 +123,8 @@ def metadata(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -159,11 +144,8 @@ def pagemeta(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -188,11 +170,8 @@ def extract_text(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ]
@@ -202,7 +181,7 @@ def extract_text(
 
     reader = PdfReader(str(pdf))
     for page in reader.pages:
-        print(page.extract_text())
+        typer.echo(page.extract_text())
 
 
 @entry_point.command(name="compress", help=pdfly.compress.__doc__)  # type: ignore[misc]
@@ -210,11 +189,8 @@ def compress(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -231,7 +207,14 @@ def compress(
 
 @entry_point.command(name="update-offsets", help=pdfly.update_offsets.__doc__)  # type: ignore[misc]
 def update_offsets(
-    file_in: Path,
+    file_in: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
     file_out: Path,
     encoding: str = typer.Option(
         "ISO-8859-1",
@@ -246,15 +229,25 @@ def update_offsets(
 
 @entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
 def x2pdf(
-    x: List[Path],
+    x: List[
+        Annotated[
+            Path,
+            typer.Argument(
+                dir_okay=False,
+                exists=True,
+                resolve_path=True,
+            ),
+        ]
+    ],
     output: Annotated[
         Path,
         typer.Option(
             "-o",
             "--output",
-            exists=False,
             writable=True,
         ),
     ],
-) -> int:
-    return pdfly.x2pdf.main(x, output)
+) -> None:
+    exit_code = pdfly.x2pdf.main(x, output)
+    if exit_code:
+        raise typer.Exit(code=exit_code)
