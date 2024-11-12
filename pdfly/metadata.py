@@ -19,9 +19,6 @@ class EncryptionData(BaseModel):
 class MetaInfo(BaseModel):
     encryption: Optional[EncryptionData] = None
     pdf_file_version: str
-    title: Optional[str] = None
-    producer: Optional[str] = None
-    author: Optional[str] = None
     pages: Optional[int] = None
     page_mode: Optional[str] = None
     page_layout: Optional[str] = None
@@ -29,6 +26,15 @@ class MetaInfo(BaseModel):
     id1: Optional[bytes] = None
     id2: Optional[bytes] = None
     images: List[int] = []
+
+    # PDF /Info dictionary
+    author: Optional[str] = None
+    creation_date: Optional[datetime] = None
+    creator: Optional[str] = None
+    keywords: Optional[str] = None
+    producer: Optional[str] = None
+    subject: Optional[str] = None
+    title: Optional[str] = None
 
     # OS Information
     file_permissions: str
@@ -43,12 +49,14 @@ def main(pdf: Path, output: OutputOptions) -> None:
     if reader.is_encrypted:
         pdf_stat = pdf.stat()
         meta = MetaInfo(
-            encryption=EncryptionData(
-                v_value=reader._encryption.V,
-                revision=reader._encryption.R,
-            )
-            if reader.is_encrypted and reader._encryption
-            else None,
+            encryption=(
+                EncryptionData(
+                    v_value=reader._encryption.V,
+                    revision=reader._encryption.R,
+                )
+                if reader.is_encrypted and reader._encryption
+                else None
+            ),
             pdf_file_version=reader.stream.read(8).decode("utf-8"),
             # OS Info
             file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
@@ -66,12 +74,14 @@ def main(pdf: Path, output: OutputOptions) -> None:
         pdf_id = reader.trailer.get("/ID")
         meta = MetaInfo(
             pages=len(reader.pages),
-            encryption=EncryptionData(
-                v_value=reader._encryption.V,  # type: ignore
-                revision=reader._encryption.R,  # type: ignore
-            )
-            if reader.is_encrypted and reader._encryption
-            else None,
+            encryption=(
+                EncryptionData(
+                    v_value=reader._encryption.V,  # type: ignore
+                    revision=reader._encryption.R,  # type: ignore
+                )
+                if reader.is_encrypted and reader._encryption
+                else None
+            ),
             page_mode=reader.page_mode,
             pdf_file_version=pdf_file_version,
             page_layout=reader.page_layout,
@@ -91,9 +101,14 @@ def main(pdf: Path, output: OutputOptions) -> None:
             ],
         )
         if info is not None:
-            meta.title = info.title
-            meta.producer = info.producer
             meta.author = info.author
+            meta.creation_date = info.creation_date
+            meta.creator = info.creator
+            # Pending https://github.com/py-pdf/pypdf/pull/2939 to be able to access .keywords:
+            meta.keywords = info.get("/Keywords")
+            meta.producer = info.producer
+            meta.subject = info.subject
+            meta.title = info.title
 
     if output == OutputOptions.json:
         print(meta.json())
@@ -107,9 +122,20 @@ def main(pdf: Path, output: OutputOptions) -> None:
         )
         table.add_column("Value", style="white")
 
-        table.add_row("Title", meta.title)
-        table.add_row("Producer", meta.producer)
-        table.add_row("Author", meta.author)
+        if meta.title:
+            table.add_row("Title", meta.title)
+        if meta.author:
+            table.add_row("Author", meta.author)
+        if meta.creation_date:
+            table.add_row("CreationDate", str(meta.creation_date))
+        if meta.creator:
+            table.add_row("Creator", meta.creator)
+        if meta.producer:
+            table.add_row("Producer", meta.producer)
+        if meta.subject:
+            table.add_row("Subject", meta.subject)
+        if meta.keywords:
+            table.add_row("Keywords", meta.keywords)
         table.add_row("Pages", f"{meta.pages:,}" if meta.pages else "unknown")
         table.add_row("Encrypted", f"{meta.encryption}")
         table.add_row("PDF File Version", meta.pdf_file_version)
