@@ -3,7 +3,9 @@
 ## Version 0.4.0, not released yet
 
 ### New Features (ENH)
+- New  update-offsets command to adjust offsets and lengths. (#15)
 - New rm command (#59)
+- metadata: now also displaying CreationDate, Creator, Keywords & Subject (#73)
 - Add warning for out-of-bounds page range in pdfly cat command (#58)
 
 [Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.3...0.4.0)
