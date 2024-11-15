@@ -33,7 +33,9 @@ def main(pdf: Path, output: Path) -> None:
     uncomp_size = output.stat().st_size
 
     print(f"Original Size  : {orig_size:,}")
-    print(f"Uncompressed Size: {uncomp_size:,} ({(uncomp_size / orig_size) * 100:.1f}% of original)")
+    print(
+        f"Uncompressed Size: {uncomp_size:,} ({(uncomp_size / orig_size) * 100:.1f}% of original)"
+    )
 
 
 def decompress_content_stream(content: IndirectObject) -> None:
@@ -45,4 +47,6 @@ def decompress_content_stream(content: IndirectObject) -> None:
             content.set_data(uncompressed_data)
             del content["/Filter"]
         except zlib.error as error:
-            print(f"Some content stream with /FlateDecode failed to be decompressed: {error}")
+            print(
+                f"Some content stream with /FlateDecode failed to be decompressed: {error}"
+            )

@@ -58,7 +58,9 @@ def main(
     verbose: bool,
     inverted_page_selection: bool = False,
 ) -> None:
-    filename_page_ranges = parse_filepaths_and_pagerange_args(filename, fn_pgrgs)
+    filename_page_ranges = parse_filepaths_and_pagerange_args(
+        filename, fn_pgrgs
+    )
     if output:
         output_fh = open(output, "wb")
     else:
@@ -77,7 +79,13 @@ def main(
             reader = PdfReader(in_fs[filepath])
             num_pages = len(reader.pages)
             start, end, step = page_range.indices(num_pages)
-            if start < 0 or end < 0 or start >= num_pages or end > num_pages or start > end:
+            if (
+                start < 0
+                or end < 0
+                or start >= num_pages
+                or end > num_pages
+                or start > end
+            ):
                 print(
                     f"WARNING: Page range {page_range} is out of bounds",
                     file=sys.stderr,
@@ -102,7 +110,9 @@ def main(
     # Not closing the in_fs because this script exits now.
 
 
-def parse_filepaths_and_pagerange_args(filename: Path, fn_pgrgs: List[str]) -> List[Tuple[Path, PageRange]]:
+def parse_filepaths_and_pagerange_args(
+    filename: Path, fn_pgrgs: List[str]
+) -> List[Tuple[Path, PageRange]]:
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges, invalid_filepaths = [], []

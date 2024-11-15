@@ -38,7 +38,9 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         console = Console()
 
         table = Table(title=f"{pdf}, page index {page_index}")
-        table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
+        table.add_column(
+            "Attribute", justify="right", style="cyan", no_wrap=True
+        )
         table.add_column("Value", style="white")
 
         table.add_row(
