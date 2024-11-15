@@ -73,7 +73,7 @@ jobs:
     - name: Test with ruff
       run: |
         echo `ruff --version`
-        ruff pdfly/
+        ruff check pdfly/
 
   package:
     name: Build & verify package
