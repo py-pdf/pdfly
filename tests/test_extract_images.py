@@ -1,5 +1,3 @@
-import pytest
-
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 

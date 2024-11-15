@@ -16,6 +16,7 @@ import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
+import pdfly.uncompress
 import pdfly.up2
 import pdfly.update_offsets
 import pdfly.x2pdf
@@ -203,6 +204,30 @@ def compress(
     ],
 ) -> None:
     pdfly.compress.main(pdf, output)
+
+
+@entry_point.command(name="uncompress", help=pdfly.uncompress.__doc__)  # type: ignore[misc]
+def uncompress(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            writable=False,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            exists=False,
+            writable=True,
+        ),
+    ],
+) -> None:
+    pdfly.uncompress.main(pdf, output)
 
 
 @entry_point.command(name="update-offsets", help=pdfly.update_offsets.__doc__)  # type: ignore[misc]

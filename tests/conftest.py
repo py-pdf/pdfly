@@ -3,8 +3,9 @@
 import os
 from pathlib import Path
 
-from fpdf import FPDF
 import pytest
+from fpdf import FPDF
+
 from pdfly.cli import entry_point
 
 try:
@@ -35,7 +36,7 @@ def run_cli(args):
         return error.code
 
 
-@pytest.fixture
+@pytest.fixture()
 def two_pages_pdf_filepath(tmp_path):
     "A PDF with 2 pages, and a different image on each page"
     # Note: prior to v2.7.9, fpdf2 produced incorrect /Resources dicts for each page (cf. fpdf2 PR #1133),
@@ -50,7 +51,7 @@ def two_pages_pdf_filepath(tmp_path):
     return pdf_filepath
 
 
-@pytest.fixture
+@pytest.fixture()
 def pdf_file_100(tmp_path):
     """A PDF with 100 pages; each has only the page index on it."""
     pdf = FPDF()
@@ -65,7 +66,7 @@ def pdf_file_100(tmp_path):
     return pdf_filepath
 
 
-@pytest.fixture
+@pytest.fixture()
 def pdf_file_abc(tmp_path):
     """A PDF with 100 pages; each has only the page index on it."""
     pdf = FPDF()
