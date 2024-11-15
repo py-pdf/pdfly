@@ -138,6 +138,7 @@ ignore = [
     "SLF001",  # Private member accessed
     "INP001",  # File `docs/conf.py` is part of an implicit namespace package. Add an `__init__.py`.
     "FA100", # Missing `from __future__ import annotations`, but uses `typing.Optional`
+    "I001" #Imports not at the top of the file.
 ]
 
 [tool.ruff.mccabe]
