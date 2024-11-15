@@ -57,7 +57,7 @@ def extract_images(
             exists=True,
             resolve_path=True,
         ),
-    ]
+    ],
 ) -> None:
     pdfly.extract_images.main(pdf)
 
@@ -175,7 +175,7 @@ def extract_text(
             exists=True,
             resolve_path=True,
         ),
-    ]
+    ],
 ) -> None:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
@@ -198,7 +198,6 @@ def compress(
     output: Annotated[
         Path,
         typer.Argument(
-            exists=False,
             writable=True,
         ),
     ],
@@ -211,18 +210,14 @@ def uncompress(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
     output: Annotated[
         Path,
         typer.Argument(
-            exists=False,
             writable=True,
         ),
     ],

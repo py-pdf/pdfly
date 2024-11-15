@@ -232,8 +232,7 @@ def update_lines(
                 lines_out[len_obj_line] = updated_length + "\n"
         else:
             raise RuntimeError(
-                f"obj {curr_obj} with stream-len {stream_len}"
-                f" has no object-length-line: {map_obj_length_line}"
+                f"obj {curr_obj} with stream-len {stream_len} has no object-length-line: {map_obj_length_line}"
             )
 
     return lines_out
@@ -260,7 +259,7 @@ def read_binary_file(file_path: Path, encoding: str) -> List[str]:
 
             # Split buffer into chunks based on LF, CR, or CRLF
             while True:
-                match = re.search(b"(\x0D\x0A|\x0A|\x0D)", buffer)
+                match = re.search(b"(\x0d\x0a|\x0a|\x0d)", buffer)
                 if not match:
                     break  # No more line breaks found, process the remaining buffer
 
