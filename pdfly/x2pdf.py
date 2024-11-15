@@ -42,9 +42,7 @@ def main(in_filepaths: List[Path], out_filepath: Path) -> int:
             new_page = PdfReader(pdf_bytes).pages[0]
             writer.insert_page(new_page)
         except Exception:
-            console.print(
-                f"[red]Error: Could not convert '{filepath}' to a PDF."
-            )
+            console.print(f"[red]Error: Could not convert '{filepath}' to a PDF.")
             console.print_exception(extra_lines=1, max_frames=1)
             exit_code += 1
     writer.write(out_filepath)

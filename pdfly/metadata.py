@@ -94,11 +94,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
             creation_time=datetime.fromtimestamp(pdf_stat.st_ctime),
             modification_time=datetime.fromtimestamp(pdf_stat.st_mtime),
             access_time=datetime.fromtimestamp(pdf_stat.st_atime),
-            images=[
-                len(image.data)
-                for page in reader.pages
-                for image in page.images
-            ],
+            images=[len(image.data) for page in reader.pages for image in page.images],
         )
         if info is not None:
             meta.author = info.author
@@ -117,9 +113,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
         from rich.table import Table
 
         table = Table(title="PDF Data")
-        table.add_column(
-            "Attribute", justify="right", style="cyan", no_wrap=True
-        )
+        table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
         table.add_column("Value", style="white")
 
         if meta.title:
@@ -149,21 +143,13 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 emb, unemb = page._get_fonts()
                 embedded_fonts = embedded_fonts.union(set(emb))
                 unemedded_fonts = unemedded_fonts.union(set(unemb))
-            table.add_row(
-                "Fonts (unembedded)", ", ".join(sorted(unemedded_fonts))
-            )
-            table.add_row(
-                "Fonts (embedded)", ", ".join(sorted(embedded_fonts))
-            )
+            table.add_row("Fonts (unembedded)", ", ".join(sorted(unemedded_fonts)))
+            table.add_row("Fonts (embedded)", ", ".join(sorted(embedded_fonts)))
         table.add_row("Attachments", meta.attachments)
-        table.add_row(
-            "Images", f"{len(meta.images)} images ({sum(meta.images):,} bytes)"
-        )
+        table.add_row("Images", f"{len(meta.images)} images ({sum(meta.images):,} bytes)")
 
         enc_table = Table(title="Encryption information")
-        enc_table.add_column(
-            "Attribute", justify="right", style="cyan", no_wrap=True
-        )
+        enc_table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
         enc_table.add_column("Value", style="white")
         if meta.encryption:
             enc_table.add_row(
@@ -173,28 +159,18 @@ def main(pdf: Path, output: OutputOptions) -> None:
             enc_table.add_row("V value", str(meta.encryption.v_value))
 
         os_table = Table(title="Operating System Data")
-        os_table.add_column(
-            "Attribute", justify="right", style="cyan", no_wrap=True
-        )
+        os_table.add_column("Attribute", justify="right", style="cyan", no_wrap=True)
         os_table.add_column("Value", style="white")
         os_table.add_row("File Name", f"{pdf}")
         os_table.add_row("File Permissions", f"{meta.file_permissions}")
         os_table.add_row("File Size", f"{meta.file_size:,} bytes")
-        os_table.add_row(
-            "Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}"
-        )
-        os_table.add_row(
-            "Modification Time", f"{meta.modification_time:%Y-%m-%d %H:%M:%S}"
-        )
-        os_table.add_row(
-            "Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}"
-        )
+        os_table.add_row("Creation Time", f"{meta.creation_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row("Modification Time", f"{meta.modification_time:%Y-%m-%d %H:%M:%S}")
+        os_table.add_row("Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}")
 
         console = Console()
         console.print(os_table)
         console.print(table)
         if meta.encryption:
             console.print(enc_table)
-        console.print(
-            "Use the 'pagemeta' subcommand to get details about a single page"
-        )
+        console.print("Use the 'pagemeta' subcommand to get details about a single page")

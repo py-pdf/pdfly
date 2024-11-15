@@ -42,7 +42,6 @@ Examples
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
 
-
 import os
 import sys
 import traceback
@@ -59,9 +58,7 @@ def main(
     verbose: bool,
     inverted_page_selection: bool = False,
 ) -> None:
-    filename_page_ranges = parse_filepaths_and_pagerange_args(
-        filename, fn_pgrgs
-    )
+    filename_page_ranges = parse_filepaths_and_pagerange_args(filename, fn_pgrgs)
     if output:
         output_fh = open(output, "wb")
     else:
@@ -71,22 +68,16 @@ def main(
     writer = PdfWriter()
     in_fs = {}
     try:
-        for filename, page_range in filename_page_ranges:  # type: ignore
+        for filepath, page_range in filename_page_ranges:  # type: ignore
             if verbose:
-                print(filename, page_range, file=sys.stderr)
-            if filename not in in_fs:
-                in_fs[filename] = open(filename, "rb")
+                print(filepath, page_range, file=sys.stderr)
+            if filepath not in in_fs:
+                in_fs[filepath] = open(filepath, "rb")
 
-            reader = PdfReader(in_fs[filename])
+            reader = PdfReader(in_fs[filepath])
             num_pages = len(reader.pages)
             start, end, step = page_range.indices(num_pages)
-            if (
-                start < 0
-                or end < 0
-                or start >= num_pages
-                or end > num_pages
-                or start > end
-            ):
+            if start < 0 or end < 0 or start >= num_pages or end > num_pages or start > end:
                 print(
                     f"WARNING: Page range {page_range} is out of bounds",
                     file=sys.stderr,
@@ -111,17 +102,15 @@ def main(
     # Not closing the in_fs because this script exits now.
 
 
-def parse_filepaths_and_pagerange_args(
-    filename: Path, fn_pgrgs: List[str]
-) -> List[Tuple[Path, PageRange]]:
+def parse_filepaths_and_pagerange_args(filename: Path, fn_pgrgs: List[str]) -> List[Tuple[Path, PageRange]]:
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges, invalid_filepaths = [], []
-    for filename, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
-        if Path(filename).is_file():
-            filename_page_ranges.append((filename, page_range))
+    for filepath, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
+        if Path(filepath).is_file():
+            filename_page_ranges.append((filepath, page_range))
         else:
-            invalid_filepaths.append(str(filename))
+            invalid_filepaths.append(str(filepath))
     if invalid_filepaths:
         print(
             f"Invalid file path or page range provided: {' '.join(invalid_filepaths)}",

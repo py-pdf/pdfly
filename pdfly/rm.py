@@ -44,7 +44,5 @@ from typing import List
 from pdfly.cat import main as cat_main
 
 
-def main(
-    filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool
-) -> None:
+def main(filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool) -> None:
     cat_main(filename, fn_pgrgs, output, verbose, inverted_page_selection=True)
