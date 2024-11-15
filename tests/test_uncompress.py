@@ -14,7 +14,6 @@ runner = CliRunner()
 def test_uncompress_all_sample_files(
     input_pdf_filepath: Path, tmp_path: Path
 ) -> None:
-
     output_pdf_filepath = tmp_path / "uncompressed_output.pdf"
 
     result = runner.invoke(
