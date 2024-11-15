@@ -1,8 +1,8 @@
 """Module for uncompressing PDF content streams."""
 
+import zlib
 from pathlib import Path
 from typing import Optional
-import zlib
 
 from pypdf import PdfReader, PdfWriter
 from pypdf.generic import IndirectObject, PdfObject

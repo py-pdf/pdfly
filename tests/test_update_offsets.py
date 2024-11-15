@@ -4,12 +4,12 @@ Every CLI command is called here with a typer CliRunner.
 Here should only be end-to-end tests.
 """
 
+import re
 from pathlib import Path
 
 import pytest
-import re
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_update_offsets(capsys, tmp_path: Path) -> None:

@@ -1,9 +1,12 @@
 """Tests for the `uncompress` command."""
 
-import pytest
 from pathlib import Path
-from pdfly.cli import entry_point
+
+import pytest
+from pypdf import PdfReader
 from typer.testing import CliRunner
+
+from pdfly.cli import entry_point
 
 runner = CliRunner()
 
@@ -27,8 +30,6 @@ def test_uncompress_all_sample_files(
     assert (
         output_pdf_filepath.exists()
     ), f"Output PDF {output_pdf_filepath} does not exist."
-
-    from pypdf import PdfReader
 
     reader = PdfReader(str(output_pdf_filepath))
     for page in reader.pages:

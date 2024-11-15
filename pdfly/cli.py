@@ -16,10 +16,10 @@ import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
+import pdfly.uncompress
 import pdfly.up2
 import pdfly.update_offsets
 import pdfly.x2pdf
-import pdfly.uncompress
 
 
 def version_callback(value: bool) -> None:
