@@ -7,11 +7,14 @@ from typer.testing import CliRunner
 
 runner = CliRunner()
 
+
 @pytest.mark.parametrize(
     "input_pdf_filepath", Path("sample-files").glob("*.pdf")
 )
-def test_uncompress_all_sample_files(input_pdf_filepath: Path, tmp_path: Path) -> None:
-    
+def test_uncompress_all_sample_files(
+    input_pdf_filepath: Path, tmp_path: Path
+) -> None:
+
     output_pdf_filepath = tmp_path / "uncompressed_output.pdf"
 
     result = runner.invoke(
