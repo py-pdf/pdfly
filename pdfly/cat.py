@@ -118,7 +118,7 @@ def parse_filepaths_and_pagerange_args(
     filename_page_ranges, invalid_filepaths = [], []
     for filepath, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
         if Path(filepath).is_file():
-            filename_page_ranges.append((filepath, page_range))
+            filename_page_ranges.append((Path(filepath), page_range))
         else:
             invalid_filepaths.append(str(filepath))
     if invalid_filepaths:
