@@ -8,12 +8,8 @@ from typer.testing import CliRunner
 runner = CliRunner()
 
 
-@pytest.mark.parametrize(
-    "input_pdf_filepath", Path("sample-files").glob("*.pdf")
-)
-def test_uncompress_all_sample_files(
-    input_pdf_filepath: Path, tmp_path: Path
-) -> None:
+@pytest.mark.parametrize("input_pdf_filepath", Path("sample-files").glob("*.pdf"))
+def test_uncompress_all_sample_files(input_pdf_filepath: Path, tmp_path: Path) -> None:
 
     output_pdf_filepath = tmp_path / "uncompressed_output.pdf"
 
@@ -35,6 +31,4 @@ def test_uncompress_all_sample_files(
     for page in reader.pages:
         contents = page.get("/Contents")
         if contents:
-            assert (
-                "/Filter" not in contents
-            ), "Content stream is still compressed"
+            assert "/Filter" not in contents, "Content stream is still compressed"
