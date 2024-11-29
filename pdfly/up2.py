@@ -18,7 +18,7 @@ def main(pdf: Path, output: Path) -> None:
     for i in range(0, len(reader.pages) - 1, 2):
         lhs = reader.pages[i]
         rhs = reader.pages[i + 1]
-        lhs.merge_translated_page(rhs, float(lhs.mediabox.width), 0, True, True)
+        lhs.merge_translated_page(rhs, tx=float(lhs.mediabox.width), ty=0, expand=True)
         writer.add_page(lhs)
         print(str(i) + " ")
         sys.stdout.flush()
