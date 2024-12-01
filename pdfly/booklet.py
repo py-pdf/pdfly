@@ -9,14 +9,14 @@ centerfold-file and blank-page-file files, if specified, otherwise
 they are blank pages.
 
 Example:
-    pdfly booklet input.pdf output.pdf 
+    pdfly booklet input.pdf output.pdf
+
 """
 
 # Copyright (c) 2014, Steve Witham <switham_github@mac-guyver.com>.
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
 
-import os
 import sys
 import traceback
 from pathlib import Path
@@ -26,9 +26,7 @@ from pypdf import (
     PageObject,
     PdfReader,
     PdfWriter,
-    Transformation,
 )
-
 from pypdf.generic import RectangleObject
 
 
@@ -47,8 +45,7 @@ def main(
         # Add blank pages to make the number of pages a multiple of 4
         # If the user specified an inside-back-cover file, use it.
         blank_page = PageObject.create_blank_page(
-            width=pages[0].mediabox.width, 
-            height=pages[0].mediabox.height
+            width=pages[0].mediabox.width, height=pages[0].mediabox.height
         )
         if len(pages) % 2 == 1:
             if inside_cover_file:
@@ -70,7 +67,7 @@ def main(
                 tx=pages[lhs].mediabox.width,
                 ty=0,
                 expand=True,
-                over=True
+                over=True,
             )
             writer.add_page(pages[lhs])
 
@@ -80,12 +77,12 @@ def main(
         if requires_centerfold and centerfold_file:
             centerfold_page = fetch_first_page(centerfold_file)
             last_page = writer.pages[-1]
-            if is_rotated(centerfold_page.mediabox, last_page.mediabox):
-                centerfold_page.add_transformation(
-                    Transformation().
-                        rotate(90).
-                        translate(last_page.mediabox.width)
-                )
+            if centerfold_page.rotation != 0:
+                centerfold_page.transfer_rotation_to_content()
+            if requires_rotate(centerfold_page.mediabox, last_page.mediabox):
+                centerfold_page = centerfold_page.rotate(270)
+            if centerfold_page.rotation != 0:
+                centerfold_page.transfer_rotation_to_content()
             last_page.merge_page(centerfold_page)
 
         # Everything looks good! Write the output file.
@@ -98,13 +95,14 @@ def main(
         sys.exit(1)
 
 
-def is_rotated(a: RectangleObject, b: RectangleObject) -> bool:
+def requires_rotate(a: RectangleObject, b: RectangleObject) -> bool:
     """
     Return True if a and b are rotated relative to each other.
 
     Args:
         a (RectangleObject): The first rectangle.
         b (RectangleObject): The second rectangle.
+
     """
     a_portrait = a.height > a.width
     b_portrait = b.height > b.width
@@ -112,15 +110,16 @@ def is_rotated(a: RectangleObject, b: RectangleObject) -> bool:
 
 
 def fetch_first_page(filename: Path) -> PageObject:
-    """Fetch the first page of a PDF file.
+    """
+    Fetch the first page of a PDF file.
 
     Args:
         filename (Path): The path to the PDF file.
 
     Returns:
         PageObject: The first page of the PDF file.
-    """
 
+    """
     return PdfReader(filename).pages[0]
 
 
@@ -142,6 +141,7 @@ def page_iter(num_pages: int) -> Generator[Tuple[int, int], None, None]:
 
     Raises:
         ValueError: If the number of pages is not divisible by 4.
+
     """
     if num_pages % 4 != 0:
         raise ValueError("Number of pages must be divisible by 4")
