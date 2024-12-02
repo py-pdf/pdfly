@@ -20,7 +20,7 @@ Example:
 import sys
 import traceback
 from pathlib import Path
-from typing import Generator, Tuple
+from typing import Generator, Optional, Tuple
 
 from pypdf import (
     PageObject,
@@ -33,8 +33,8 @@ from pypdf.generic import RectangleObject
 def main(
     filename: Path,
     output: Path,
-    inside_cover_file: Path,
-    centerfold_file: Path,
+    inside_cover_file: Optional[Path],
+    centerfold_file: Optional[Path],
 ) -> None:
     try:
         # Set up the streams
