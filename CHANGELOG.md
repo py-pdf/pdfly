@@ -3,10 +3,15 @@
 ## Version 0.4.0, not released yet
 
 ### New Features (ENH)
-- New  update-offsets command to adjust offsets and lengths. (#15)
-- New rm command (#59)
-- metadata: now also displaying CreationDate, Creator, Keywords & Subject (#73)
-- Add warning for out-of-bounds page range in pdfly cat command (#58)
+- New `booklet` command to adjust offsets and lengths ([PR #77](https://github.com/py-pdf/pdfly/pull/77))
+- New `uncompress` command ([PR #75](https://github.com/py-pdf/pdfly/pull/75))
+- New `update-offsets` command to adjust offsets and lengths ([PR #15](https://github.com/py-pdf/pdfly/pull/15))
+- New `rm` command ([PR #59](https://github.com/py-pdf/pdfly/pull/59))
+- `metadata`: now also displaying CreationDate, Creator, Keywords & Subject ([PR #73](https://github.com/py-pdf/pdfly/pull/73))
+- Add warning for out-of-bounds page range in pdfly `cat` command ([PR #58](https://github.com/py-pdf/pdfly/pull/58))
+
+### Bug Fixes (BUG)
+- `2-up` command, that only showed one page per sheet, on the left side, with blank space on the right ([PR #78](https://github.com/py-pdf/pdfly/pull/78))
 
 [Full Changelog](https://github.com/py-pdf/pdfly/compare/0.3.3...0.4.0)
 
