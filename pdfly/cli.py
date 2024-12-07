@@ -5,11 +5,12 @@ Subcommands are added here.
 """
 
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import typer
 from typing_extensions import Annotated
 
+import pdfly.booklet
 import pdfly.cat
 import pdfly.compress
 import pdfly.extract_images
@@ -96,6 +97,50 @@ def cat(
     ),
 ) -> None:
     pdfly.cat.main(filename, fn_pgrgs, output, verbose)
+
+
+@entry_point.command(name="booklet", help=pdfly.booklet.__doc__)  # type: ignore[misc]
+def booklet(
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=False,
+            resolve_path=False,
+        ),
+    ],
+    blank_page: Annotated[
+        Optional[Path],
+        typer.Option(
+            "-b",
+            "--blank-page-file",
+            help="page added if input is odd number of pages",
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ] = None,
+    centerfold: Annotated[
+        Optional[Path],
+        typer.Option(
+            "-c",
+            "--centerfold-file",
+            help="double-page added if input is missing >= 2 pages",
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ] = None,
+) -> None:
+    pdfly.booklet.main(filename, output, blank_page, centerfold)
 
 
 @entry_point.command(name="rm", help=pdfly.rm.__doc__)
