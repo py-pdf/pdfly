@@ -46,9 +46,10 @@ import os
 import sys
 import traceback
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
+from pypdf.errors import FileNotDecryptedError
 
 
 def main(
@@ -57,6 +58,7 @@ def main(
     output: Path,
     verbose: bool,
     inverted_page_selection: bool = False,
+    password: Optional[str] = None,
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
@@ -77,6 +79,8 @@ def main(
                 in_fs[filepath] = open(filepath, "rb")
 
             reader = PdfReader(in_fs[filepath])
+            if password is not None:
+                reader.decrypt(password)
             num_pages = len(reader.pages)
             start, end, step = page_range.indices(num_pages)
             if (
@@ -100,6 +104,10 @@ def main(
                 for page_num in range(*page_range.indices(len(reader.pages))):
                     writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
+    except FileNotDecryptedError as error:
+        print(str(error), file=sys.stderr)
+        print(f"Error while reading {filename}", file=sys.stderr)
+        sys.exit(1)
     except Exception:
         print(traceback.format_exc(), file=sys.stderr)
         print(f"Error while reading {filename}", file=sys.stderr)
