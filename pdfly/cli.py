@@ -99,7 +99,7 @@ def cat(
         None, help="Document's user or owner password."
     ),
 ) -> None:
-    pdfly.cat.main(filename, fn_pgrgs, output, verbose, password)
+    pdfly.cat.main(filename, fn_pgrgs, output, verbose, password=password)
 
 
 @entry_point.command(name="booklet", help=pdfly.booklet.__doc__)  # type: ignore[misc]
