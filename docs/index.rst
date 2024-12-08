@@ -19,7 +19,14 @@ pdfly is a command line tool to get informaiton about PDF documents and to manip
 
 
 .. toctree::
-   :caption: About pypdf
+   :caption: Developer Guide
+   :maxdepth: 1
+
+   dev/intro
+   dev/testing
+
+.. toctree::
+   :caption: About pdfly
    :maxdepth: 1
 
    meta/CHANGELOG

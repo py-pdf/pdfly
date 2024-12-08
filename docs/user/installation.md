@@ -7,14 +7,14 @@ There are several ways to install pdfly. The most common option is to use pip.
 pdfly requires Python 3.6+ to run.
 
 Typically Python comes with `pip`, a package installer. Using it you can
-install pypdf:
+install pdfly:
 
 ```bash
 pip install pdfly
 ```
 
 If you are not a super-user (a system administrator / root), you can also just
-install pypdf for your current user:
+install pdfly for your current user:
 
 ```bash
 pip install --user pdfly
