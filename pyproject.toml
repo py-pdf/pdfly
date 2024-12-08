@@ -36,7 +36,7 @@ dependencies = [
     "pillow",
     "pydantic",
     "rich",
-    "fpdf2",
+    "fpdf2>=2.8.1",
 ]
 
 [project.urls]
