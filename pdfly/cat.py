@@ -46,7 +46,7 @@ import os
 import sys
 import traceback
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 from pypdf.errors import FileNotDecryptedError
