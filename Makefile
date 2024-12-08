@@ -15,7 +15,7 @@ upload:
 clean:
 	python setup.py clean --all
 	pyclean .
-	rm -rf tests/__pycache__ pypdf/__pycache__ Image9.png htmlcov docs/_build dist dont_commit_merged.pdf dont_commit_writer.pdf pypdf.egg-info pypdf_pdfLocation.txt
+	rm -rf tests/__pycache__ pdfly/__pycache__ Image9.png htmlcov docs/_build dist dont_commit_merged.pdf dont_commit_writer.pdf pdfly.egg-info
 
 test:
 	pytest tests --cov --cov-report term-missing -vv --cov-report html --durations=3 --timeout=30
