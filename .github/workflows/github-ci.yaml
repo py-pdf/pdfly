@@ -39,7 +39,14 @@ jobs:
     - name: Install requirements (Python 3)
       run: pip install -r requirements/ci.txt -r requirements/dev.txt
     - name: Install pdfly
+      if: matrix.python-version != '3.8'
       run: pip install .
+    - name: Install pdfly using the minimal versions of the dependencies
+      if: matrix.python-version == '3.8'
+      run: |
+        # We ensure that those minimal versions remain compatible:
+        sed -i '/dependencies = \[/,/\]/s/>=/==/' pyproject.toml
+        pip install .
 
     - name: Run tests
       run: pytest -vv
