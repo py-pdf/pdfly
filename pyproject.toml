@@ -26,6 +26,8 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 
 dependencies = [
@@ -60,6 +62,8 @@ known_third_party = ["pytest", "setuptools"]
 
 [tool.ruff]
 line-length = 120
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "D404",  # First word of the docstring should not be "This"
@@ -138,9 +142,9 @@ ignore = [
     "FA100", # Missing `from __future__ import annotations`, but uses `typing.Optional`
 ]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 20  # Recommended: 10
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "sample-files/*" = ["D100", "INP001", "FA102", "I001"]
 "make_release.py" = ["T201", "S603", "S607"]

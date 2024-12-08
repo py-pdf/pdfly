@@ -1,10 +1,11 @@
 """Utilities and fixtures that are available automatically for all tests."""
 
-import io, os
+import os
 from pathlib import Path
 
-from fpdf import FPDF
 import pytest
+from fpdf import FPDF
+
 from pdfly.cli import entry_point
 
 try:
@@ -35,7 +36,7 @@ def run_cli(args):
         return error.code
 
 
-@pytest.fixture
+@pytest.fixture()
 def two_pages_pdf_filepath(tmp_path):
     "A PDF with 2 pages, and a different image on each page"
     # Note: prior to v2.7.9, fpdf2 produced incorrect /Resources dicts for each page (cf. fpdf2 PR #1133),
@@ -50,7 +51,7 @@ def two_pages_pdf_filepath(tmp_path):
     return pdf_filepath
 
 
-@pytest.fixture
+@pytest.fixture()
 def pdf_file_100(tmp_path):
     """A PDF with 100 pages; each has only the page index on it."""
     pdf = FPDF()
@@ -58,14 +59,14 @@ def pdf_file_100(tmp_path):
     for i in range(100):
         pdf.add_page()
         pdf.set_font("helvetica", size=12)
-        pdf.cell(200, 10, txt=f"{i}", ln=True, align="C")
+        pdf.cell(200, 10, text=f"{i}", ln=True, align="C")
 
     pdf_filepath = tmp_path / "pdf_file_100.pdf"
     pdf.output(pdf_filepath)
     return pdf_filepath
 
 
-@pytest.fixture
+@pytest.fixture()
 def pdf_file_abc(tmp_path):
     """A PDF with 100 pages; each has only the page index on it."""
     pdf = FPDF()
@@ -73,7 +74,7 @@ def pdf_file_abc(tmp_path):
     for char in [chr(i) for i in range(ord("a"), ord("z") + 1)]:
         pdf.add_page()
         pdf.set_font("helvetica", size=12)
-        pdf.cell(200, 10, txt=f"{char}", ln=True, align="C")
+        pdf.cell(200, 10, text=f"{char}", ln=True, align="C")
 
     pdf_filepath = tmp_path / "abc.pdf"
     pdf.output(pdf_filepath)

@@ -5,18 +5,21 @@ Subcommands are added here.
 """
 
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import typer
 from typing_extensions import Annotated
 
+import pdfly.booklet
 import pdfly.cat
 import pdfly.compress
 import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
+import pdfly.uncompress
 import pdfly.up2
+import pdfly.update_offsets
 import pdfly.x2pdf
 
 
@@ -51,14 +54,11 @@ def extract_images(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
-    ]
+    ],
 ) -> None:
     pdfly.extract_images.main(pdf)
 
@@ -68,11 +68,8 @@ def up2(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -88,11 +85,8 @@ def cat(
     filename: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -107,16 +101,57 @@ def cat(
     pdfly.cat.main(filename, fn_pgrgs, output, verbose)
 
 
+@entry_point.command(name="booklet", help=pdfly.booklet.__doc__)  # type: ignore[misc]
+def booklet(
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=False,
+            resolve_path=False,
+        ),
+    ],
+    blank_page: Annotated[
+        Optional[Path],
+        typer.Option(
+            "-b",
+            "--blank-page-file",
+            help="page added if input is odd number of pages",
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ] = None,
+    centerfold: Annotated[
+        Optional[Path],
+        typer.Option(
+            "-c",
+            "--centerfold-file",
+            help="double-page added if input is missing >= 2 pages",
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ] = None,
+) -> None:
+    pdfly.booklet.main(filename, output, blank_page, centerfold)
+
+
 @entry_point.command(name="rm", help=pdfly.rm.__doc__)
 def rm(
     filename: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -136,11 +171,8 @@ def metadata(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -160,11 +192,8 @@ def pagemeta(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
@@ -189,21 +218,18 @@ def extract_text(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
-    ]
+    ],
 ) -> None:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
 
     reader = PdfReader(str(pdf))
     for page in reader.pages:
-        print(page.extract_text())
+        typer.echo(page.extract_text())
 
 
 @entry_point.command(name="compress", help=pdfly.compress.__doc__)  # type: ignore[misc]
@@ -211,18 +237,14 @@ def compress(
     pdf: Annotated[
         Path,
         typer.Argument(
-            exists=True,
-            file_okay=True,
             dir_okay=False,
-            writable=False,
-            readable=True,
+            exists=True,
             resolve_path=True,
         ),
     ],
     output: Annotated[
         Path,
         typer.Argument(
-            exists=False,
             writable=True,
         ),
     ],
@@ -230,17 +252,69 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
+@entry_point.command(name="uncompress", help=pdfly.uncompress.__doc__)  # type: ignore[misc]
+def uncompress(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            writable=True,
+        ),
+    ],
+) -> None:
+    pdfly.uncompress.main(pdf, output)
+
+
+@entry_point.command(name="update-offsets", help=pdfly.update_offsets.__doc__)  # type: ignore[misc]
+def update_offsets(
+    file_in: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    file_out: Path,
+    encoding: str = typer.Option(
+        "ISO-8859-1",
+        help="Encoding used to read and write the files, e.g. UTF-8.",
+    ),
+    verbose: bool = typer.Option(
+        False, help="Show progress while processing."
+    ),
+) -> None:
+    pdfly.update_offsets.main(file_in, file_out, encoding, verbose)
+
+
 @entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
 def x2pdf(
-    x: List[Path],
+    x: List[
+        Annotated[
+            Path,
+            typer.Argument(
+                dir_okay=False,
+                exists=True,
+                resolve_path=True,
+            ),
+        ]
+    ],
     output: Annotated[
         Path,
         typer.Option(
             "-o",
             "--output",
-            exists=False,
             writable=True,
         ),
     ],
-) -> int:
-    return pdfly.x2pdf.main(x, output)
+) -> None:
+    exit_code = pdfly.x2pdf.main(x, output)
+    if exit_code:
+        raise typer.Exit(code=exit_code)

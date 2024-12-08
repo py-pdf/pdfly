@@ -34,10 +34,13 @@ $ pdfly --help
 │ 2-up             Create a booklet-style PDF from a single input.            │
 │ cat              Concatenate pages from PDF files into a single PDF file.   │
 │ compress         Compress a PDF.                                            │
+| uncompress       Uncompresses a PDF.                                        │
 │ extract-images   Extract images from PDF without resampling or altering.    │
 │ extract-text     Extract text from a PDF file.                              │
 │ meta             Show metadata of a PDF file                                │
 │ pagemeta         Give details about a single page.                          │
+│ rm               Remove pages from PDF files.                               │
+│ update-offsets   Updates offsets and lengths in a simple PDF file.          │
 │ x2pdf            Convert one or more files to PDF. Each file is a page.     │
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
