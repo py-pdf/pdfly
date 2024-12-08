@@ -42,7 +42,6 @@ Examples
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
 
-
 import os
 import sys
 import traceback
@@ -54,7 +53,12 @@ from pypdf.errors import FileNotDecryptedError
 
 
 def main(
-    filename: Path, fn_pgrgs: List[str], output: Optional[Path], verbose: bool, password: Optional[str] = None
+    filename: Path,
+    fn_pgrgs: List[str],
+    output: Path,
+    verbose: bool,
+    inverted_page_selection: bool = False,
+    password: Optional[str] = None
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
@@ -68,16 +72,15 @@ def main(
     writer = PdfWriter()
     in_fs = {}
     try:
-        for filename, page_range in filename_page_ranges:  # type: ignore
+        for filepath, page_range in filename_page_ranges:  # type: ignore
             if verbose:
-                print(filename, page_range, file=sys.stderr)
-            if filename not in in_fs:
-                in_fs[filename] = open(filename, "rb")
+                print(filepath, page_range, file=sys.stderr)
+            if filepath not in in_fs:
+                in_fs[filepath] = open(filepath, "rb")
 
             reader = PdfReader(in_fs[filename])
             if password is not None:
                 reader.decrypt(password)
-
             num_pages = len(reader.pages)
             start, end, step = page_range.indices(num_pages)
             if (
@@ -91,8 +94,15 @@ def main(
                     f"WARNING: Page range {page_range} is out of bounds",
                     file=sys.stderr,
                 )
-            for page_num in range(*page_range.indices(len(reader.pages))):
-                writer.add_page(reader.pages[page_num])
+            if inverted_page_selection:
+                all_page_nums = set(range(len(reader.pages)))
+                page_nums = set(range(*page_range.indices(len(reader.pages))))
+                inverted_page_nums = all_page_nums - page_nums
+                for page_num in inverted_page_nums:
+                    writer.add_page(reader.pages[page_num])
+            else:
+                for page_num in range(*page_range.indices(len(reader.pages))):
+                    writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
     except FileNotDecryptedError as error:
         print(str(error), file=sys.stderr)
@@ -114,11 +124,11 @@ def parse_filepaths_and_pagerange_args(
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges, invalid_filepaths = [], []
-    for filename, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
-        if Path(filename).is_file():
-            filename_page_ranges.append((filename, page_range))
+    for filepath, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
+        if Path(filepath).is_file():
+            filename_page_ranges.append((Path(filepath), page_range))
         else:
-            invalid_filepaths.append(str(filename))
+            invalid_filepaths.append(str(filepath))
     if invalid_filepaths:
         print(
             f"Invalid file path or page range provided: {' '.join(invalid_filepaths)}",

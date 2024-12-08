@@ -57,9 +57,7 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         )
         table.add_row(
             "artbox",
-            f"{meta.artbox}: "
-            f"with={meta.artbox[2] - meta.artbox[0]} "
-            f"x height={meta.artbox[3] - meta.artbox[1]}",
+            f"{meta.artbox}: with={meta.artbox[2] - meta.artbox[0]} x height={meta.artbox[3] - meta.artbox[1]}",
         )
         table.add_row(
             "bleedbox",

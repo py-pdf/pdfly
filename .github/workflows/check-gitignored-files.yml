@@ -1,0 +1,30 @@
+name: Check for Gitignored Files
+
+on:
+  push:
+    branches:
+      - '**' # Run on all branches
+  pull_request:
+
+jobs:
+  check-gitignored-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for gitignored files in commit
+        run: |
+          # List all files in the commit
+          git diff --name-only --cached > committed_files.txt
+
+          # Check if any of the committed files are ignored by .gitignore
+          git check-ignore -v $(cat committed_files.txt) > ignored_files.txt || true
+
+          # Fail if there are any ignored files
+          if [[ -s ignored_files.txt ]]; then
+            echo "The following files are gitignored but committed:"
+            cat ignored_files.txt
+            exit 1
+          fi
