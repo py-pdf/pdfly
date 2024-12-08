@@ -58,7 +58,7 @@ def main(
     output: Path,
     verbose: bool,
     inverted_page_selection: bool = False,
-    password: Optional[str] = None
+    password: Optional[str] = None,
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
