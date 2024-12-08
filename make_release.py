@@ -1,4 +1,4 @@
-"""Internal tool to update the changelog."""
+"""Internal tool to update the CHANGELOG."""
 
 import json
 import subprocess
@@ -8,6 +8,11 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple
 
 from rich.prompt import Prompt
+
+GH_ORG = "py-pdf"
+GH_PROJECT = "pdfly"
+VERSION_FILE_PATH = "pdfly/_version.py"
+CHANGELOG_FILE_PATH = "CHANGELOG.md"
 
 
 @dataclass(frozen=True)
@@ -27,6 +32,7 @@ def main(changelog_path: str) -> None:
 
     Args:
         changelog_path: The location of the CHANGELOG file
+
     """
     changelog = get_changelog(changelog_path)
     git_tag = get_most_recent_git_tag()
@@ -41,7 +47,7 @@ def main(changelog_path: str) -> None:
 
     today = datetime.now(tz=timezone.utc)
     header = f"## Version {new_version}, {today:%Y-%m-%d}\n"
-    url = f"https://github.com/py-pdf/pdfly/compare/{git_tag}...{new_version}"
+    url = f"https://github.com/{GH_ORG}/{GH_PROJECT}/compare/{git_tag}...{new_version}"
     trailer = f"\n[Full Changelog]({url})\n\n"
     new_entry = header + changes + trailer
     print(new_entry)
@@ -61,9 +67,9 @@ def main(changelog_path: str) -> None:
 def print_instructions(new_version: str) -> None:
     """Print release instructions."""
     print("=" * 80)
-    print(f"☑  _version.py was adjusted to '{new_version}'")
-    print("☑  CHANGELOG.md was adjusted")
-    print("")
+    print(f"☑  {VERSION_FILE_PATH} was adjusted to '{new_version}'")
+    print(f"☑  {CHANGELOG_FILE_PATH} was adjusted")
+    print()
     print("Now run:")
     print("  git commit -eF RELEASE_COMMIT_MSG.md")
     print(f"  git tag -s {new_version} -eF RELEASE_TAG_MSG.md")
@@ -73,7 +79,7 @@ def print_instructions(new_version: str) -> None:
 
 def adjust_version_py(version: str) -> None:
     """Adjust the __version__ string."""
-    with open("pdfly/_version.py", "w") as fp:
+    with open(VERSION_FILE_PATH, "w") as fp:
         fp.write(f'__version__ = "{version}"\n')
 
 
@@ -93,8 +99,7 @@ def get_version_interactive(new_version: str, changes: str) -> str:
 
 def is_semantic_version(version: str) -> bool:
     """Check if the given version is a semantic version."""
-    # It's not so important to cover the edge-cases like pre-releases
-    # This is meant for pdfly only and we don't make pre-releases
+    # This doesn't cover the edge-cases like pre-releases
     if version.count(".") != 2:
         return False
     try:
@@ -147,6 +152,7 @@ def version_bump(git_tag: str) -> str:
 
     Returns:
         The new version where the patch version is bumped.
+
     """
     # just assume a patch version change
     major, minor, patch = git_tag.split(".")
@@ -162,6 +168,7 @@ def get_changelog(changelog_path: str) -> str:
 
     Returns:
         Data of the CHANGELOG
+
     """
     with open(changelog_path) as fh:
         changelog = fh.read()
@@ -175,6 +182,7 @@ def write_changelog(new_changelog: str, changelog_path: str) -> None:
     Args:
         new_changelog: Contents of the new CHANGELOG
         changelog_path: Path where the CHANGELOG file is
+
     """
     with open(changelog_path, "w") as fh:
         fh.write(new_changelog)
@@ -189,6 +197,7 @@ def get_formatted_changes(git_tag: str) -> Tuple[str, str]:
 
     Returns:
         Changes done since git_tag
+
     """
     commits = get_git_commits_since_tag(git_tag)
 
@@ -249,8 +258,11 @@ def get_formatted_changes(git_tag: str) -> Tuple[str, str]:
 
     if grouped:
         output += "\n### Other\n"
+        output_with_user += "\n### Other\n"
         for prefix in grouped:
-            output += f"- {prefix}: {grouped[prefix]}\n"
+            for commit_dict in grouped[prefix]:
+                output += f"- {prefix}: {commit_dict['msg']}\n"
+                output_with_user += f"- {prefix}: {commit_dict['msg']} by @{commit_dict['author']}\n"
 
     return output, output_with_user
 
@@ -261,6 +273,7 @@ def get_most_recent_git_tag() -> str:
 
     Returns:
         Most recently created git tag.
+
     """
     git_tag = str(
         subprocess.check_output(
@@ -280,18 +293,18 @@ def get_author_mapping(line_count: int) -> Dict[str, str]:
 
     Returns:
         A mapping of long commit hashes to author login handles.
+
     """
     per_page = min(line_count, 100)
     page = 1
     mapping: Dict[str, str] = {}
     for _ in range(0, line_count, per_page):
-        with urllib.request.urlopen(  # noqa: S310
-            f"https://api.github.com/repos/py-pdf/pdfly/commits?per_page={per_page}&page={page}"
+        with urllib.request.urlopen(
+            f"https://api.github.com/repos/{GH_ORG}/{GH_PROJECT}/commits?per_page={per_page}&page={page}"
         ) as response:
             commits = json.loads(response.read())
         page += 1
         for commit in commits:
-            print(commit)
             if commit["author"]:
                 gh_handle = commit["author"]["login"]
             else:
@@ -311,8 +324,9 @@ def get_git_commits_since_tag(git_tag: str) -> List[Change]:
 
     Returns:
         List of all changes since git_tag.
+
     """
-    commits = str(
+    commits = (
         subprocess.check_output(
             [
                 "git",
@@ -323,8 +337,10 @@ def get_git_commits_since_tag(git_tag: str) -> List[Change]:
             ],
             stderr=subprocess.STDOUT,
         )
-    ).strip("'b\\n")
-    lines = commits.split("\\n")
+        .decode("UTF-8")
+        .strip()
+    )
+    lines = commits.splitlines()
     authors = get_author_mapping(len(lines))
     return [parse_commit_line(line, authors) for line in lines if line != ""]
 
@@ -341,13 +357,14 @@ def parse_commit_line(line: str, authors: Dict[str, str]) -> Change:
 
     Raises:
         ValueError: The commit line is not well-structured
+
     """
     parts = line.split(":::")
     if len(parts) != 3:
         raise ValueError(f"Invalid commit line: '{line}'")
     commit_hash, rest, author = parts
     if ":" in rest:
-        prefix, message = rest.split(":", 1)
+        prefix, message = rest.split(": ", 1)
     else:
         prefix = ""
         message = rest
@@ -374,4 +391,4 @@ def parse_commit_line(line: str, authors: Dict[str, str]) -> Change:
 
 
 if __name__ == "__main__":
-    main("CHANGELOG.md")
+    main(CHANGELOG_FILE_PATH)

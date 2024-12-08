@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Version 0.4.0, not released yet
+## Version 0.4.0, 2024-12-08
 
 ### New Features (ENH)
 - New `booklet` command to adjust offsets and lengths ([PR #77](https://github.com/py-pdf/pdfly/pull/77))
