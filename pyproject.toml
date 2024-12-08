@@ -10,7 +10,7 @@ description = "A pure-python CLI application to manipulate PDF files"
 readme = "README.md"
 dynamic = ["version"]
 license = { file = "LICENSE" }
-requires-python = ">=3.6.1"
+requires-python = ">=3.7.0"
 
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
@@ -22,6 +22,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
+    # We do not test Python 3.7 in CI, so support is not guaranteed
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -31,7 +32,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "pypdf>=3.8.2",
+    "pypdf>=5.1.0",
     "typer>=0.12.4",
     "pillow",
     "pydantic",
