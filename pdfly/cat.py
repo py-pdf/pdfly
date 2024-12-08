@@ -78,7 +78,7 @@ def main(
             if filepath not in in_fs:
                 in_fs[filepath] = open(filepath, "rb")
 
-            reader = PdfReader(in_fs[filename])
+            reader = PdfReader(in_fs[filepath])
             if password is not None:
                 reader.decrypt(password)
             num_pages = len(reader.pages)
