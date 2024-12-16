@@ -1,0 +1,98 @@
+{
+  "projectName": "pdfly",
+  "projectOwner": "py-pdf",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "eslint",
+  "contributors": [
+    {
+      "login": "MartinThoma",
+      "name": "Martin Thoma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1658117?v=4",
+      "profile": "http://martin-thoma.com/",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "infra",
+        "maintenance",
+        "projectManagement",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "Lucas-C",
+      "name": "Lucas Cimon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/925560?v=4",
+      "profile": "https://chezsoi.org/lucas/blog/",
+      "contributions": [
+        "bug",
+        "code",
+        "doc",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "pastor-robert",
+      "name": "Rob Adams",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35646090?v=4",
+      "profile": "https://github.com/pastor-robert",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Kaos599",
+      "name": "Harsh ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/115716485?v=4",
+      "profile": "https://github.com/Kaos599",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "srogmann",
+      "name": "Sascha Rogmann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59577610?v=4",
+      "profile": "https://github.com/srogmann",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ebotiab",
+      "name": "Enrique Botía",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62219950?v=4",
+      "profile": "https://github.com/ebotiab",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kommade",
+      "name": "kommade",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99523586?v=4",
+      "profile": "https://github.com/kommade",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Zingzy",
+      "name": "Zingzy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/90309290?v=4",
+      "profile": "https://spoo.me/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 5,
+  "skipCi": true,
+  "commitType": "docs"
+}
