@@ -1,0 +1,12 @@
+# Doc: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  - package-ecosystem: "gitsubmodule"
+    commit-message:
+      prefix: "MAINT"
+  - package-ecosystem: "github-actions"
+    commit-message:
+      prefix: "MAINT"
+  - package-ecosystem: "pip"
+    commit-message:
+      prefix: "MAINT"
