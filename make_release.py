@@ -218,7 +218,7 @@ def get_formatted_changes(git_tag: str) -> Tuple[str, str]:
         "PI",
         "BUG",
         "ROB",
-        "DOC",
+        "DOC",  # We ignore MRs from Dependabot prefixed with: "Docs:"
         "DEV",
         "CI",
         "MAINT",

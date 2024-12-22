@@ -11,6 +11,7 @@ KNOWN_PREFIXES = (
     "PI: ",
     "ROB: ",
     "DOC: ",
+    "Docs: ",  # MRs from Dependabot
     "TST: ",
     "DEV: ",
     "STY: ",
