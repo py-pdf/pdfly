@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   build_and_publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Publish a new version
     runs-on: ubuntu-latest
     steps:

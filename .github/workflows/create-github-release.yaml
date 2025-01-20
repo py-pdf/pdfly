@@ -15,11 +15,13 @@ permissions:
 
 jobs:
   build_and_publish:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Create a GitHub release page
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Prepare variables
         id: prepare_variables
         run: |
@@ -31,6 +33,7 @@ jobs:
           echo "tag_body<<$EOF" >> "$GITHUB_ENV"
           git --no-pager tag -l "${latest_tag}" --format='%(contents:body)' >> "$GITHUB_ENV"
           echo "$EOF" >> "$GITHUB_ENV"
+
       - name: Create GitHub Release 🚀
         uses: softprops/action-gh-release@v2
         with:
