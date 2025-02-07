@@ -8,7 +8,7 @@ VERSIONFILE = "pdfly/_version.py"
 with open(VERSIONFILE) as fp:
     verstrline = fp.read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
-mo = re.search(VSRE, verstrline, re.M)
+mo = re.search(VSRE, verstrline, re.MULTILINE)
 if mo:
     verstr = mo.group(1)
 else:
