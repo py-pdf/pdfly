@@ -277,6 +277,8 @@ def read_binary_file(file_path: Path, encoding: str) -> List[str]:
 
 
 def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
+    if not file_out:
+        file_out = file_in
     console = Console()
     console.print(f"Read {file_in}")
 

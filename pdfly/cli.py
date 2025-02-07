@@ -283,7 +283,7 @@ def update_offsets(
             resolve_path=True,
         ),
     ],
-    file_out: Path,
+    file_out: Path = typer.Option(None, "-o", "--output"),
     encoding: str = typer.Option(
         "ISO-8859-1",
         help="Encoding used to read and write the files, e.g. UTF-8.",

@@ -45,7 +45,7 @@ $ pdfly --help
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
 
-You can see the help of every subcommand by typing:
+You can see the help of every subcommand by typing `--help`:
 
 ```console
 $ pdfly 2-up --help
