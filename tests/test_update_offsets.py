@@ -14,17 +14,14 @@ from .conftest import RESOURCES_ROOT, run_cli
 
 def test_update_offsets(capsys, tmp_path: Path) -> None:
     # Arrange
-    input = str(RESOURCES_ROOT / "file-with-invalid-offsets.pdf")
+    input = RESOURCES_ROOT / "file-with-invalid-offsets.pdf"
     file_expected = str(RESOURCES_ROOT / "file-with-fixed-offsets.pdf")
-    output = tmp_path / "file-with-offsets-out.pdf"
-    assert not output.exists()
 
     # Act
     exit_code = run_cli(
         [
             "update-offsets",
             str(input),
-            str(output),
         ]
     )
 
@@ -32,11 +29,10 @@ def test_update_offsets(capsys, tmp_path: Path) -> None:
     captured = capsys.readouterr()
     assert exit_code == 0, captured
     assert not captured.err
-    assert re.search(r"Wrote\s+" + re.escape(str(output)), captured.out)
-    assert output.exists()
+    assert re.search(r"Wrote\s+" + re.escape(str(input)), captured.out)
     with open(file_expected, encoding="iso-8859-1") as file_exp:
         lines_exp = file_exp.readlines()
-    with open(output, encoding="iso-8859-1") as file_act:
+    with input.open(encoding="iso-8859-1") as file_act:
         lines_act = file_act.readlines()
     assert len(lines_exp) == len(
         lines_act
@@ -92,6 +88,7 @@ def test_update_offsets_on_all_reference_files(
             "--encoding",
             "iso-8859-1",
             input_pdf_filepath,
+            "-o",
             str(output_pdf_filepath),
         ]
     )

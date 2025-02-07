@@ -283,7 +283,9 @@ def update_offsets(
             resolve_path=True,
         ),
     ],
-    file_out: Path = typer.Option(..., "-o", "--output"),  # noqa
+    file_out: Annotated[
+        Path, typer.Option("-o", "--output")  # noqa
+    ] = None,  # type: ignore
     encoding: str = typer.Option(
         "ISO-8859-1",
         help="Encoding used to read and write the files, e.g. UTF-8.",
