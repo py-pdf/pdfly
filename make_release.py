@@ -259,9 +259,10 @@ def get_formatted_changes(git_tag: str) -> Tuple[str, str]:
     if grouped:
         output += "\n### Other\n"
         output_with_user += "\n### Other\n"
-        for prefix, commit_dict in grouped.items():
-            output += f"- {prefix}: {commit_dict['msg']}\n"
-            output_with_user += f"- {prefix}: {commit_dict['msg']} by @{commit_dict['author']}\n"
+        for prefix, commit_dicts in grouped.items():
+            for commit_dict in commit_dicts:
+                output += f"- {prefix}: {commit_dict['msg']}\n"
+                output_with_user += f"- {prefix}: {commit_dict['msg']} by @{commit_dict['author']}\n"
 
     return output, output_with_user
 
