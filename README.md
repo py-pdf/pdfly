@@ -3,7 +3,7 @@
 [![License: BSD 3 Clause](https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Documentation Status](https://readthedocs.org/projects/pdfly/badge/?version=latest)](https://pdfly.readthedocs.io/en/latest/?badge=latest)
 
-[![build status](https://github.com/py-pdf/pdfly/workflows/build/badge.svg)](https://github.com/py-pdf/pdfly/actions?query=branch%3Amain)
+[![build status](https://github.com/py-pdf/pdfly/workflows/CI/badge.svg)](https://github.com/py-pdf/pdfly/actions?query=branch%3Amain)
 [![GitHub last commit](https://img.shields.io/github/last-commit/py-pdf/pdfly)](https://github.com/py-pdf/pdfly)
 [![issues closed](https://img.shields.io/github/issues-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/issues)
 [![PRs closed](https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/pulls)
