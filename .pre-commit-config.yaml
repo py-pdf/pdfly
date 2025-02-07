@@ -18,7 +18,7 @@ repos:
     -   id: check-added-large-files
         args: ['--maxkb=1000']
 -   repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
     -   id: black
         args: [--target-version, py36]
@@ -28,13 +28,13 @@ repos:
     -   id: blacken-docs
         additional_dependencies: [black==22.1.0]
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.7.4
+    rev: v0.9.5
     hooks:
     -   id: ruff
         args: ['--fix']
         exclude: "tests/"
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.0
+    rev: v3.19.1
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]
@@ -45,7 +45,7 @@ repos:
         args: ["--ignore", "E,W,F"]
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.13.0'
+    rev: 'v1.15.0'
     hooks:
       - id: mypy
         files: ^pdfly/.*
