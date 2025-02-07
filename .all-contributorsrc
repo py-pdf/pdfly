@@ -93,6 +93,6 @@
     }
   ],
   "contributorsPerLine": 5,
-  "skipCi": true,
+  "skipCi": false,
   "commitType": "docs"
 }
