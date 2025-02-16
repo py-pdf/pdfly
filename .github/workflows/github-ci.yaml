@@ -19,7 +19,7 @@ on:
 jobs:
   tests:
     name: pytest on ${{ matrix.python-version }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
@@ -53,7 +53,7 @@ jobs:
 
   codestyle:
     name: Check code style issues
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
