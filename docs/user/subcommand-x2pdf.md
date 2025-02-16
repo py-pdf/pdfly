@@ -40,7 +40,7 @@ $ ls -lh
 ### Multiple files manually
 
 ```
-$ pdfly x2pdf image1.jpg image2.jgp -o out.pdf
+$ pdfly x2pdf image1.jpg image2.jpg -o out.pdf
 $ ls -lh
 -rw-rw-r-- 1 user user 47K Sep 17 21:49 image1.jpg
 -rw-rw-r-- 1 user user 15K Sep 17 21:49 image2.jpg
