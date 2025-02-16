@@ -13,7 +13,7 @@ try:
 except ImportError:  # Fallback when not available (< Python 3.11):
     from contextlib import contextmanager
 
-    @contextmanager
+    @contextmanager  # type: ignore
     def chdir(dir_path):
         """Non thread-safe context manager to change the current working directory."""
         cwd = Path.cwd()
