@@ -95,6 +95,7 @@ contributors, but we do value their contributions 🤗
       <td align="center" valign="top" width="20%"><a href="https://github.com/kommade"><img src="https://avatars.githubusercontent.com/u/99523586?v=4?s=100" width="100px;" alt="kommade"/><br /><sub><b>kommade</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=kommade" title="Code">💻</a></td>
       <td align="center" valign="top" width="20%"><a href="https://spoo.me/"><img src="https://avatars.githubusercontent.com/u/90309290?v=4?s=100" width="100px;" alt="Zingzy"/><br /><sub><b>Zingzy</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=Zingzy" title="Code">💻</a></td>
       <td align="center" valign="top" width="20%"><a href="https://wolfram77.github.io"><img src="https://avatars.githubusercontent.com/u/3179612?v=4?s=100" width="100px;" alt="Subhajit Sahu"/><br /><sub><b>Subhajit Sahu</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=wolfram77" title="Code">💻</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://www.kianmeng.org"><img src="https://avatars.githubusercontent.com/u/134518?v=4?s=100" width="100px;" alt="Kian-Meng Ang"/><br /><sub><b>Kian-Meng Ang</b></sub></a><br /><a href="#ideas-kianmeng" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
