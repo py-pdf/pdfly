@@ -6,7 +6,7 @@
 Welcome to pdfly
 ================
 
-pdfly is a command line tool to get informaiton about PDF documents and to manipulate them.
+pdfly is a command line tool to get information about PDF documents and to manipulate them.
 
 .. toctree::
    :caption: User Guide
