@@ -18,7 +18,7 @@ tool.
   request, but that is up to the maintainer. Other contributors describe issues,
   help to ask questions on existing issues to make them easier to answer,
   participate in discussions, and help to improve the documentation. Contributors
-  are similar to maintainers, but without technial permissions.
+  are similar to maintainers, but without technical permissions.
 * A **user** is a person who imports pdfly into their code. All pdfly users
   are developers, but not developers who know the internals of pdfly. They only
   use the public interface of pdfly. They will likely have less knowledge about
@@ -102,7 +102,7 @@ An issue is any technical description that aims at bringing pdfly forward:
 * Performance tickets: pdfly could be faster - let us know about your specific
   scenario.
 
-Any comment that is in those technial descriptions which is not helping the
+Any comment that is in those technical descriptions which is not helping the
 discussion can be deleted. This is especially true for "me too" comments on bugs
 or "bump" comments for desired features. People can express this with 👍 / 👎
 reactions.
