@@ -29,7 +29,7 @@ pipx installs the pdfly application in an isolated environment. That guarantees
 that no other applications interferes with its defpendencies.
 
 ## Python Version Support
-If ✓ is givien, it works. It is tested via CI.
+If ✓ is given, it works. It is tested via CI.
 If ✖ is given, it is guaranteed not to work.
 If it's not filled, we don't guarantee support, but it might still work.
 
