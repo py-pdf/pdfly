@@ -99,6 +99,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kianmeng",
+      "name": "Kian-Meng Ang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/134518?v=4",
+      "profile": "https://www.kianmeng.org",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 5,
