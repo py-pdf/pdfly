@@ -108,6 +108,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "hwine",
+      "name": "Hal Wine",
+      "avatar_url": "https://avatars.githubusercontent.com/u/132412?v=4",
+      "profile": "https://github.com/hwine",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 5,
