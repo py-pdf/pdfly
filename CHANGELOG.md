@@ -7,7 +7,7 @@
 - Added optional `--password` argument to `cat` to perform decryption ([PR #61](https://github.com/py-pdf/pdfly/pull/61))
 
 ### Bug Fixes (BUG)
-- `pypdf[full]` is now dependency, instead of just `pypdf`, to avoid some cases of `DependencyError`
+- `pypdf[full]` is now a dependency, instead of just `pypdf`, to avoid some cases of `DependencyError`
 
 
 ## Version 0.4.0, 2024-12-08
