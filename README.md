@@ -62,6 +62,7 @@ $ pdfly 2-up --help
 
  Create a booklet-style PDF from a single input.
  Pairs of two pages will be put on one page (left and right)
+
  usage: python 2-up.py input_file output_file
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────────────╮
