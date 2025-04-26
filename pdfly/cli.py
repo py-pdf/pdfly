@@ -18,6 +18,7 @@ import pdfly.extract_images
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
+import pdfly.rotate
 import pdfly.uncompress
 import pdfly.up2
 import pdfly.update_offsets
@@ -346,3 +347,22 @@ def extract_annotated_pages(
     ] = None,
 ) -> None:
     pdfly.extract_annotated_pages.main(input_pdf, output_pdf)
+
+
+@entry_point.command(name="rotate", help=pdfly.rotate.__doc__)  # type: ignore[misc]
+def rotate(
+    filename: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    degrees: Annotated[
+        int, typer.Argument(..., help="degrees to rotate")
+    ] = 90,
+    pgrgs: Annotated[str, typer.Argument(..., help="page range")] = ":",
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+) -> None:
+    pdfly.rotate.main(filename, output, pgrgs)

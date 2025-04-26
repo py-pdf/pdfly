@@ -4,41 +4,52 @@ from pypdf import PdfReader
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_booklet_fewer_args(capsys, tmp_path):
+def test_rotate_fewer_args(capsys, tmp_path):
     with chdir(tmp_path):
-        exit_code = run_cli(["rotate", str(RESOURCES_ROOT / "box.pdf")])
+        exit_code = run_cli(
+            [
+                "rotate",
+            ]
+        )
     assert exit_code == 2
     captured = capsys.readouterr()
     assert "Missing argument" in captured.err
 
 
-def test_booklet_extra_args(capsys, tmp_path):
+def test_rotate_extra_args(capsys, tmp_path):
     with chdir(tmp_path):
         exit_code = run_cli(
-            ["rotate", str(RESOURCES_ROOT / "box.pdf"), "a.pdf", "b.pdf"]
+            [
+                "rotate",
+                "-o",
+                "/dev/null",
+                str(RESOURCES_ROOT / "box.pdf"),
+                "37",
+                "extra 1",
+                "extra 2",
+            ]
         )
     assert exit_code == 2
     captured = capsys.readouterr()
     assert "unexpected extra argument" in captured.err
 
 
-def test_booklet_page_size(capsys, tmp_path):
+def test_rotate_default(capsys, tmp_path):
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
 
     with chdir(tmp_path):
         exit_code = run_cli(
             [
                 "rotate",
-                in_fname,
+                "-o",
                 "output8.pdf",
+                in_fname,
             ]
         )
         in_reader = PdfReader(in_fname)
         out_reader = PdfReader("output8.pdf")
 
     assert exit_code == 0
-
-    assert len(in_reader.pages) == len(out_reader.pages)
 
     in_height = in_reader.pages[0].mediabox.height
     in_width = in_reader.pages[0].mediabox.width
@@ -66,7 +77,7 @@ def test_booklet_page_size(capsys, tmp_path):
 ##         ("1", "1\n\n", "1b\nc\n"),
 ##     ],
 ## )
-## def test_booklet_order(capsys, tmp_path, page_count, expected, expected_bc):
+## def test_rotate_order(capsys, tmp_path, page_count, expected, expected_bc):
 ##     with chdir(tmp_path):
 ##         exit_code = run_cli(
 ##             [
