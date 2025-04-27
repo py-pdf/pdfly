@@ -1,3 +1,4 @@
+from pathlib import Path
 import pytest
 from pypdf import PdfReader
 
@@ -34,22 +35,48 @@ def test_rotate_extra_args(capsys, tmp_path):
     assert "unexpected extra argument" in captured.err
 
 
+def get_page_rotations(fname: Path) -> list[int]:
+    reader = PdfReader(fname)
+    rotations = []
+    for page in reader.pages:
+        rotations.append(page.rotation)
+    return rotations
+
+
+def diff_rotations(degrees: int, in_: list[int], out: list[int]) -> list[int]:
+    diffs = []
+    for orig, rotated in zip(in_, out):
+        diffs.append(rotated - (orig + degrees))
+    return diffs
+
+
 def test_rotate_default(capsys, tmp_path):
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
+    out_fname = str(RESOURCES_ROOT / "input8.pdf")
+    degrees = 90
 
     with chdir(tmp_path):
         exit_code = run_cli(
             [
                 "rotate",
                 "-o",
-                "output8.pdf",
+                out_fname,
                 in_fname,
             ]
         )
         in_reader = PdfReader(in_fname)
-        out_reader = PdfReader("output8.pdf")
+        out_reader = PdfReader(out_fname)
 
     assert exit_code == 0
+
+    in_rotations = get_page_rotations(in_fname)
+    out_rotations = get_page_rotations(out_fname)
+    assert not any(diff_rotations(degrees, in_rotations, out_rotations))
+    # can test rotation values
+    reader = PdfReader(pdf)
+    page = reader.pages[page_index]
+    # print(dir(page))
+    print(f"{page.rotate=}\n{page.rotation=}")
 
     in_height = in_reader.pages[0].mediabox.height
     in_width = in_reader.pages[0].mediabox.width
