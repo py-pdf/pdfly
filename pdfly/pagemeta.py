@@ -26,6 +26,7 @@ class PageMeta(BaseModel):
     artbox: Tuple[float, float, float, float]
     bleedbox: Tuple[float, float, float, float]
     annotations: int
+    rotation: int
 
 
 def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
@@ -37,6 +38,7 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         artbox=page.artbox,
         bleedbox=page.bleedbox,
         annotations=len(page.annotations) if page.annotations else 0,
+        rotation=page.rotation,
     )
 
     if output == OutputOptions.json:
@@ -68,6 +70,7 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         add_box_attr("bleedbox", meta.bleedbox)
 
         table.add_row("annotations", str(meta.annotations))
+        table.add_row("rotation", str(meta.rotation))
 
         console.print(table)
 
