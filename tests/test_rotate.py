@@ -52,40 +52,27 @@ def diff_rotations(degrees: int, in_: list[int], out: list[int]) -> list[int]:
 
 def test_rotate_default(capsys, tmp_path):
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
-    out_fname = str(RESOURCES_ROOT / "input8.pdf")
+    out_fname = "output8.pdf"
     degrees = 90
 
     with chdir(tmp_path):
+        print(f"{tmp_path=}")
         exit_code = run_cli(
             [
                 "rotate",
                 "-o",
                 out_fname,
                 in_fname,
+                str(degrees),
             ]
         )
-        in_reader = PdfReader(in_fname)
-        out_reader = PdfReader(out_fname)
+        in_rotations = get_page_rotations(in_fname)
+        out_rotations = get_page_rotations(out_fname)
 
     assert exit_code == 0
 
-    in_rotations = get_page_rotations(in_fname)
-    out_rotations = get_page_rotations(out_fname)
     assert not any(diff_rotations(degrees, in_rotations, out_rotations))
     # can test rotation values
-    reader = PdfReader(pdf)
-    page = reader.pages[page_index]
-    # print(dir(page))
-    print(f"{page.rotate=}\n{page.rotation=}")
-
-    in_height = in_reader.pages[0].mediabox.height
-    in_width = in_reader.pages[0].mediabox.width
-    out_height = out_reader.pages[0].mediabox.height
-    out_width = out_reader.pages[0].mediabox.width
-
-    # ToDo: need different assertions here
-    ## assert out_width == in_width * 2
-    ## assert in_height == out_height
 
 
 # ToDo: needs major restructuring, but want to leave syntax framework

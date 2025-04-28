@@ -359,10 +359,8 @@ def rotate(
             resolve_path=True,
         ),
     ],
-    degrees: Annotated[
-        int, typer.Argument(..., help="degrees to rotate")
-    ] = 90,
+    degrees: Annotated[int, typer.Argument(..., help="degrees to rotate")],
     pgrgs: Annotated[str, typer.Argument(..., help="page range")] = ":",
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
 ) -> None:
-    pdfly.rotate.main(filename, output, pgrgs)
+    pdfly.rotate.main(filename, output, degrees, pgrgs)
