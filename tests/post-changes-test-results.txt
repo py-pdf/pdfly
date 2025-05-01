@@ -1,0 +1,1461 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.3.3, pluggy-1.5.0
+rootdir: /home/hwine/wip/pdfly
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-5.0.0, timeout-2.3.1, socket-0.7.0
+timeout: 30.0s
+timeout method: signal
+timeout func_only: False
+collected 87 items
+
+tests/test_booklet.py ...........                                        [ 12%]
+tests/test_cat.py ....................                                   [ 35%]
+tests/test_cli.py ..                                                     [ 37%]
+tests/test_extract_annotated_pages.py .                                  [ 39%]
+tests/test_extract_images.py ..                                          [ 41%]
+tests/test_rm.py ...................                                     [ 63%]
+tests/test_rotate.py ...                                                 [ 66%]
+tests/test_uncompress.py s                                               [ 67%]
+tests/test_up2.py ...                                                    [ 71%]
+tests/test_update_offsets.py .FFFFFFFFFFFFFFFFFFFF                       [ 95%]
+tests/test_x2pdf.py FF..                                                 [100%]
+
+=================================== FAILURES ===================================
+_ test_update_offsets_on_all_reference_files[sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187ede9100>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref0')
+input_pdf_filepath = 'sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...                                │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f411b20>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref1')
+input_pdf_filepath = 'sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...                                │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f2192e0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref2')
+input_pdf_filepath = 'sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...                                │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187eead9d0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref3')
+input_pdf_filepath = 'sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...                                │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-images.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f21a630>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref4')
+input_pdf_filepath = 'sample-files/007-imagemagick-images/imagemagick-images.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...ick-images.pdf' does not exist. │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-lzw.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f1fcaa0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref5')
+input_pdf_filepath = 'sample-files/007-imagemagick-images/imagemagick-lzw.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...ick-lzw.pdf' does not exist.    │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/008-reportlab-inline-image/inline-image.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f6675f0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref6')
+input_pdf_filepath = 'sample-files/008-reportlab-inline-image/inline-image.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...ne-image.pdf' does not exist.   │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187eeaef60>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref7')
+input_pdf_filepath = 'sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...mprimiert.pdf' does not exist.  │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/012-libreoffice-form/libreoffice-form.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187eeaca40>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref8')
+input_pdf_filepath = 'sample-files/012-libreoffice-form/libreoffice-form.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...e-form.pdf' does not exist.     │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/013-reportlab-overlay/reportlab-overlay.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f3f0560>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref9')
+input_pdf_filepath = 'sample-files/013-reportlab-overlay/reportlab-overlay.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...-overlay.pdf' does not exist.   │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/015-arabic/habibi-oneline-cmap.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f3f3a70>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref10')
+input_pdf_filepath = 'sample-files/015-arabic/habibi-oneline-cmap.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...pdf' does not exist.            │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/015-arabic/habibi-rotated.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f3f1250>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref11')
+input_pdf_filepath = 'sample-files/015-arabic/habibi-rotated.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...does not exist.                 │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/015-arabic/habibi.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f3f3fe0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref12')
+input_pdf_filepath = 'sample-files/015-arabic/habibi.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...                                │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/016-libre-office-link/libre-office-link.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187edc7800>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref13')
+input_pdf_filepath = 'sample-files/016-libre-office-link/libre-office-link.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...ice-link.pdf' does not exist.   │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/018-base64-image/base64image.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f437a70>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref14')
+input_pdf_filepath = 'sample-files/018-base64-image/base64image.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...f' does not exist.              │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/020-xmp/output_with_metadata_pymupdf.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f852a50>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref15')
+input_pdf_filepath = 'sample-files/020-xmp/output_with_metadata_pymupdf.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...mupdf.pdf' does not exist.      │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/022-pdfkit/pdfkit.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f7c4980>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref16')
+input_pdf_filepath = 'sample-files/022-pdfkit/pdfkit.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...                                │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/023-cmyk-image/cmyk-image.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f7dc9b0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref17')
+input_pdf_filepath = 'sample-files/023-cmyk-image/cmyk-image.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...does not exist.                 │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/024-annotations/annotated_pdf.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f7c7e90>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref18')
+input_pdf_filepath = 'sample-files/024-annotations/annotated_pdf.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...df' does not exist.             │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+_ test_update_offsets_on_all_reference_files[sample-files/025-attachment/with-attachment.pdf] _
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f851fa0>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_update_offsets_on_all_ref19')
+input_pdf_filepath = 'sample-files/025-attachment/with-attachment.pdf'
+
+    @pytest.mark.parametrize(
+        "input_pdf_filepath",
+        [
+            "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-images.pdf",
+            "sample-files/007-imagemagick-images/imagemagick-lzw.pdf",
+            "sample-files/008-reportlab-inline-image/inline-image.pdf",
+            "sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf",
+            # "sample-files/011-google-doc-document/google-doc-document.pdf", # stream token in line after /Length
+            "sample-files/012-libreoffice-form/libreoffice-form.pdf",
+            "sample-files/013-reportlab-overlay/reportlab-overlay.pdf",
+            "sample-files/015-arabic/habibi-oneline-cmap.pdf",
+            "sample-files/015-arabic/habibi-rotated.pdf",
+            "sample-files/015-arabic/habibi.pdf",
+            "sample-files/016-libre-office-link/libre-office-link.pdf",
+            # "sample-files/017-unreadable-meta-data/unreadablemetadata.pdf", # stream in line after object
+            "sample-files/018-base64-image/base64image.pdf",
+            # "sample-files/019-grayscale-image/grayscale-image.pdf", # stream in line after object
+            "sample-files/020-xmp/output_with_metadata_pymupdf.pdf",
+            # "sample-files/021-pdfa/crazyones-pdfa.pdf", # stream in line is after dictionary
+            "sample-files/022-pdfkit/pdfkit.pdf",
+            "sample-files/023-cmyk-image/cmyk-image.pdf",
+            "sample-files/024-annotations/annotated_pdf.pdf",
+            "sample-files/025-attachment/with-attachment.pdf",
+        ],
+    )
+    def test_update_offsets_on_all_reference_files(
+        capsys, tmp_path: Path, input_pdf_filepath: Path
+    ) -> None:
+        # Arrange
+        output_pdf_filepath = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "update-offsets",
+                "--encoding",
+                "iso-8859-1",
+                input_pdf_filepath,
+                "-o",
+                str(output_pdf_filepath),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='', err="Usage: pytest update-offsets [OPTIONS] FILE_IN
+E         Try 'pytest update-offsets --help' for help...pdf' does not exist.            │
+E         ╰──────────────────────────────────────────────────────────────────────────────╯
+E         ")
+E       assert 2 == 0
+
+tests/test_update_offsets.py:98: AssertionError
+______________________ test_x2pdf_succeed_to_convert_jpg _______________________
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f435910>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_x2pdf_succeed_to_convert_0')
+
+    def test_x2pdf_succeed_to_convert_jpg(capsys, tmp_path: Path):
+        # Arrange
+        output = tmp_path / "out.pdf"
+
+        # Act
+        exit_code = run_cli(
+            [
+                "x2pdf",
+                "sample-files/003-pdflatex-image/page-0-Im1.jpg",
+                "--output",
+                str(output),
+            ]
+        )
+
+        # Assert
+        captured = capsys.readouterr()
+>       assert exit_code == 0, captured
+E       AssertionError: CaptureResult(out='Error: Could not convert \'sample-files/003-pdflatex-image/page-0-Im1.jpg\' to a
+E         PDF.
+E         ╭─────────...ileNotFoundError: [Errno 2] No such file or directory:
+E         \'sample-files/003-pdflatex-image/page-0-Im1.jpg\'
+E         ', err='')
+E       assert 1 == 0
+
+tests/test_x2pdf.py:28: AssertionError
+_______________________ test_x2pdf_succeed_to_embed_pdfs _______________________
+
+capsys = <_pytest.capture.CaptureFixture object at 0xff187f791250>
+tmp_path = PosixPath('/tmp/pytest-of-hwine/pytest-28/test_x2pdf_succeed_to_embed_pd0')
+
+    def test_x2pdf_succeed_to_embed_pdfs(capsys, tmp_path: Path):
+        # Arrange
+        output = tmp_path / "out.pdf"
+
+        # Act
+>       exit_code = run_cli(
+            [
+                "x2pdf",
+                "sample-files/001-trivial/minimal-document.pdf",
+                "sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf",
+                "--output",
+                str(output),
+            ]
+        )
+
+tests/test_x2pdf.py:38:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests/conftest.py:34: in run_cli
+    entry_point(args)
+.venv/lib/python3.12/site-packages/typer/main.py:339: in __call__
+    raise e
+.venv/lib/python3.12/site-packages/typer/main.py:322: in __call__
+    return get_command(self)(*args, **kwargs)
+.venv/lib/python3.12/site-packages/click/core.py:1157: in __call__
+    return self.main(*args, **kwargs)
+.venv/lib/python3.12/site-packages/typer/core.py:740: in main
+    return _main(
+.venv/lib/python3.12/site-packages/typer/core.py:195: in _main
+    rv = self.invoke(ctx)
+.venv/lib/python3.12/site-packages/click/core.py:1688: in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+.venv/lib/python3.12/site-packages/click/core.py:1434: in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+.venv/lib/python3.12/site-packages/click/core.py:783: in invoke
+    return __callback(*args, **kwargs)
+.venv/lib/python3.12/site-packages/typer/main.py:697: in wrapper
+    return callback(**use_params)
+pdfly/cli.py:323: in x2pdf
+    exit_code = pdfly.x2pdf.main(x, output)
+pdfly/x2pdf.py:37: in main
+    for page in PdfReader(filepath).pages:
+.venv/lib/python3.12/site-packages/pypdf/_reader.py:136: in __init__
+    self._initialize_stream(stream)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <pypdf._reader.PdfReader object at 0xff187f7c75c0>
+stream = PosixPath('sample-files/001-trivial/minimal-document.pdf')
+
+    def _initialize_stream(self, stream: Union[StrByteType, Path]) -> None:
+        if hasattr(stream, "mode") and "b" not in stream.mode:
+            logger_warning(
+                "PdfReader stream/file object is not in binary mode. "
+                "It may not be read correctly.",
+                __name__,
+            )
+        self._stream_opened = False
+        if isinstance(stream, (str, Path)):
+>           with open(stream, "rb") as fh:
+E           FileNotFoundError: [Errno 2] No such file or directory: 'sample-files/001-trivial/minimal-document.pdf'
+
+.venv/lib/python3.12/site-packages/pypdf/_reader.py:155: FileNotFoundError
+=============================== warnings summary ===============================
+tests/test_cat.py: 1000 warnings
+tests/test_rm.py: 1000 warnings
+  /home/hwine/wip/pdfly/tests/conftest.py:62: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+    pdf.cell(200, 10, text=f"{i}", ln=True, align="C")
+
+tests/test_cat.py: 26 warnings
+tests/test_rm.py: 26 warnings
+  /home/hwine/wip/pdfly/tests/conftest.py:77: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+    pdf.cell(200, 10, text=f"{char}", ln=True, align="C")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform linux, python 3.12.3-final-0 -----------
+Name                                    Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------
+make_release.py                           163    163     0%   3-394
+pdfly/__init__.py                           2      0   100%
+pdfly/__main__.py                           3      0   100%
+pdfly/_utils.py                             4      0   100%
+pdfly/_version.py                           1      0   100%
+pdfly/booklet.py                           57      6    89%   81, 92-95, 147
+pdfly/cat.py                               58     12    79%   69-70, 77, 83, 107-114
+pdfly/cli.py                               74      4    95%   190, 212, 255, 275
+pdfly/compress.py                          16     13    19%   9-25
+pdfly/extract_annotated_pages.py           23      1    96%   34
+pdfly/extract_images.py                    16      1    94%   24
+pdfly/metadata.py                         110     77    30%   48-198
+pdfly/pagemeta.py                          37     24    35%   22-80
+pdfly/rm.py                                 5      0   100%
+pdfly/rotate.py                            25      5    80%   44, 51-54
+pdfly/uncompress.py                        36     29    19%   12-36, 43-50
+pdfly/up2.py                               17      0   100%
+pdfly/update_offsets.py                   167     39    77%   34, 85, 95, 97, 112, 116, 118, 122, 133, 142-148, 153, 164, 168, 178, 182, 186, 195, 203, 210-234, 274
+pdfly/x2pdf.py                             40     15    62%   14-18, 23-28, 38-39, 42-43
+setup.py                                   11     11     0%   3-17
+tests/__init__.py                           0      0   100%
+tests/conftest.py                          54      9    83%   13-24
+tests/test_booklet.py                      49      0   100%
+tests/test_cat.py                          75      0   100%
+tests/test_cli.py                          14      0   100%
+tests/test_extract_annotated_pages.py       7      0   100%
+tests/test_extract_images.py               13      0   100%
+tests/test_rm.py                           65      0   100%
+tests/test_rotate.py                       38      0   100%
+tests/test_uncompress.py                   17      9    47%   20-38
+tests/test_up2.py                          35      0   100%
+tests/test_update_offsets.py               28      3    89%   99-101
+tests/test_x2pdf.py                        26      6    77%   29-30, 49-52
+---------------------------------------------------------------------
+TOTAL                                    1286    427    67%
+Coverage HTML written to dir tests/reports/coverage-html
+
+============================= slowest 3 durations ==============================
+10.81s call     tests/test_cli.py::test_pypdf_cli_can_be_invoked_as_a_module
+0.78s call     tests/test_x2pdf.py::test_x2pdf_succeed_to_convert_jpg
+0.65s call     tests/test_x2pdf.py::test_x2pdf_fail_to_convert
+=========================== short test summary info ============================
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-ASCII85Decode.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-CCITTFaxDecode.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-images.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/007-imagemagick-images/imagemagick-lzw.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/008-reportlab-inline-image/inline-image.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/009-pdflatex-geotopo/GeoTopo-komprimiert.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/012-libreoffice-form/libreoffice-form.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/013-reportlab-overlay/reportlab-overlay.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/015-arabic/habibi-oneline-cmap.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/015-arabic/habibi-rotated.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/015-arabic/habibi.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/016-libre-office-link/libre-office-link.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/018-base64-image/base64image.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/020-xmp/output_with_metadata_pymupdf.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/022-pdfkit/pdfkit.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/023-cmyk-image/cmyk-image.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/024-annotations/annotated_pdf.pdf]
+FAILED tests/test_update_offsets.py::test_update_offsets_on_all_reference_files[sample-files/025-attachment/with-attachment.pdf]
+FAILED tests/test_x2pdf.py::test_x2pdf_succeed_to_convert_jpg - AssertionErro...
+FAILED tests/test_x2pdf.py::test_x2pdf_succeed_to_embed_pdfs - FileNotFoundEr...
+=========== 22 failed, 64 passed, 1 skipped, 2052 warnings in 19.57s ===========
