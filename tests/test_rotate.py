@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 import pytest
 from pypdf import PdfReader
 
@@ -35,7 +36,7 @@ def test_rotate_extra_args(capsys, tmp_path):
     assert "unexpected extra argument" in captured.err
 
 
-def get_page_rotations(fname: Path) -> list[int]:
+def get_page_rotations(fname: Path) -> List[int]:
     reader = PdfReader(fname)
     rotations = []
     for page in reader.pages:

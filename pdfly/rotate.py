@@ -54,6 +54,6 @@ def main(
         sys.exit(1)
 
 
-def convert_range_to_pages(page_range: PageRange, num_pages: int) -> Set[int]:
+def convert_range_to_pages(page_range: str, num_pages: int) -> Set[int]:
     pages_to_rotate = {*range(*PageRange(page_range).indices(num_pages))}
     return pages_to_rotate
