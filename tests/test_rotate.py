@@ -45,8 +45,8 @@ def get_page_rotations(fname: Path) -> List[int]:
 
 
 def diff_rotations(
-    in_: list[int], out: list[int], degrees: int = 0
-) -> list[int]:
+    in_: List[int], out: List[int], degrees: int = 0
+) -> List[int]:
     diffs = []
     for orig, rotated in zip(in_, out):
         diffs.append(rotated - (orig + degrees))
