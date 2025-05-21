@@ -5,8 +5,19 @@ from typing import Tuple
 
 from pydantic import BaseModel
 from pypdf import PdfReader
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.table import Table
 
 from ._utils import OutputOptions
+
+KNOWN_PAGE_FORMATS = {
+    (841.89, 1190.55): "A3",
+    (595.28, 841.89): "A4",
+    (420.94, 595.28): "A5",
+    (612, 792): "Letter",
+    (612, 1008): "Legal",
+}
 
 
 class PageMeta(BaseModel):
@@ -31,40 +42,30 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
     if output == OutputOptions.json:
         print(meta.json())
     else:
-        from rich.console import Console
-        from rich.markdown import Markdown
-        from rich.table import Table
-
         console = Console()
-
         table = Table(title=f"{pdf}, page index {page_index}")
         table.add_column(
             "Attribute", justify="right", style="cyan", no_wrap=True
         )
         table.add_column("Value", style="white")
 
-        table.add_row(
-            "mediabox",
-            f"{meta.mediabox}: "
-            f"with={meta.mediabox[2] - meta.mediabox[0]} "
-            f"x height={meta.mediabox[3] - meta.mediabox[1]}",
-        )
-        table.add_row(
-            "cropbox",
-            f"{meta.cropbox}: "
-            f"with={meta.cropbox[2] - meta.cropbox[0]} "
-            f"x height={meta.cropbox[3] - meta.cropbox[1]}",
-        )
-        table.add_row(
-            "artbox",
-            f"{meta.artbox}: with={meta.artbox[2] - meta.artbox[0]} x height={meta.artbox[3] - meta.artbox[1]}",
-        )
-        table.add_row(
-            "bleedbox",
-            f"{meta.bleedbox}: "
-            f"with={meta.bleedbox[2] - meta.bleedbox[0]} "
-            f"x height={meta.bleedbox[3] - meta.bleedbox[1]}",
-        )
+        def add_box_attr(
+            name: str, box: Tuple[float, float, float, float]
+        ) -> None:
+            width = box[2] - box[0]
+            height = box[3] - box[1]
+            known_format = KNOWN_PAGE_FORMATS.get((width, height))
+            extra = f" ({known_format})" if known_format else ""
+            table.add_row(
+                name,
+                f"({box[0]:.2f}, {box[1]:.2f}, {box[2]:.2f}, {box[3]:.2f}):"
+                f" {width=:.2f} x {height=:.2f}{extra}",
+            )
+
+        add_box_attr("mediabox", meta.mediabox)
+        add_box_attr("cropbox", meta.cropbox)
+        add_box_attr("artbox", meta.artbox)
+        add_box_attr("bleedbox", meta.bleedbox)
 
         table.add_row("annotations", str(meta.annotations))
 
