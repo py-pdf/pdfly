@@ -70,10 +70,9 @@ def main(
             with open(output, "wb") as output_fh:
                 writer.write(output_fh)
 
-    except Exception:
-        print(traceback.format_exc(), file=sys.stderr)
-        print(f"Error while reading {filename}", file=sys.stderr)
-        sys.exit(1)
+    except Exception as error:
+        console.print(f"Error while rotating {filename}", file=sys.stderr)
+        raise error
 
 
 def convert_range_to_pages(page_range: str, num_pages: int) -> Set[int]:
