@@ -61,9 +61,8 @@ def main(
 
         for page_index, page in enumerate(pages):
             if page_index in pages_to_rotate:
-                writer.add_page(page.rotate(degrees))
-            else:
-                writer.add_page(page)
+                page = page.rotate(degrees)
+            writer.add_page(page)
 
         # Everything looks good! Write the output file.
         if True:

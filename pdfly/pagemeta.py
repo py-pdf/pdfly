@@ -69,8 +69,10 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         add_box_attr("artbox", meta.artbox)
         add_box_attr("bleedbox", meta.bleedbox)
 
-        table.add_row("annotations", str(meta.annotations))
-        table.add_row("rotation", str(meta.rotation))
+        if meta.annotations:
+            table.add_row("annotations", str(meta.annotations))
+        if meta.rotation:
+            table.add_row("rotation", str(meta.rotation))
 
         console.print(table)
 
