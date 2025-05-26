@@ -17,8 +17,6 @@ Example:
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
 
-import sys
-import traceback
 from pathlib import Path
 from typing import Generator, Optional, Tuple
 
@@ -89,10 +87,8 @@ def main(
         with open(output, "wb") as output_fh:
             writer.write(output_fh)
 
-    except Exception:
-        print(traceback.format_exc(), file=sys.stderr)
-        print(f"Error while reading {filename}", file=sys.stderr)
-        sys.exit(1)
+    except Exception as error:
+        raise RuntimeError(f"Error while processing {filename}") from error
 
 
 def requires_rotate(a: RectangleObject, b: RectangleObject) -> bool:
