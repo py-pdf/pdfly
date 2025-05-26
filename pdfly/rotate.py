@@ -28,12 +28,7 @@ PAGE RANGES are like Python slices.
 
 """
 
-# Copyright (c) 2014, Steve Witham <switham_github@mac-guyver.com>.
-# All rights reserved. This software is available under a BSD license;
-# see https://github.com/py-pdf/pypdf/LICENSE
-
 import sys
-import traceback
 from pathlib import Path
 from typing import Set
 
@@ -42,6 +37,7 @@ from pypdf import (
     PdfReader,
     PdfWriter,
 )
+from rich.console import Console
 
 
 def main(
@@ -65,11 +61,11 @@ def main(
             writer.add_page(page)
 
         # Everything looks good! Write the output file.
-        if True:
-            with open(output, "wb") as output_fh:
-                writer.write(output_fh)
+        with open(output, "wb") as output_fh:
+            writer.write(output_fh)
 
     except Exception as error:
+        console = Console()
         console.print(f"Error while rotating {filename}", file=sys.stderr)
         raise error
 

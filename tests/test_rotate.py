@@ -85,6 +85,16 @@ def test_rotate_default(capsys, tmp_path):
         (90, "::2", [90, 0, 90, 0, 90, 0, 90, 0]),  # every other, even index
         (90, "1::2", [0, 90, 0, 90, 0, 90, 0, 90]),  # every other, odd index
         (90, ":2", [90, 90, 0, 0, 0, 0, 0, 0]),  # first 2
+        (
+            -90,
+            ":",
+            [-90, -90, -90, -90, -90, -90, -90, -90],
+        ),  # negative degrees works
+        (
+            -720,
+            ":",
+            [-720, -720, -720, -720, -720, -720, -720, -720],
+        ),  # |degrees| > 360 is also supported
     ],
 )
 def test_rotate_slices(capsys, tmp_path, degrees, slice, expected_diff):
@@ -96,6 +106,7 @@ def test_rotate_slices(capsys, tmp_path, degrees, slice, expected_diff):
             "-o",
             f"{out_fname}",
             f"{in_fname}",
+            "--",  # end options, so negative degree values work
             f"{degrees}",
             f"{slice}",
         ]
