@@ -22,10 +22,8 @@ def main(pdf: Path, output: Path) -> None:
             rhs, tx=float(lhs.mediabox.width), ty=0, expand=True
         )
         writer.add_page(lhs)
-        print(str(i) + " ")
         sys.stdout.flush()
 
-    print(f"writing {output}")
     with open(output, "wb") as fp:
         writer.write(fp)
-    print("done.")
+    print(f"{output} was created")

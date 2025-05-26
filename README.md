@@ -99,7 +99,7 @@ contributors, but we do value their contributions 🤗
       <td align="center" valign="top" width="20%"><a href="https://www.kianmeng.org"><img src="https://avatars.githubusercontent.com/u/134518?v=4?s=100" width="100px;" alt="Kian-Meng Ang"/><br /><sub><b>Kian-Meng Ang</b></sub></a><br /><a href="#ideas-kianmeng" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="20%"><a href="https://github.com/hwine"><img src="https://avatars.githubusercontent.com/u/132412?v=4?s=100" width="100px;" alt="Hal Wine"/><br /><sub><b>Hal Wine</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/issues?q=author%3Ahwine" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/hwine"><img src="https://avatars.githubusercontent.com/u/132412?v=4?s=100" width="100px;" alt="Hal Wine"/><br /><sub><b>Hal Wine</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/issues?q=author%3Ahwine" title="Bug reports">🐛</a> <a href="https://github.com/py-pdf/pdfly/commits?author=hwine" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
