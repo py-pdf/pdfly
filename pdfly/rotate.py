@@ -28,7 +28,6 @@ PAGE RANGES are like Python slices.
 
 """
 
-import sys
 from pathlib import Path
 from typing import Set
 
@@ -66,7 +65,7 @@ def main(
 
     except Exception as error:
         console = Console()
-        console.print(f"Error while rotating {filename}", file=sys.stderr)
+        console.print(f"Error while rotating {filename}")
         raise error
 
 
