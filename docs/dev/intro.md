@@ -5,8 +5,11 @@ might also use it.
 
 ## Installing Requirements
 
-```
-pip install -r requirements/dev.txt
+```bash
+pip install --group '<PATH-TO-ROOT-DIR>/pyproject.toml:dev'
+
+# if 'pyproject.toml' is in the current directory:
+pip install --group dev
 ```
 
 ## Running Tests
