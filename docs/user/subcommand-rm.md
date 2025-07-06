@@ -5,6 +5,7 @@ Remove pages from PDF files.
 ## Usage
 
 ```
+$ pdfly rm --help
 Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...                                                            
                                                                                                            
  Remove pages from PDF files.                                                                              
