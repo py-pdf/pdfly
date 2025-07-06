@@ -1,4 +1,4 @@
-# meta
+# booklet
 
 Reorder and two-up PDF pages for booklet printing.
 

@@ -1,4 +1,4 @@
-# meta
+# rm
 
 Remove pages from PDF files.
 

@@ -1,4 +1,4 @@
-# meta
+# extract-images
 
 Extract text from a PDF file.
 ## Usage

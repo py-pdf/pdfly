@@ -1,4 +1,4 @@
-# meta
+# pagemeta
 
 Give details about a PDF's single page.
 

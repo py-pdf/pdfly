@@ -1,4 +1,4 @@
-# meta
+# uncompress
 
 Module for uncompressing PDF content streams.
 ## Usage

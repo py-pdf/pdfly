@@ -1,4 +1,4 @@
-# meta
+# extract-text
 
 Extract text from a PDF file.
 ## Usage
