@@ -58,14 +58,14 @@ Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
 
 ## Examples
 
-Remove the 5th page of the pdf, modifying the original file
+Remove the 5th page of `document.pdf`, modifying the original file.
 
 ```
 pdfly rm document.pdf 4
 
 ```
 
-Remove the first and last page of document.pdf, producing output.pdf
+Remove the first and last page of `document.pdf`, producing `output.pdf`.
 
 ```
 pdfly rm -o output.pdf document.pdf 1:-1 
