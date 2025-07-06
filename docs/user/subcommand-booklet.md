@@ -37,7 +37,7 @@ $ pdfly booklet --help
 
 ## Examples
 
-Organize `document.pdf` into the booklet `booklet.pdf`.
+Convert `document.pdf` into the booklet `booklet.pdf`.
 ```
 pdfly booklet document.pdf booklet.pdf
 
