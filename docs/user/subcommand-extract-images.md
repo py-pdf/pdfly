@@ -4,15 +4,15 @@ Extract text from a PDF file.
 ## Usage
 
 ```
-$ pdfly extract-images --help                                                                                                                                                                                                                                                        
- Usage: pdfly extract-images [OPTIONS] PDF                                      
-                                                                                
- Extract images from PDF without resampling or altering.                        
-                                                                                
- Adapted from work by Sylvain Pelissier                                         
+$ pdfly extract-images --help
+ Usage: pdfly extract-images [OPTIONS] PDF
+
+ Extract images from PDF without resampling or altering.
+
+ Adapted from work by Sylvain Pelissier
  http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-res 
- ampling-in-python                                                              
-                                                                                
+ ampling-in-python
+
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
 │ *    pdf      FILE  [default: None] [required]                               │
 ╰──────────────────────────────────────────────────────────────────────────────╯

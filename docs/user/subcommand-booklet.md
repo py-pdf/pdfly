@@ -37,7 +37,7 @@ $ pdfly booklet --help
 
 ## Examples
 
-Convert `document.pdf` into the booklet `booklet.pdf`.
+Convert `document.pdf` into a booklet and write the output in `booklet.pdf`.
 ```
 pdfly booklet document.pdf booklet.pdf
 

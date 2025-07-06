@@ -25,7 +25,7 @@ $ pdfly 2-up --help
 
 ## Examples
 
-Convert `document.pdf` into the booklet `booklet.pdf`.
+Convert `document.pdf` into a booklet and write the output in `booklet.pdf`.
 ```
 pdfly 2-up document.pdf booklet.pdf
 

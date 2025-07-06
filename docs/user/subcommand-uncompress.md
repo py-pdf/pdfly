@@ -5,8 +5,8 @@ Module for uncompressing PDF content streams.
 
 ```
 $ pdfly ucompress --help
- Module for uncompressing PDF content streams.                                                                                                                                                                                                                         
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+ Module for uncompressing PDF content streams.
+
  ╭─ Arguments ───────────────────────────────────────────╮
  │ *    pdf         FILE  [default: None] [required]     │
  │ *    output      PATH  [default: None] [required]     │
@@ -14,7 +14,6 @@ $ pdfly ucompress --help
  ╭─ Options ─────────────────────────────────────────────╮
  │ --help          Show this message and exit.           │
  ╰───────────────────────────────────────────────────────╯
-
 ```
 
 ## Examples

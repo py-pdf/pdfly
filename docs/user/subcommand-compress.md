@@ -5,9 +5,9 @@ Compress a PDF.
 ## Usage
 
 ```
-$ pdfly compress --help                                                                                                                                                                                                                                                        
- Usage: pdfly compress [OPTIONS] PDF OUTPUT                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                       
+$ pdfly compress --help
+ Usage: pdfly compress [OPTIONS] PDF OUTPUT
+
  Compress a PDF.
 
 ╭─ Arguments ───────────────────────────────────────────╮
@@ -18,7 +18,6 @@ $ pdfly compress --help
 │ --help          Show this message and exit.           │
 ╰───────────────────────────────────────────────────────╯
 ```
-
 ## Examples
 
 Compress the file `document.pdf` and output `document_compressed.pdf`

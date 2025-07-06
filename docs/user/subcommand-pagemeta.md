@@ -5,12 +5,12 @@ Give details about a PDF's single page.
 ## Usage
 
 ```
-$ pdfly pagemeta --help                                                                                                                                                                                                                                                        
- Usage: pdfly pagemeta [OPTIONS] PDF PAGE_INDEX                                 
-                                                                                
- Give details about a single page.                                              
-                                                                                
-                                                                                
+$ pdfly pagemeta --help
+ Usage: pdfly pagemeta [OPTIONS] PDF PAGE_INDEX
+
+ Give details about a single page.
+
+
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
 │ *    pdf             FILE     [default: None] [required]                     │
 │ *    page_index      INTEGER  [default: None] [required]                     │
