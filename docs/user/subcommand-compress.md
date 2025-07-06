@@ -17,6 +17,7 @@ $ pdfly compress --help
 ╭─ Options ─────────────────────────────────────────────╮
 │ --help          Show this message and exit.           │
 ╰───────────────────────────────────────────────────────╯
+```
 
 ## Examples
 
