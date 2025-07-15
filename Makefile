@@ -1,5 +1,6 @@
 maint:
 	pre-commit autoupdate
+	uv lock
 
 release:
 	python make_release.py
