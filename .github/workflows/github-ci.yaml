@@ -75,10 +75,8 @@ jobs:
     - name: Create venv
       run: uv venv
     - name: Activate venv
-    # Adding `source .../activate` to $GITHUB_ENV ensures all subsequent steps 
-    # run within the newly created virtual environment:
-      run: echo "source $GITHUB_WORKSPACE/.venv/bin/activate" >> $GITHUB_ENV  
-    
+      run: source .venv/bin/activate
+
     - name: Install requirements
       run: uv pip install --group ci
     - name: Install pdfly
