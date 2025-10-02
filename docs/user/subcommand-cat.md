@@ -16,6 +16,9 @@ pdfly cat --help
  range means all the pages of the file.
  PAGE RANGES are like Python slices.
  Remember, page indices start with zero.
+ When using page ranges that start with a negative value a
+ two-hyphen symbol -- must be used to separate them from
+ the command line options.
  Page range expression examples:
 
     :     all pages.
@@ -39,7 +42,7 @@ pdfly cat --help
 
 
  Examples
-      pdfly cat -o output.pdf head.pdf content.pdf :6 7: tail.pdf -1
+    pdfly cat -o output.pdf head.pdf -- content.pdf :6 7: tail.pdf -1
         Concatenate all of head.pdf, all but page seven of content.pdf,
         and the last page of tail.pdf, producing output.pdf.
 

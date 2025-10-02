@@ -10,12 +10,16 @@ Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
 
  Remove pages from PDF files.
 
- Page ranges refer to the previously-named file.                                                           
+ Page ranges refer to the previously-named file.
  A file not followed by a page range means all the pages of the file.
 
  PAGE RANGES are like Python slices.
-                                                                                                           
+
          Remember, page indices start with zero.
+
+         When using page ranges that start with a negative value a
+         two-hyphen symbol -- must be used to separate them from
+         the command line options.
 
          Page range expression examples:
 
@@ -44,7 +48,7 @@ Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
 
          Remove all pages except page seven from report.pdf,
          producing a single-page report.pdf.
-                                                                                                           
+
 ╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────╮
 │ *    filename      FILE         [default: None] [required]                                              │
 │ *    fn_pgrgs      FN_PGRGS...  filenames and/or page ranges [default: None] [required]                 │
@@ -68,6 +72,6 @@ pdfly rm document.pdf 4
 Remove the first and last page of `document.pdf`, producing `output.pdf`.
 
 ```
-pdfly rm -o output.pdf document.pdf 1:-1 
+pdfly rm -o output.pdf document.pdf 1:-1
 
 ```

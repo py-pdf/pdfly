@@ -5,11 +5,21 @@ Example:
     pdfly rotate --output output.pdf input.pdf 90
         Rotate all pages by 90 degrees (clockwise)
 
+    pdfly rotate --output output.pdf input.pdf 90 :3
+        Rotate first three pages by 90 degrees (clockwise)
+
+    pdfly rotate --output output.pdf input.pdf 90 -- -1
+        Rotate last page by 90 degrees (clockwise)
+
 A file not followed by a page range (PGRGS) means all the pages of the file.
 
 PAGE RANGES are like Python slices.
 
         Remember, page indices start with zero.
+
+        When using page ranges that start with a negative value a
+        two-hyphen symbol -- must be used to separate them from
+        the command line options.
 
         Page range expression examples:
 
