@@ -35,6 +35,9 @@ dependencies = [
     "pydantic",
     "rich",
     "fpdf2>=2.8.1",
+    "asn1crypto",
+    "cryptography",
+    "endesive"
 ]
 
 [project.urls]
