@@ -5,7 +5,7 @@ Creates a signed PDF.
 ## Usage
 
 ```
-Usage: python -m pdfly sign [OPTIONS] FILENAME
+Usage: pdfly sign [OPTIONS] FILENAME
 
 Creates a signed PDF.
 
