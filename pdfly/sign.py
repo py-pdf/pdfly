@@ -20,6 +20,7 @@ from typing import Generator, Optional, Union
 
 import fpdf.sign
 import typer
+from cryptography.hazmat.primitives.serialization import pkcs12
 from endesive import signer
 from fpdf import FPDF, get_scale_factor
 from pypdf import PageObject, PdfReader, PdfWriter
@@ -60,23 +61,22 @@ def _sign_pdf_contents(
 ) -> None:
     unsigned_output_buffer = io.BytesIO()
 
-    sign_key = None
-    sign_cert = None
-    sign_extra_certs = None
-    sign_hashalgo = None
-    sign_time = None
-
     with add_to_page(pdf_reader.pages[-1]) as pdf:
-        pdf.sign_pkcs12(
-            p12,
-            (p12_password.encode() if p12_password is not None else None),
-        )
+        with p12.open("rb") as pkcs_file:
+            hashalgo = "sha256"
+            sign_time = pdf.creation_date
 
-        sign_key = pdf._sign_key
-        sign_cert = pdf._sign_cert
-        sign_extra_certs = pdf._sign_extra_certs
-        sign_hashalgo = pdf._sign_hashalgo
-        sign_time = pdf._sign_time
+            key, cert, extra_certs = pkcs12.load_key_and_certificates(
+                pkcs_file.read(),
+                (p12_password.encode() if p12_password is not None else None),
+            )
+        pdf.sign(
+            key=key,
+            cert=cert,
+            extra_certs=extra_certs,
+            hashalgo=hashalgo,
+            signing_time=sign_time,
+        )
 
         # defer actual signing until after the input pdfs contents are merged
         # _sign_key = None prevents FDPF.output() from calculating the signature hash too early
@@ -103,10 +103,10 @@ def _sign_pdf_contents(
     signed_output_buffer = fpdf.sign.sign_content(
         signer,
         content_to_sign,
-        sign_key,
-        sign_cert,
-        sign_extra_certs,
-        sign_hashalgo,
+        key,
+        cert,
+        extra_certs,
+        hashalgo,
         sign_time,
     )
     output_file.write(signed_output_buffer)
