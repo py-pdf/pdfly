@@ -1,5 +1,5 @@
 """
-Creates a signed PDF.
+Creates a signed PDF from an existing PDF file.
 
 Examples
     pdfly sign input.pdf --p12 certs.p12 -o signed.pdf
