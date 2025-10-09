@@ -3,7 +3,7 @@
 ## Usage
 
 ```
- Usage: python -m pdfly check-sign [OPTIONS] FILENAME
+ Usage: pdfly check-sign [OPTIONS] FILENAME
 
  Verifies the signature of a signed PDF.
 
