@@ -29,91 +29,87 @@ def main(
     filename: Path,
     output: Optional[Path],
     in_place: bool,
-    p12: Optional[Path],
+    p12: Path,
     p12_password: Optional[str],
 ) -> None:
     validate_output_args_or_raise(output, in_place)
 
-    with open(filename, "rb") as input_file:
-        unsigned_output_buffer = io.BytesIO()
-
-        output_file: Union[
-            io.BufferedWriter, tempfile._TemporaryFileWrapper[bytes]
-        ]
+    pdf_reader = PdfReader(filename)
+    try:
+        output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper]
         if output:
             output_file = open(output, "wb")
         else:
             output_file = tempfile.NamedTemporaryFile(delete_on_close=False)
             output = Path(output_file.name)
 
-        try:
-            sign_key = None
-            sign_cert = None
-            sign_extra_certs = None
-            sign_hashalgo = None
-            sign_time = None
-
-            reader = PdfReader(input_file)
-
-            with add_to_page(reader.pages[-1]) as pdf:
-                pdf.sign_pkcs12(
-                    p12,
-                    (
-                        p12_password.encode()
-                        if p12_password is not None
-                        else None
-                    ),
-                )
-
-                sign_key = pdf._sign_key
-                sign_cert = pdf._sign_cert
-                sign_extra_certs = pdf._sign_extra_certs
-                sign_hashalgo = pdf._sign_hashalgo
-                sign_time = pdf._sign_time
-
-                # defer actual signing until after the input pdfs contents are merged
-                # _sign_key = None prevents FDPF.output() from calculating the signature hash too early
-                pdf._sign_key = None
-
-            writer = PdfWriter()
-            writer.append_pages_from_reader(reader)
-            writer.write(unsigned_output_buffer)
-
-            # Now that output_buffer contains the contents to be signed
-            # we can generate the cryptographic signature using fpdf2.sign.sign_content
-
-            # patch placeholder values to match how fpdf.sign.sign_content() expects them
-            content_to_sign = bytearray(unsigned_output_buffer.getbuffer())
-            content_to_sign = content_to_sign.replace(
-                _SIGNATURE_BYTERANGE_PLACEHOLDER.encode(),
-                fpdf.sign._SIGNATURE_BYTERANGE_PLACEHOLDER.encode(),
-            )
-            content_to_sign = content_to_sign.replace(
-                b"(" + _SIGNATURE_CONTENTS_PLACEHOLDER.encode() + b")",
-                b"<"
-                + fpdf.sign._SIGNATURE_CONTENTS_PLACEHOLDER.encode()
-                + b">",
-            )
-
-            signed_output_buffer = fpdf.sign.sign_content(
-                signer,
-                content_to_sign,
-                sign_key,
-                sign_cert,
-                sign_extra_certs,
-                sign_hashalgo,
-                sign_time,
-            )
-
-            output_file.write(signed_output_buffer)
-        except Exception as error:
-            raise RuntimeError(f"Error while reading {filename}") from error
-        finally:
-            output_file.close()
+        _sign_pdf_contents(pdf_reader, output_file, p12, p12_password)
+    finally:
+        output_file.close()
 
     if in_place:
         filename.write_bytes(output.read_bytes())
         output.unlink()
+
+
+def _sign_pdf_contents(
+    pdf_reader: PdfReader,
+    output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper],
+    p12: Path,
+    p12_password: Optional[str],
+) -> None:
+    unsigned_output_buffer = io.BytesIO()
+
+    sign_key = None
+    sign_cert = None
+    sign_extra_certs = None
+    sign_hashalgo = None
+    sign_time = None
+
+    with add_to_page(pdf_reader.pages[-1]) as pdf:
+        pdf.sign_pkcs12(
+            p12,
+            (p12_password.encode() if p12_password is not None else None),
+        )
+
+        sign_key = pdf._sign_key
+        sign_cert = pdf._sign_cert
+        sign_extra_certs = pdf._sign_extra_certs
+        sign_hashalgo = pdf._sign_hashalgo
+        sign_time = pdf._sign_time
+
+        # defer actual signing until after the input pdfs contents are merged
+        # _sign_key = None prevents FDPF.output() from calculating the signature hash too early
+        pdf._sign_key = None
+
+    writer = PdfWriter()
+    writer.append_pages_from_reader(pdf_reader)
+    writer.write(unsigned_output_buffer)
+
+    # Now that output_buffer contains the contents to be signed
+    # we can generate the cryptographic signature using fpdf2.sign.sign_content
+
+    # patch placeholder values to match how fpdf.sign.sign_content() expects them
+    content_to_sign = bytearray(unsigned_output_buffer.getbuffer())
+    content_to_sign = content_to_sign.replace(
+        _SIGNATURE_BYTERANGE_PLACEHOLDER.encode(),
+        fpdf.sign._SIGNATURE_BYTERANGE_PLACEHOLDER.encode(),
+    )
+    content_to_sign = content_to_sign.replace(
+        b"(" + _SIGNATURE_CONTENTS_PLACEHOLDER.encode() + b")",
+        b"<" + fpdf.sign._SIGNATURE_CONTENTS_PLACEHOLDER.encode() + b">",
+    )
+
+    signed_output_buffer = fpdf.sign.sign_content(
+        signer,
+        content_to_sign,
+        sign_key,
+        sign_cert,
+        sign_extra_certs,
+        sign_hashalgo,
+        sign_time,
+    )
+    output_file.write(signed_output_buffer)
 
 
 @contextmanager
