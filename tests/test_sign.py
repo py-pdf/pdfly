@@ -3,19 +3,34 @@ from endesive import pdf
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
+def test_sign_missing_certificate_key_option(capsys, tmp_path):
+    # Act
+    with chdir(tmp_path):
+        exit_code = run_cli(
+            ["sign", str(RESOURCES_ROOT / "input8.pdf"), "-o", "out.pdf"]
+        )
+    captured = capsys.readouterr()
+
+    # Assert
+    assert exit_code == 2
+    assert "Missing option '--p12'" in captured.err
+
+
 def test_sign_pkcs12(capsys, tmp_path):
     # Act
     with chdir(tmp_path):
-        exit_code = run_cli([
-            "sign",
-            str(RESOURCES_ROOT / "input8.pdf"),
-            "-o",
-            "out.pdf",
-            "--p12",
-            str(RESOURCES_ROOT / "signing-certificate.p12"),
-            "--p12-password",
-            "fpdf2"
-        ])
+        exit_code = run_cli(
+            [
+                "sign",
+                str(RESOURCES_ROOT / "input8.pdf"),
+                "-o",
+                "out.pdf",
+                "--p12",
+                str(RESOURCES_ROOT / "signing-certificate.p12"),
+                "--p12-password",
+                "fpdf2",
+            ]
+        )
     captured = capsys.readouterr()
 
     # Assert
@@ -30,6 +45,7 @@ def test_sign_pkcs12(capsys, tmp_path):
         assert hash_ok
         assert cert_ok
 
+
 def test_sign_pkcs12_in_place(capsys, tmp_path):
     # Arrange
     input8pdf = RESOURCES_ROOT / "input8.pdf"
@@ -39,15 +55,17 @@ def test_sign_pkcs12_in_place(capsys, tmp_path):
 
     # Act
     with chdir(tmp_path):
-        exit_code = run_cli([
-            "sign",
-            "out.pdf",
-            "--in-place",
-            "--p12",
-            str(RESOURCES_ROOT / "signing-certificate.p12"),
-            "--p12-password",
-            "fpdf2"
-        ])
+        exit_code = run_cli(
+            [
+                "sign",
+                "out.pdf",
+                "--in-place",
+                "--p12",
+                str(RESOURCES_ROOT / "signing-certificate.p12"),
+                "--p12-password",
+                "fpdf2",
+            ]
+        )
     captured = capsys.readouterr()
 
     # Assert
