@@ -20,6 +20,10 @@ from endesive import pdf
 def main(filename: Path, pem: Path, verbose: Optional[bool]) -> None:
     x509_certificates = [pem.read_bytes()]
     results = pdf.verify(filename.read_bytes(), x509_certificates)
+
+    if len(results) == 0:
+        raise typer.BadParameter("Signature missing")
+
     for hash_ok, signature_ok, cert_ok in results:
         if not signature_ok:
             print(f"Signature ok: {signature_ok}", file=sys.stderr)
@@ -37,6 +41,6 @@ def main(filename: Path, pem: Path, verbose: Optional[bool]) -> None:
     for hash_ok, signature_ok, cert_ok in results:
         if not signature_ok or not hash_ok or not cert_ok:
             print("Failure", file=sys.stderr)
-            typer.Exit(code=1)
+            raise typer.Exit(code=1)
 
     print("Success")
