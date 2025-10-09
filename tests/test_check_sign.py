@@ -93,3 +93,37 @@ def test_check_sign_pem(capsys, tmp_path):
     # Assert
     assert exit_code == 0
     assert not captured.err
+
+
+def test_check_sign_pdfly_signed_pdf(capsys, tmp_path):
+    # Arrange
+    with chdir(tmp_path):
+        exit_code = run_cli(
+            [
+                "sign",
+                str(RESOURCES_ROOT / "input8.pdf"),
+                "-o",
+                str(tmp_path / "input8_signed.pdf"),
+                "--p12",
+                str(RESOURCES_ROOT / "signing-certificate.p12"),
+                "--p12-password",
+                "fpdf2",
+            ]
+        )
+    captured = capsys.readouterr()
+
+    # Act
+    with chdir(tmp_path):
+        exit_code = run_cli(
+            [
+                "check-sign",
+                str(tmp_path / "input8_signed.pdf"),
+                "--pem",
+                str(RESOURCES_ROOT / "signing-certificate.crt"),
+            ]
+        )
+    captured = capsys.readouterr()
+
+    # Assert
+    assert exit_code == 0
+    assert not captured.err
