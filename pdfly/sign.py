@@ -36,14 +36,14 @@ def main(
     validate_output_args_or_raise(output, in_place)
 
     pdf_reader = PdfReader(filename)
-    try:
-        output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper]
-        if output:
-            output_file = open(output, "wb")
-        else:
-            output_file = tempfile.NamedTemporaryFile(delete_on_close=False)
-            output = Path(output_file.name)
+    output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper]
+    if output:
+        output_file = open(output, "wb")
+    else:
+        output_file = tempfile.NamedTemporaryFile(delete_on_close=False)
+        output = Path(output_file.name)
 
+    try:
         _sign_pdf_contents(pdf_reader, output_file, p12, p12_password)
     finally:
         output_file.close()
