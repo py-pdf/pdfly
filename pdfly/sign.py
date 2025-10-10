@@ -14,9 +14,10 @@ Examples
 
 import io
 import tempfile
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Generator, Optional, Union
+from typing import Optional, Union
 
 import fpdf.sign
 import typer
@@ -143,9 +144,7 @@ def _sign_pdf_contents(
 
 
 @contextmanager
-def add_to_page(
-    reader_page: PageObject, unit: str = "mm"
-) -> Generator[FPDF, None, None]:
+def add_to_page(reader_page: PageObject, unit: str = "mm") -> Generator[FPDF]:
     k = get_scale_factor(unit)
     format = (reader_page.mediabox[2] / k, reader_page.mediabox[3] / k)
     pdf = FPDF(format=format, unit=unit)
