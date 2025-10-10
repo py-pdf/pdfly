@@ -36,7 +36,8 @@ def test_check_sign_manipulated_content(capsys, tmp_path):
 
     # Assert
     assert exit_code == 1
-    assert "Content hash ok: False" in captured.err
+    assert "Check failed" in captured.err
+    assert "Content hash not ok" in captured.err
 
 
 def test_check_sign_missing_signature(capsys, tmp_path):
@@ -74,7 +75,8 @@ def test_check_sign_signature_not_matching_to_certificate(capsys, tmp_path):
 
     # Assert
     assert exit_code == 1
-    assert "Certificate ok: False" in captured.err
+    assert "Check failed" in captured.err
+    assert "Certificate not ok" in captured.err
 
 
 def test_check_sign_pem(capsys, tmp_path):
