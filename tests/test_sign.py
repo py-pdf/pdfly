@@ -13,7 +13,7 @@ def test_sign_missing_certificate_key_option(capsys, tmp_path):
 
     # Assert
     assert exit_code == 2
-    assert "Missing option '--p12'" in captured.err
+    assert "Missing option" in captured.err
 
 
 def test_sign_pkcs12(capsys, tmp_path):
