@@ -136,6 +136,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "moormaster",
+      "name": "moormaster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2452695?v=4",
+      "profile": "https://github.com/moormaster",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 5,
