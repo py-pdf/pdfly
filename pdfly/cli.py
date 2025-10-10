@@ -18,6 +18,7 @@ import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
 import pdfly.rotate
+import pdfly.sign
 import pdfly.uncompress
 import pdfly.up2
 import pdfly.update_offsets
@@ -363,3 +364,33 @@ def rotate(
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
 ) -> None:
     pdfly.rotate.main(filename, output, degrees, pgrgs)
+
+
+@entry_point.command(name="sign", help=pdfly.sign.__doc__)
+def sign(
+    filename: Annotated[
+        Path,
+        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
+    ],
+    p12: Annotated[
+        Path,
+        typer.Option(
+            ...,
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="PKCS12 certificate container",
+        ),
+    ],
+    output: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
+    in_place: bool = typer.Option(False, "--in-place", "-i"),
+    p12_password: Annotated[
+        Optional[str],
+        typer.Option(
+            "--p12-password",
+            "-p",
+            help="The password to use to decrypt the PKCS12 file.",
+        ),
+    ] = None,
+) -> None:
+    pdfly.sign.main(filename, output, in_place, p12, p12_password)
