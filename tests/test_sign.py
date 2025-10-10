@@ -16,6 +16,28 @@ def test_sign_missing_certificate_key_option(capsys, tmp_path):
     assert "Missing option" in captured.err
 
 
+def test_sign_already_signed_pdf(capsys, tmp_path):
+    # Act
+    with chdir(tmp_path):
+        exit_code = run_cli(
+            [
+                "sign",
+                str(RESOURCES_ROOT / "sign_pkcs12.pdf"),
+                "-o",
+                "out.pdf",
+                "--p12",
+                str(RESOURCES_ROOT / "signing-certificate.p12"),
+                "--p12-password",
+                "fpdf2",
+            ]
+        )
+    captured = capsys.readouterr()
+
+    # Assert
+    assert exit_code == 2
+    assert "already signed" in captured.err
+
+
 def test_sign_pkcs12(capsys, tmp_path):
     # Act
     with chdir(tmp_path):

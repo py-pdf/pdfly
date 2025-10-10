@@ -24,6 +24,7 @@ from cryptography.hazmat.primitives.serialization import pkcs12
 from endesive import signer
 from fpdf import FPDF, get_scale_factor
 from pypdf import PageObject, PdfReader, PdfWriter
+from pypdf.generic import DictionaryObject, PdfObject
 
 
 def main(
@@ -36,6 +37,8 @@ def main(
     validate_output_args_or_raise(output, in_place)
 
     pdf_reader = PdfReader(filename)
+    pdf_is_unsigned_or_raise(pdf_reader)
+
     output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper]
     if output:
         output_file = open(output, "wb")
@@ -53,6 +56,31 @@ def main(
     if in_place:
         filename.write_bytes(output.read_bytes())
         output.unlink()
+
+
+def pdf_is_unsigned_or_raise(pdf_reader: PdfReader) -> None:
+    for page in pdf_reader.pages:
+        if page.annotations is None:
+            continue
+
+        if any(is_signature(annotation) for annotation in page.annotations):
+            raise typer.BadParameter("PDF is already signed.")
+
+
+def is_signature(annotation: PdfObject) -> bool:
+    resolved_annotation_object = annotation.get_object()
+    if resolved_annotation_object is None:
+        return False
+
+    if type(resolved_annotation_object) is not DictionaryObject:
+        return False
+
+    subtype = resolved_annotation_object["/Subtype"]
+    if subtype != "/Widget":
+        return False
+
+    fieldtype = resolved_annotation_object["/FT"]
+    return fieldtype == "/Sig"
 
 
 def _sign_pdf_contents(
