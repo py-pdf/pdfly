@@ -17,8 +17,9 @@ Example:
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
 
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator, Optional, Tuple
+from typing import Optional
 
 from pypdf import (
     PageObject,
@@ -121,7 +122,7 @@ def fetch_first_page(filename: Path) -> PageObject:
 
 # This function written with inspiration, assistance, and code
 # from claude.ai & Github Copilot
-def page_iter(num_pages: int) -> Generator[Tuple[int, int], None, None]:
+def page_iter(num_pages: int) -> Generator[tuple[int, int], None, None]:
     """
     Generate pairs of page numbers for printing a booklet.
     This function assumes that the total number of pages is divisible by 4.
@@ -132,7 +133,7 @@ def page_iter(num_pages: int) -> Generator[Tuple[int, int], None, None]:
         num_pages (int): The total number of pages in the document. Must be divisible by 4.
 
     Yields:
-        Generator[Tuple[int, int], None, None]: Tuples containing pairs of page numbers.
+        Generator[tuple[int, int], None, None]: tuples containing pairs of page numbers.
             Each tuple represents the page numbers to be printed on one side of a sheet.
 
     Raises:

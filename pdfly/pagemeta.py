@@ -1,7 +1,6 @@
 """Give details about a single page."""
 
 from pathlib import Path
-from typing import Tuple
 
 from pydantic import BaseModel
 from pypdf import PdfReader
@@ -21,10 +20,10 @@ KNOWN_PAGE_FORMATS = {
 
 
 class PageMeta(BaseModel):
-    mediabox: Tuple[float, float, float, float]
-    cropbox: Tuple[float, float, float, float]
-    artbox: Tuple[float, float, float, float]
-    bleedbox: Tuple[float, float, float, float]
+    mediabox: tuple[float, float, float, float]
+    cropbox: tuple[float, float, float, float]
+    artbox: tuple[float, float, float, float]
+    bleedbox: tuple[float, float, float, float]
     annotations: int
     rotation: int
 
@@ -52,7 +51,7 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         table.add_column("Value", style="white")
 
         def add_box_attr(
-            name: str, box: Tuple[float, float, float, float]
+            name: str, box: tuple[float, float, float, float]
         ) -> None:
             width = box[2] - box[0]
             height = box[3] - box[1]

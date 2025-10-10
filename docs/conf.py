@@ -59,7 +59,7 @@ extensions = [
 ]
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3.8", None),
+    "py-pdf organization": ("https://py-pdf.github.io/", None),
 }
 
 nitpick_ignore_regex = [
