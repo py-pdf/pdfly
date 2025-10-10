@@ -102,6 +102,7 @@ contributors, but we do value their contributions 🤗
       <td align="center" valign="top" width="20%"><a href="https://github.com/hwine"><img src="https://avatars.githubusercontent.com/u/132412?v=4?s=100" width="100px;" alt="Hal Wine"/><br /><sub><b>Hal Wine</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/issues?q=author%3Ahwine" title="Bug reports">🐛</a> <a href="https://github.com/py-pdf/pdfly/commits?author=hwine" title="Code">💻</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/philippesamuel"><img src="https://avatars.githubusercontent.com/u/32560769?v=4?s=100" width="100px;" alt="philippesamuel"/><br /><sub><b>philippesamuel</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=philippesamuel" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/marcobrb"><img src="https://avatars.githubusercontent.com/u/219329309?v=4?s=100" width="100px;" alt="marcobrb"/><br /><sub><b>marcobrb</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=marcobrb" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/moormaster"><img src="https://avatars.githubusercontent.com/u/2452695?v=4?s=100" width="100px;" alt="moormaster"/><br /><sub><b>moormaster</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=moormaster" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
