@@ -40,7 +40,9 @@ def main(
     if output:
         output_file = open(output, "wb")
     else:
-        output_file = tempfile.NamedTemporaryFile(delete_on_close=False)
+        output_file = tempfile.NamedTemporaryFile(
+            delete=False
+        )  # will be deleted by output.unlink() later on
         output = Path(output_file.name)
 
     try:
