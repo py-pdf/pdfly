@@ -8,6 +8,10 @@ PAGE RANGES are like Python slices.
 
         Remember, page indices start with zero.
 
+        When using page ranges that start with a negative value a
+        two-hyphen symbol -- must be used to separate them from
+        the command line options.
+
         Page range expression examples:
 
             :     all pages.                   -1    last page.
@@ -26,6 +30,10 @@ Examples
     pdfly rm -o output.pdf document.pdf 2:5
 
         Remove pages 2 to 4 from document.pdf, producing output.pdf.
+
+    pdfly rm document.pdf -- -1
+
+        Removes the last page from document.pdf, modifying the original file.
 
     pdfly rm document.pdf :-1
 
