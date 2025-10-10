@@ -47,12 +47,11 @@ Examples
 """
 
 from pathlib import Path
-from typing import List
 
 from pdfly.cat import main as cat_main
 
 
 def main(
-    filename: Path, fn_pgrgs: List[str], output: Path, verbose: bool
+    filename: Path, fn_pgrgs: list[str], output: Path, verbose: bool
 ) -> None:
     cat_main(filename, fn_pgrgs, output, verbose, inverted_page_selection=True)

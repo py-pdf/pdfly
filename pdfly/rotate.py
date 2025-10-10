@@ -39,7 +39,6 @@ PAGE RANGES are like Python slices.
 """
 
 from pathlib import Path
-from typing import Set
 
 from pypdf import (
     PageRange,
@@ -56,7 +55,7 @@ def main(
     page_range: str,
 ) -> None:
     try:
-        # Set up the streams
+        # set up the streams
         reader = PdfReader(filename)
         pages = list(reader.pages)
         writer = PdfWriter()
@@ -79,6 +78,6 @@ def main(
         raise error
 
 
-def convert_range_to_pages(page_range: str, num_pages: int) -> Set[int]:
+def convert_range_to_pages(page_range: str, num_pages: int) -> set[int]:
     pages_to_rotate = {*range(*PageRange(page_range).indices(num_pages))}
     return pages_to_rotate

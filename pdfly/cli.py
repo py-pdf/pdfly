@@ -5,10 +5,9 @@ Subcommands are added here.
 """
 
 from pathlib import Path
-from typing import List, Optional
+from typing import Annotated, Optional
 
 import typer
-from typing_extensions import Annotated
 
 import pdfly.booklet
 import pdfly.cat
@@ -91,7 +90,7 @@ def cat(
         ),
     ],
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
-    fn_pgrgs: List[str] = typer.Argument(  # noqa
+    fn_pgrgs: list[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
     ),
     verbose: bool = typer.Option(
@@ -159,7 +158,7 @@ def rm(
         ),
     ],
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
-    fn_pgrgs: List[str] = typer.Argument(  # noqa
+    fn_pgrgs: list[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
     ),
     verbose: bool = typer.Option(
@@ -301,7 +300,7 @@ def update_offsets(
 
 @entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
 def x2pdf(
-    x: List[
+    x: list[
         Annotated[
             Path,
             typer.Argument(

@@ -12,6 +12,9 @@
 ### Bug Fixes (BUG)
 - `pypdf[full]` is now a dependency, instead of just `pypdf`, to avoid some cases of `DependencyError`
 
+### Deprecations (DEP)
+* support for older Python3 versions has been dropped, `pdfly` now requires Python 3.10+
+
 
 ## Version 0.4.0, 2024-12-08
 

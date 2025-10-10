@@ -49,14 +49,14 @@ Examples
 import os
 import sys
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional
 
 from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
 
 def main(
     filename: Path,
-    fn_pgrgs: List[str],
+    fn_pgrgs: list[str],
     output: Path,
     verbose: bool,
     inverted_page_selection: bool = False,
@@ -115,8 +115,8 @@ def main(
 
 
 def parse_filepaths_and_pagerange_args(
-    filename: Path, fn_pgrgs: List[str]
-) -> List[Tuple[Path, PageRange]]:
+    filename: Path, fn_pgrgs: list[str]
+) -> list[tuple[Path, PageRange]]:
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges, invalid_filepaths = [], []

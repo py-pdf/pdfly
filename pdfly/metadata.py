@@ -3,7 +3,7 @@
 import stat
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Set
+from typing import Optional
 
 from pydantic import BaseModel
 from pypdf import PdfReader
@@ -25,7 +25,7 @@ class MetaInfo(BaseModel):
     attachments: str = "unknown"
     id1: Optional[bytes] = None
     id2: Optional[bytes] = None
-    images: List[int] = []
+    images: list[int] = []
 
     # PDF /Info dictionary
     author: Optional[str] = None
@@ -142,8 +142,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
         table.add_row("PDF ID", f"ID1={meta.id1!r} ID2={meta.id2!r}")
-        embedded_fonts: Set[str] = set()
-        unemedded_fonts: Set[str] = set()
+        embedded_fonts: set[str] = set()
+        unemedded_fonts: set[str] = set()
         if not reader.is_encrypted:
             for page in reader.pages:
                 emb, unemb = page._get_fonts()
