@@ -37,7 +37,7 @@ dependencies = [
     "fpdf2>=2.8.1",
     "asn1crypto",
     "cryptography",
-    "endesive"
+    "endesive",
 ]
 
 [project.urls]

@@ -27,6 +27,7 @@ pdfly is a command line tool to get information about PDF documents and to manip
    user/subcommand-uncompress
    user/subcommand-rotate
    user/subcommand-sign
+   user/subcommand-check-sign
    user/subcommand-update-offsets
 
 
