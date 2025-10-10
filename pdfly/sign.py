@@ -113,7 +113,9 @@ def _sign_pdf_contents(
 
 
 @contextmanager
-def add_to_page(reader_page: PageObject, unit: str = "mm") -> Generator[FPDF]:
+def add_to_page(
+    reader_page: PageObject, unit: str = "mm"
+) -> Generator[FPDF, None, None]:
     k = get_scale_factor(unit)
     format = (reader_page.mediabox[2] / k, reader_page.mediabox[3] / k)
     pdf = FPDF(format=format, unit=unit)
