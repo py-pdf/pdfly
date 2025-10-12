@@ -29,7 +29,9 @@ def main(pdf: Path, output: Path) -> None:
 
     # If compressed size is larger than original, use original file
     if comp_size >= orig_size:
-        print(f"Compression resulted in larger file ({comp_size:,} >= {orig_size:,} bytes)")
+        print(
+            f"Compression resulted in larger file ({comp_size:,} >= {orig_size:,} bytes)"
+        )
         print("Keeping original file as compressed version would be larger")
         shutil.copy2(pdf, output)
         final_size = orig_size
