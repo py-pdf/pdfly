@@ -5,13 +5,13 @@ Subcommands are added here.
 """
 
 from pathlib import Path
-from typing import List, Optional
+from typing import Annotated, Optional
 
 import typer
-from typing_extensions import Annotated
 
 import pdfly.booklet
 import pdfly.cat
+import pdfly.check_sign
 import pdfly.compress
 import pdfly.extract_annotated_pages
 import pdfly.extract_images
@@ -19,6 +19,7 @@ import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
 import pdfly.rotate
+import pdfly.sign
 import pdfly.uncompress
 import pdfly.up2
 import pdfly.update_offsets
@@ -91,7 +92,7 @@ def cat(
         ),
     ],
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
-    fn_pgrgs: List[str] = typer.Argument(  # noqa
+    fn_pgrgs: list[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
     ),
     verbose: bool = typer.Option(
@@ -159,7 +160,7 @@ def rm(
         ),
     ],
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
-    fn_pgrgs: List[str] = typer.Argument(  # noqa
+    fn_pgrgs: list[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
     ),
     verbose: bool = typer.Option(
@@ -301,7 +302,7 @@ def update_offsets(
 
 @entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
 def x2pdf(
-    x: List[
+    x: list[
         Annotated[
             Path,
             typer.Argument(
@@ -364,3 +365,56 @@ def rotate(
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
 ) -> None:
     pdfly.rotate.main(filename, output, degrees, pgrgs)
+
+
+@entry_point.command(name="sign", help=pdfly.sign.__doc__)
+def sign(
+    filename: Annotated[
+        Path,
+        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
+    ],
+    p12: Annotated[
+        Path,
+        typer.Option(
+            ...,
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="PKCS12 certificate container",
+        ),
+    ],
+    output: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
+    in_place: bool = typer.Option(False, "--in-place", "-i"),
+    p12_password: Annotated[
+        Optional[str],
+        typer.Option(
+            "--p12-password",
+            "-p",
+            help="The password to use to decrypt the PKCS12 file.",
+        ),
+    ] = None,
+) -> None:
+    pdfly.sign.main(filename, output, in_place, p12, p12_password)
+
+
+@entry_point.command(name="check-sign", help=pdfly.check_sign.__doc__)
+def check_sign(
+    filename: Annotated[
+        Path,
+        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
+    ],
+    pem: Annotated[
+        Path,
+        typer.Option(
+            ...,
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="PEM certificate file",
+        ),
+    ],
+    verbose: bool = typer.Option(
+        False, help="Show signature verification details."
+    ),
+) -> None:
+    pdfly.check_sign.main(filename, pem, verbose)

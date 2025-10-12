@@ -8,6 +8,10 @@ PAGE RANGES are like Python slices.
 
         Remember, page indices start with zero.
 
+        When using page ranges that start with a negative value a
+        two-hyphen symbol -- must be used to separate them from
+        the command line options.
+
         Page range expression examples:
 
             :     all pages.                   -1    last page.
@@ -23,7 +27,7 @@ PAGE RANGES are like Python slices.
             ::-1      all pages in reverse order.
 
 Examples
-    pdfly cat -o output.pdf head.pdf content.pdf :6 7: tail.pdf -1
+    pdfly cat -o output.pdf head.pdf -- content.pdf :6 7: tail.pdf -1
 
         Concatenate all of head.pdf, all but page seven of content.pdf,
         and the last page of tail.pdf, producing output.pdf.
@@ -45,14 +49,14 @@ Examples
 import os
 import sys
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional
 
 from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
 
 def main(
     filename: Path,
-    fn_pgrgs: List[str],
+    fn_pgrgs: list[str],
     output: Path,
     verbose: bool,
     inverted_page_selection: bool = False,
@@ -111,8 +115,8 @@ def main(
 
 
 def parse_filepaths_and_pagerange_args(
-    filename: Path, fn_pgrgs: List[str]
-) -> List[Tuple[Path, PageRange]]:
+    filename: Path, fn_pgrgs: list[str]
+) -> list[tuple[Path, PageRange]]:
     fn_pgrgs_l = list(fn_pgrgs)
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges, invalid_filepaths = [], []

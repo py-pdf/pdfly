@@ -127,6 +127,25 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "marcobrb",
+      "name": "marcobrb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/219329309?v=4",
+      "profile": "https://github.com/marcobrb",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "moormaster",
+      "name": "moormaster",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2452695?v=4",
+      "profile": "https://github.com/moormaster",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 5,

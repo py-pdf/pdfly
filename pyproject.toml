@@ -10,7 +10,7 @@ description = "A pure-python CLI application to manipulate PDF files"
 readme = "README.md"
 dynamic = ["version"]
 license = { file = "LICENSE" }
-requires-python = ">=3.8.0"
+requires-python = ">=3.10.0"
 
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
@@ -22,8 +22,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -37,6 +35,9 @@ dependencies = [
     "pydantic",
     "rich",
     "fpdf2>=2.8.1",
+    "asn1crypto",
+    "cryptography",
+    "endesive",
 ]
 
 [project.urls]
@@ -102,10 +103,6 @@ ignore = [
     "SIM300",  # yoda conditions
     "TID252",  # we want relative imports
     "TRY", # I don't know what this is about
-    # As long as we are not on Python 3.9+
-    "UP035", # PEP 585
-    # As long as we are not on Python 3.10+
-    "UP038",  # Use `X | Y` in `isinstance` call instead of `(X, Y)` - PEP 604
     # As long as we are not on Python 3.11+
     "UP006", "UP007",
     # for the moment, fix it later:

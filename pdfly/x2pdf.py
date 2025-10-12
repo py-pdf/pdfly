@@ -2,7 +2,6 @@
 
 from io import BytesIO
 from pathlib import Path
-from typing import List
 
 from fpdf import FPDF
 from PIL import Image
@@ -28,7 +27,7 @@ def image_to_pdf(filepath: Path) -> BytesIO:
     return BytesIO(pdf.output())
 
 
-def main(in_filepaths: List[Path], out_filepath: Path) -> int:
+def main(in_filepaths: list[Path], out_filepath: Path) -> int:
     console = Console()
     exit_code = 0
     writer = PdfWriter()

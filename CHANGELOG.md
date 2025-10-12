@@ -8,9 +8,14 @@
 - Added optional `--password` argument to `cat` to perform decryption ([PR #61](https://github.com/py-pdf/pdfly/pull/61))
 - `pagemeta` now display known page formats when it can detect it: A3, A4, A5, Letter, Legal
 - `pagemeta` now displays the rotation value.
+- New `sign` sub-command to create a signed pdf from an existing pdf ([PR #165](https://github.com/py-pdf/pdfly/pull/165))
+- New `check-sign` sub-command to verify the signature of a signed pdf ([PR #166](https://github.com/py-pdf/pdfly/pull/166))
 
 ### Bug Fixes (BUG)
 - `pypdf[full]` is now a dependency, instead of just `pypdf`, to avoid some cases of `DependencyError`
+
+### Deprecations (DEP)
+* support for older Python3 versions has been dropped, `pdfly` now requires Python 3.10+
 
 
 ## Version 0.4.0, 2024-12-08

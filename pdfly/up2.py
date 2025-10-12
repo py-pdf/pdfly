@@ -21,9 +21,14 @@ def main(pdf: Path, output: Path) -> None:
         lhs.merge_translated_page(
             rhs, tx=float(lhs.mediabox.width), ty=0, expand=True
         )
+        # Lucas: expand=True triggers a mediabox size update in PageObject._expand_mediabox(),
+        #        but sometimes the cropbox is also update in the process, sometimes it doesn't.
+        #        I haven't investigated why, but maybe because those attributes are properties
+        #        created with _create_rectangle_accessor().
+        #        Anyway, for now I prefer to ensure that the cropbox matches the mediabox:
+        lhs.cropbox = lhs.mediabox
         writer.add_page(lhs)
         sys.stdout.flush()
-
     with open(output, "wb") as fp:
         writer.write(fp)
     print(f"{output} was created")

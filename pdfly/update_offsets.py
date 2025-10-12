@@ -25,13 +25,7 @@ Example:
 """
 
 import re
-import sys
 from pathlib import Path
-
-if sys.version_info >= (3, 9):
-    List = list
-else:  # Support for Python 3.8
-    from typing import List
 
 from rich.console import Console
 
@@ -46,8 +40,8 @@ RE_LENGTH = re.compile(
 
 
 def update_lines(
-    lines_in: List[str], encoding: str, console: Console, verbose: bool
-) -> List[str]:
+    lines_in: list[str], encoding: str, console: Console, verbose: bool
+) -> list[str]:
     """
     Iterates over the lines of a pdf-files and updates offsets.
 
@@ -238,7 +232,7 @@ def update_lines(
     return lines_out
 
 
-def read_binary_file(file_path: Path, encoding: str) -> List[str]:
+def read_binary_file(file_path: Path, encoding: str) -> list[str]:
     """
     Reads a binary file line by line and returns these lines as a list of strings in the given encoding.
     Encoding utf-8 can't be used to read random binary data.
@@ -247,7 +241,7 @@ def read_binary_file(file_path: Path, encoding: str) -> List[str]:
     :param encoding: encoding to be used (e.g. "iso-8859-1")
     :return lines including line-breaks
     """
-    chunks: List[str] = []
+    chunks: list[str] = []
     with file_path.open("rb") as file:
         buffer = bytearray()
         while True:
