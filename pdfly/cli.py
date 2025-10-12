@@ -11,6 +11,7 @@ import typer
 
 import pdfly.booklet
 import pdfly.cat
+import pdfly.check_sign
 import pdfly.compress
 import pdfly.extract_annotated_pages
 import pdfly.extract_images
@@ -394,3 +395,26 @@ def sign(
     ] = None,
 ) -> None:
     pdfly.sign.main(filename, output, in_place, p12, p12_password)
+
+
+@entry_point.command(name="check-sign", help=pdfly.check_sign.__doc__)
+def check_sign(
+    filename: Annotated[
+        Path,
+        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
+    ],
+    pem: Annotated[
+        Path,
+        typer.Option(
+            ...,
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="PEM certificate file",
+        ),
+    ],
+    verbose: bool = typer.Option(
+        False, help="Show signature verification details."
+    ),
+) -> None:
+    pdfly.check_sign.main(filename, pem, verbose)
