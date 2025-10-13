@@ -100,22 +100,22 @@ You can see the help of every subcommand by typing ``--help``:
    :maxdepth: 1
 
    user/installation
-   user/subcommand-meta
-   user/subcommand-cat
-   user/subcommand-x2pdf
-   user/subcommand-extract-annotated-pages
-   user/subcommand-extract-images
    user/subcommand-2-up
    user/subcommand-booklet
-   user/subcommand-rm
-   user/subcommand-pagemeta
-   user/subcommand-extract-text
+   user/subcommand-cat
+   user/subcommand-check-sign
    user/subcommand-compress
-   user/subcommand-uncompress
+   user/subcommand-extract-annotated-pages
+   user/subcommand-extract-images
+   user/subcommand-extract-text
+   user/subcommand-meta
+   user/subcommand-pagemeta
+   user/subcommand-rm
    user/subcommand-rotate
    user/subcommand-sign
-   user/subcommand-check-sign
+   user/subcommand-uncompress
    user/subcommand-update-offsets
+   user/subcommand-x2pdf
 
 .. toctree::
    :caption: Developer Guide
