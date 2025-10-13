@@ -2,6 +2,9 @@
 
 ## Version 0.6.0, not released yet
 
+
+## Version 0.5.1, 2025-10-13
+
 ### Bug Fixes (BUG)
 - `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv` 
 
