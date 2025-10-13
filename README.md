@@ -8,13 +8,15 @@
 [![issues closed](https://img.shields.io/github/issues-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/issues)
 [![PRs closed](https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/pulls)
 
-[![linters: black, ruff, mypi](https://img.shields.io/badge/linters-black,ruff,mypi.svg)](https://github.com/py-pdf/pdfly/actions)
+[![linters: black, ruff, mypi](https://img.shields.io/badge/linters-black,ruff,mypi-green.svg)](https://github.com/py-pdf/pdfly/actions)
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://makeapullrequest.com)
 [![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
 
 # pdfly
 
 pdfly (say: PDF-li) is a pure-python cli application for manipulating PDF files.
+
+<img src="docs/pdfly-logo.png" alt="pdfly logo" width="25%">
 
 ## Installation
 
