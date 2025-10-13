@@ -38,6 +38,7 @@ dependencies = [
     "asn1crypto",
     "cryptography",
     "endesive",
+    "requests>=2.32.5",  # required by endesive.signer
 ]
 
 [project.urls]
