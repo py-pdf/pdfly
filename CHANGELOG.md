@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## Version 0.5.0, not released yet
+## Version 0.6.0, not released yet
+
+
+## Version 0.5.0, 2025-10-13
 
 ### New Features (ENH)
 - New `extract-annotated-pages` to filter out only the user annotated pages ([PR #98](https://github.com/py-pdf/pdfly/pull/98))

@@ -77,3 +77,13 @@ feature, and a bug-fix, that could be 3 or 4 PRs.
 
 A PR must be complete. That means if you introduce a new feature it must be
 finished within the PR and have a test for that feature.
+
+## Releases
+
+To perform a new release:
+1. update `CHANGELOG.md` in order to specify the release date for the new version
+2. perform a `REL`-prefixed commit, _e.g;_ `REL: X.Y.0"`, then make & merge a PR for it
+3. trigger a new release on <https://github.com/py-pdf/pdfly/releases/new>, and use the `CHANGELOG.md` content for the release description
+
+The Github Actions pipeline should create a new `git` tag,
+and then publish a new version on Pypi: <https://pypi.org/project/pdfly/#history>
