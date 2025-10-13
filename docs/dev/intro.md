@@ -13,6 +13,13 @@ pip install -r requirements/dev.txt
 
 See [testing pdfly with pytest](testing.md)
 
+## Documentation
+
+To preview the HTML documentation, you can run this command:
+```
+sphinx-autobuild docs docs/_build/html
+```
+
 ## Tools: git and pre-commit
 
 Git is a command line application for version control. If you don't know it,
@@ -69,7 +76,7 @@ The prefix is used to generate the CHANGELOG. Every PR must have exactly one -
 if you feel like several match, take the top one from this list that matches for
 your PR.
 
-## Pull Request Size
+## Pull Requests
 
 Smaller Pull Requests (PRs) are preferred as it's typically easier to merge
 them. For example, if you have some typos, a few code-style changes, a new
@@ -80,10 +87,9 @@ finished within the PR and have a test for that feature.
 
 ## Releases
 
-To perform a new release:
-1. update `__version__` in `pdfly/_version.py` & `CHANGELOG.md` in order to specify the release date for the new version
-2. perform a `REL`-prefixed commit, _e.g;_ `REL: X.Y.0"`, then make & merge a PR for it
-3. trigger a new release on <https://github.com/py-pdf/pdfly/releases/new>, and use the `CHANGELOG.md` content for the release description
+To perform a new release, there is the checklist to follow:
 
-The Github Actions pipeline should create a new `git` tag,
-and then publish a new version on Pypi: <https://pypi.org/project/pdfly/#history>
+1. update `__version__` in `pdfly/_version.py` & `CHANGELOG.md` in order to specify the release date for the new version
+2. perform a `REL`-prefixed commit, _e.g;_ `REL: X.Y.0"`, then make & merge a PR for it.
+   The Github Actions pipeline should create a new `git` tag, and then publish a new version on Pypi: <https://pypi.org/project/pdfly/#history>
+3. edit the [GitHub release note](https://github.com/py-pdf/pdfly/releases), using the `CHANGELOG.md` content for the description
