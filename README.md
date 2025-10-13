@@ -1,16 +1,16 @@
 [![Pypi latest version](https://img.shields.io/pypi/v/pdfly.svg)](https://pypi.org/pypi/pdfly#history)
 [![Python Support](https://img.shields.io/pypi/pyversions/pdfly.svg)](https://pypi.org/project/pdfly/)
-[![License: BSD 3 Clause](https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
-[![Documentation Status](https://readthedocs.org/projects/pdfly/badge/?version=latest)](https://pdfly.readthedocs.io/en/latest/?badge=latest)
+[![License: BSD 3 Clause](https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg)](https://opensource.org/license/bsd-3-clause)
+[![Documentation Status](https://app.readthedocs.org/projects/pdfly/badge/?version=latest)](https://pdfly.readthedocs.io/en/latest/)
 
 [![build status](https://github.com/py-pdf/pdfly/workflows/CI/badge.svg)](https://github.com/py-pdf/pdfly/actions?query=branch%3Amain)
-[![GitHub last commit](https://img.shields.io/github/last-commit/py-pdf/pdfly)](https://github.com/py-pdf/pdfly)
+[![GitHub last commit](https://img.shields.io/github/last-commit/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/commits/main/)
 [![issues closed](https://img.shields.io/github/issues-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/issues)
 [![PRs closed](https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/pulls)
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-[![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
+[![linters: black, ruff, mypi](https://img.shields.io/badge/linters-black,ruff,mypi.svg)](https://github.com/py-pdf/pdfly/actions)
+[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://makeapullrequest.com)
+[![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
 
 # pdfly
 
@@ -22,7 +22,7 @@ pdfly (say: PDF-li) is a pure-python cli application for manipulating PDF files.
 pip install -U pdfly
 ```
 
-As `pdfly` is an application, you might want to install it with [`pipx`](https://pypi.org/project/pipx/).
+As `pdfly` is an application, you might want to install it with [`pipx`](https://pypi.org/project/pipx/) or [`uv tool`](https://docs.astral.sh/uv/concepts/tools/)
 
 ## Usage
 
