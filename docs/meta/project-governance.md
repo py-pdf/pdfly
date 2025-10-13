@@ -117,7 +117,7 @@ try to insult people (luckily, the community was very respectful so far 🤞)
 The maintainers follow [semantic versioning](https://semver.org/). Most
 importantly, that means that breaking changes will have a major version bump.
 
-Be aware that unintentional breaking changes might still happen. The pdfly
+Be aware that unintentional breaking changes might still happen. The `pdfly`
 maintainers do their best to fix that in a timely manner - please
 [report such issues](https://github.com/py-pdf/pdfly/issues)!
 
