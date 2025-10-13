@@ -31,6 +31,8 @@ pdfly (say: PDF-li) is a pure-python cli application for manipulating PDF files.
 .. image:: ./pdfly-logo.png
    :scale: 25%
 
+Repository: `github.com/py-pdf/pdfly <https://github.com/py-pdf/pdfly>`__
+
 Installation
 ------------
 
@@ -51,28 +53,28 @@ Usage
 
     pdfly is a pure-python cli application for manipulating PDF files.
 
-    ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-    │ --version                                                                                                                │
-    │ --help             Show this message and exit.                                                                           │
-    ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-    ╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-    │ 2-up                      Create a booklet-style PDF from a single input.                                                │
-    │ booklet                   Reorder and two-up PDF pages for booklet printing.                                             │
-    │ cat                       Concatenate pages from PDF files into a single PDF file.                                       │
-    │ check-sign                Verifies the signature of a signed PDF.                                                        │
-    │ compress                  Compress a PDF.                                                                                │
-    │ extract-annotated-pages   Extract only the annotated pages from a PDF.                                                   │
-    │ extract-images            Extract images from PDF without resampling or altering.                                        │
-    │ extract-text              Extract text from a PDF file.                                                                  │
-    │ meta                      Show metadata of a PDF file                                                                    │
-    │ pagemeta                  Give details about a single page.                                                              │
-    │ rm                        Remove pages from PDF files.                                                                   │
-    │ rotate                    Rotate specified pages by the specified amount                                                 │
-    │ sign                      Creates a signed PDF from an existing PDF file.                                                │
-    │ uncompress                Module for uncompressing PDF content streams.                                                  │
-    │ update-offsets            Updates offsets and lengths in a simple PDF file.                                              │
-    │ x2pdf                     Convert one or more files to PDF. Each file is a page.                                         │
-    ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Options ─────────────────────────────────────────────────────────────────────────────╮
+   │ --version                                                                             │
+   │ --help             Show this message and exit.                                        │
+   ╰───────────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Commands ────────────────────────────────────────────────────────────────────────────╮
+   │ 2-up                      Create a booklet-style PDF from a single input.             │
+   │ booklet                   Reorder and two-up PDF pages for booklet printing.          │
+   │ cat                       Concatenate pages from PDF files into a single PDF file.    │
+   │ check-sign                Verifies the signature of a signed PDF.                     │
+   │ compress                  Compress a PDF.                                             │
+   │ extract-annotated-pages   Extract only the annotated pages from a PDF.                │
+   │ extract-images            Extract images from PDF without resampling or altering.     │
+   │ extract-text              Extract text from a PDF file.                               │
+   │ meta                      Show metadata of a PDF file                                 │
+   │ pagemeta                  Give details about a single page.                           │
+   │ rm                        Remove pages from PDF files.                                │
+   │ rotate                    Rotate specified pages by the specified amount              │
+   │ sign                      Creates a signed PDF from an existing PDF file.             │
+   │ uncompress                Module for uncompressing PDF content streams.               │
+   │ update-offsets            Updates offsets and lengths in a simple PDF file.           │
+   │ x2pdf                     Convert one or more files to PDF. Each file is a page.      │
+   ╰───────────────────────────────────────────────────────────────────────────────────────╯
 
 You can see the help of every subcommand by typing ``--help``:
 
@@ -87,13 +89,15 @@ You can see the help of every subcommand by typing ``--help``:
 
     usage: python 2-up.py input_file output_file
 
-    ╭─ Arguments ──────────────────────────────────────────────────────────────────────────╮
-    │ *    pdf      PATH  [default: None] [required]                                       │
-    │ *    out      PATH  [default: None] [required]                                       │
-    ╰──────────────────────────────────────────────────────────────────────────────────────╯
-    ╭─ Options ────────────────────────────────────────────────────────────────────────────╮
-    │ --help          Show this message and exit.                                          │
-    ╰──────────────────────────────────────────────────────────────────────────────────────╯
+   ╭─ Arguments ───────────────────────────────────────╮
+   │ *    pdf      PATH  [default: None] [required]    │
+   │ *    out      PATH  [default: None] [required]    │
+   ╰───────────────────────────────────────────────────╯
+   ╭─ Options ─────────────────────────────────────────╮
+   │ --help          Show this message and exit.       │
+   ╰───────────────────────────────────────────────────╯
+
+.. note:: ``pdfly`` has nothing to do with ``pdfly.net`` or ``gopdfly.com``
 
 .. toctree::
    :caption: User Guide
