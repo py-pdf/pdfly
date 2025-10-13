@@ -3,6 +3,9 @@
 This document describes how the pdfly project is managed. It describes the
 different actors, their roles, and the responsibilities they have.
 
+`pdfly` is part of the `py-pdf` organization,
+and hence we try to follow some [maintainer guidelines](https://py-pdf.github.io/pages/maintainer-guidelines.html) & [rules](https://py-pdf.github.io/pages/py-pdf-owners.html).
+
 ## Terminology
 
 * The **project** is pdfly - a free and open-source pure-python PDF command line
