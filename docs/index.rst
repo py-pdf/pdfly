@@ -19,7 +19,7 @@ Welcome to pdfly
 .. image:: https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly
    :target: https://github.com/py-pdf/pdfly/pulls
 
-.. image:: https://img.shields.io/badge/linters-black,ruff,mypi.svg
+.. image:: https://img.shields.io/badge/linters-black,ruff,mypi-green.svg
    :target: https://github.com/py-pdf/pdfly/actions
 .. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat
    :target: https://makeapullrequest.com
@@ -27,6 +27,9 @@ Welcome to pdfly
    :target: https://www.firsttimersonly.com/
 
 pdfly (say: PDF-li) is a pure-python cli application for manipulating PDF files.
+
+.. image:: ./pdfly-logo.png
+   :scale: 25%
 
 Installation
 ------------
@@ -125,9 +128,9 @@ You can see the help of every subcommand by typing ``--help``:
    :caption: About pdfly
    :maxdepth: 1
 
-   meta/CHANGELOG.md
-   meta/CONTRIBUTORS.md
-   meta/project-governance.md
+   meta/CHANGELOG
+   meta/CONTRIBUTORS
+   meta/project-governance
 
 Indices and tables
 ==================
