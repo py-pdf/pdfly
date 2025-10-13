@@ -16,6 +16,7 @@
 
 ### Bug Fixes (BUG)
 - `pypdf[full]` is now a dependency, instead of just `pypdf`, to avoid some cases of `DependencyError`
+- `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv` 
 
 ### Deprecations (DEP)
 * support for older Python3 versions has been dropped, `pdfly` now requires Python 3.10+
