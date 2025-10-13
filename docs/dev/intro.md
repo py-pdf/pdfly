@@ -81,7 +81,7 @@ finished within the PR and have a test for that feature.
 ## Releases
 
 To perform a new release:
-1. update `CHANGELOG.md` in order to specify the release date for the new version
+1. update `__version__` in `pdfly/_version.py` & `CHANGELOG.md` in order to specify the release date for the new version
 2. perform a `REL`-prefixed commit, _e.g;_ `REL: X.Y.0"`, then make & merge a PR for it
 3. trigger a new release on <https://github.com/py-pdf/pdfly/releases/new>, and use the `CHANGELOG.md` content for the release description
 

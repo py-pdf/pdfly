@@ -52,20 +52,6 @@ def common(
     pass
 
 
-@entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)  # type: ignore[misc]
-def extract_images(
-    pdf: Annotated[
-        Path,
-        typer.Argument(
-            dir_okay=False,
-            exists=True,
-            resolve_path=True,
-        ),
-    ],
-) -> None:
-    pdfly.extract_images.main(pdf)
-
-
 @entry_point.command(name="2-up", help=pdfly.up2.__doc__)  # type: ignore[misc]
 def up2(
     pdf: Annotated[
@@ -79,30 +65,6 @@ def up2(
     out: Path,
 ) -> None:
     pdfly.up2.main(pdf, out)
-
-
-@entry_point.command(name="cat", help=pdfly.cat.__doc__)  # type: ignore[misc]
-def cat(
-    filename: Annotated[
-        Path,
-        typer.Argument(
-            dir_okay=False,
-            exists=True,
-            resolve_path=True,
-        ),
-    ],
-    output: Path = typer.Option(..., "-o", "--output"),  # noqa
-    fn_pgrgs: list[str] = typer.Argument(  # noqa
-        ..., help="filenames and/or page ranges"
-    ),
-    verbose: bool = typer.Option(
-        False, help="show page ranges as they are being read"
-    ),
-    password: str = typer.Option(
-        None, help="Document's user or owner password."
-    ),
-) -> None:
-    pdfly.cat.main(filename, fn_pgrgs, output, verbose, password=password)
 
 
 @entry_point.command(name="booklet", help=pdfly.booklet.__doc__)  # type: ignore[misc]
@@ -149,8 +111,8 @@ def booklet(
     pdfly.booklet.main(filename, output, blank_page, centerfold)
 
 
-@entry_point.command(name="rm", help=pdfly.rm.__doc__)
-def rm(
+@entry_point.command(name="cat", help=pdfly.cat.__doc__)  # type: ignore[misc]
+def cat(
     filename: Annotated[
         Path,
         typer.Argument(
@@ -166,8 +128,111 @@ def rm(
     verbose: bool = typer.Option(
         False, help="show page ranges as they are being read"
     ),
+    password: str = typer.Option(
+        None, help="Document's user or owner password."
+    ),
 ) -> None:
-    pdfly.rm.main(filename, fn_pgrgs, output, verbose)
+    pdfly.cat.main(filename, fn_pgrgs, output, verbose, password=password)
+
+
+@entry_point.command(name="check-sign", help=pdfly.check_sign.__doc__)
+def check_sign(
+    filename: Annotated[
+        Path,
+        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
+    ],
+    pem: Annotated[
+        Path,
+        typer.Option(
+            ...,
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="PEM certificate file",
+        ),
+    ],
+    verbose: bool = typer.Option(
+        False, help="Show signature verification details."
+    ),
+) -> None:
+    pdfly.check_sign.main(filename, pem, verbose)
+
+
+@entry_point.command(name="compress", help=pdfly.compress.__doc__)  # type: ignore[misc]
+def compress(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    output: Annotated[
+        Path,
+        typer.Argument(
+            writable=True,
+        ),
+    ],
+) -> None:
+    pdfly.compress.main(pdf, output)
+
+
+@entry_point.command(name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__)  # type: ignore[misc]
+def extract_annotated_pages(
+    input_pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="Input PDF file.",
+        ),
+    ],
+    output_pdf: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--output",
+            "-o",
+            writable=True,
+            help="Output PDF file. Defaults to 'input_pdf_annotated'.",
+        ),
+    ] = None,
+) -> None:
+    pdfly.extract_annotated_pages.main(input_pdf, output_pdf)
+
+
+@entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)  # type: ignore[misc]
+def extract_images(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+) -> None:
+    pdfly.extract_images.main(pdf)
+
+
+@entry_point.command(name="extract-text")  # type: ignore[misc]
+def extract_text(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+) -> None:
+    """Extract text from a PDF file."""
+    from pypdf import PdfReader
+
+    reader = PdfReader(str(pdf))
+    for page in reader.pages:
+        typer.echo(page.extract_text())
 
 
 @entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]
@@ -217,9 +282,9 @@ def pagemeta(
     )
 
 
-@entry_point.command(name="extract-text")  # type: ignore[misc]
-def extract_text(
-    pdf: Annotated[
+@entry_point.command(name="rm", help=pdfly.rm.__doc__)
+def rm(
+    filename: Annotated[
         Path,
         typer.Argument(
             dir_okay=False,
@@ -227,18 +292,20 @@ def extract_text(
             resolve_path=True,
         ),
     ],
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    fn_pgrgs: list[str] = typer.Argument(  # noqa
+        ..., help="filenames and/or page ranges"
+    ),
+    verbose: bool = typer.Option(
+        False, help="show page ranges as they are being read"
+    ),
 ) -> None:
-    """Extract text from a PDF file."""
-    from pypdf import PdfReader
-
-    reader = PdfReader(str(pdf))
-    for page in reader.pages:
-        typer.echo(page.extract_text())
+    pdfly.rm.main(filename, fn_pgrgs, output, verbose)
 
 
-@entry_point.command(name="compress", help=pdfly.compress.__doc__)  # type: ignore[misc]
-def compress(
-    pdf: Annotated[
+@entry_point.command(name="rotate", help=pdfly.rotate.__doc__)  # type: ignore[misc]
+def rotate(
+    filename: Annotated[
         Path,
         typer.Argument(
             dir_okay=False,
@@ -246,14 +313,41 @@ def compress(
             resolve_path=True,
         ),
     ],
-    output: Annotated[
+    degrees: Annotated[int, typer.Argument(..., help="degrees to rotate")],
+    pgrgs: Annotated[str, typer.Argument(..., help="page range")] = ":",
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+) -> None:
+    pdfly.rotate.main(filename, output, degrees, pgrgs)
+
+
+@entry_point.command(name="sign", help=pdfly.sign.__doc__)
+def sign(
+    filename: Annotated[
         Path,
-        typer.Argument(
-            writable=True,
+        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
+    ],
+    p12: Annotated[
+        Path,
+        typer.Option(
+            ...,
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+            help="PKCS12 certificate container",
         ),
     ],
+    output: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
+    in_place: bool = typer.Option(False, "--in-place", "-i"),
+    p12_password: Annotated[
+        Optional[str],
+        typer.Option(
+            "--p12-password",
+            "-p",
+            help="The password to use to decrypt the PKCS12 file.",
+        ),
+    ] = None,
 ) -> None:
-    pdfly.compress.main(pdf, output)
+    pdfly.sign.main(filename, output, in_place, p12, p12_password)
 
 
 @entry_point.command(name="uncompress", help=pdfly.uncompress.__doc__)  # type: ignore[misc]
@@ -324,97 +418,3 @@ def x2pdf(
     exit_code = pdfly.x2pdf.main(x, output)
     if exit_code:
         raise typer.Exit(code=exit_code)
-
-
-@entry_point.command(name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__)  # type: ignore[misc]
-def extract_annotated_pages(
-    input_pdf: Annotated[
-        Path,
-        typer.Argument(
-            dir_okay=False,
-            exists=True,
-            resolve_path=True,
-            help="Input PDF file.",
-        ),
-    ],
-    output_pdf: Annotated[
-        Optional[Path],
-        typer.Option(
-            "--output",
-            "-o",
-            writable=True,
-            help="Output PDF file. Defaults to 'input_pdf_annotated'.",
-        ),
-    ] = None,
-) -> None:
-    pdfly.extract_annotated_pages.main(input_pdf, output_pdf)
-
-
-@entry_point.command(name="rotate", help=pdfly.rotate.__doc__)  # type: ignore[misc]
-def rotate(
-    filename: Annotated[
-        Path,
-        typer.Argument(
-            dir_okay=False,
-            exists=True,
-            resolve_path=True,
-        ),
-    ],
-    degrees: Annotated[int, typer.Argument(..., help="degrees to rotate")],
-    pgrgs: Annotated[str, typer.Argument(..., help="page range")] = ":",
-    output: Path = typer.Option(..., "-o", "--output"),  # noqa
-) -> None:
-    pdfly.rotate.main(filename, output, degrees, pgrgs)
-
-
-@entry_point.command(name="sign", help=pdfly.sign.__doc__)
-def sign(
-    filename: Annotated[
-        Path,
-        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
-    ],
-    p12: Annotated[
-        Path,
-        typer.Option(
-            ...,
-            dir_okay=False,
-            exists=True,
-            resolve_path=True,
-            help="PKCS12 certificate container",
-        ),
-    ],
-    output: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
-    in_place: bool = typer.Option(False, "--in-place", "-i"),
-    p12_password: Annotated[
-        Optional[str],
-        typer.Option(
-            "--p12-password",
-            "-p",
-            help="The password to use to decrypt the PKCS12 file.",
-        ),
-    ] = None,
-) -> None:
-    pdfly.sign.main(filename, output, in_place, p12, p12_password)
-
-
-@entry_point.command(name="check-sign", help=pdfly.check_sign.__doc__)
-def check_sign(
-    filename: Annotated[
-        Path,
-        typer.Argument(dir_okay=False, exists=True, resolve_path=True),
-    ],
-    pem: Annotated[
-        Path,
-        typer.Option(
-            ...,
-            dir_okay=False,
-            exists=True,
-            resolve_path=True,
-            help="PEM certificate file",
-        ),
-    ],
-    verbose: bool = typer.Option(
-        False, help="Show signature verification details."
-    ),
-) -> None:
-    pdfly.check_sign.main(filename, pem, verbose)
