@@ -47,3 +47,5 @@ Signs the document.pdf with a PKCS12 certificate archive. Modifies the input fil
 ```
 pdfly sign document.pdf --p12 certs.p12 --in-place
 ```
+
+![alt text](../diagrams/sign-command.png)

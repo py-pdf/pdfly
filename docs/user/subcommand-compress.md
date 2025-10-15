@@ -39,3 +39,5 @@ Example output when compression would increase file size:
 Original Size  : 887
 Final Size     : 887 (No compression applied (would increase size))
 ```
+
+![alt text](../diagrams/compress-command.png)

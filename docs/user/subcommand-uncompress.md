@@ -23,3 +23,5 @@ Uncompress `document_compressed.pdf` and output `document.pdf`.
 ```
 pdfly uncompress document_compressed.pdf document.pdf
 ```
+
+![alt text](../diagrams/uncompress-command.png)

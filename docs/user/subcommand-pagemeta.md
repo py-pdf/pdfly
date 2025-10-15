@@ -55,3 +55,5 @@ pdfly pagemeta document.pdf 100 -o json
 
     {"mediabox":[0.0,0.0,504.0,661.5],"cropbox":[0.0,0.0,504.0,661.5],"artbox":[0.0,0.0,504.0,661.5],"bleedbox":[0.0,0.0,504.0,661.5],"annotations":19}
 ```
+
+![alt text](../diagrams/page-meta.png)

@@ -31,3 +31,5 @@ Verifies the input.pdf with a PEM certificate bundle.
 ```
 pdfly verify input.pdf --pem certs.pem
 ```
+
+![alt text](../diagrams/check-sign-command.png)

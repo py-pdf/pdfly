@@ -93,3 +93,5 @@ Just combine two PDF files so that the pages come right after each other:
 ```
 pdfly cat input1.pdf input2.pdf -o out.pdf
 ```
+
+![alt text](../diagrams/cat-command.png)

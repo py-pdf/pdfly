@@ -56,3 +56,5 @@ $ ls -lh
 -rw-rw-r-- 1 user user 15K Sep 17 21:49 image2.jpg
 -rw-rw-r-- 1 user user 64K Sep 17 22:48 out.pdf
 ```
+
+![alt text](../diagrams/x2pdf.png)
