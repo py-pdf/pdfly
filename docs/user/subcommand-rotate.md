@@ -79,3 +79,5 @@ Rotate last page from `input.pdf` by 90 degrees (clockwise) and write the result
 ```
 pdfly rotate --output output.pdf input.pdf 90 -- -1
 ```
+
+![alt text](../diagrams/rotate-command.png)

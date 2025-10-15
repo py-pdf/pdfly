@@ -54,3 +54,5 @@ Update the offsets of `document.pdf` with UTF-8 encoding and write the output to
 ```
 pdfly update-offsets document.pdf --verbose --encoding UTF-8 document.out.pdf
 ```
+
+![alt text](../diagrams/update-offsets.png)

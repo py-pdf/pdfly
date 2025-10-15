@@ -42,3 +42,5 @@ Convert `document.pdf` into a booklet and write the output in `booklet.pdf`.
 pdfly booklet document.pdf booklet.pdf
 
 ```
+
+![alt text](../diagrams/booklet-command.png)

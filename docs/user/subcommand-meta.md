@@ -66,3 +66,5 @@ $pdfly meta Allianz-Versicherungsunterlagen.pdf
 Use the 'pagemeta' subcommand to get details about a single page
 
 ```
+
+![alt text](../diagrams/meta-command.png)

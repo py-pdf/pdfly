@@ -75,3 +75,5 @@ Remove the first and last page of `document.pdf`, producing `output.pdf`.
 pdfly rm -o output.pdf document.pdf 1:-1
 
 ```
+
+![alt text](../diagrams/rm-command.png)
