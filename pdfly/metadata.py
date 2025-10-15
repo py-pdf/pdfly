@@ -49,6 +49,10 @@ class MetaInfo(BaseModel):
 
 
 def _format_permissions(uap) -> str:
+    """
+    Return a compact, single-line summary of allowed permissions.
+    uap may be None (unencrypted), an IntFlag, or an object with .to_dict().
+    """
     if uap is None:
         return "n/a (unencrypted)"
 
@@ -221,18 +225,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
             "Images", f"{len(meta.images)} images ({sum(meta.images):,} bytes)"
         )
 
-        enc_table = Table(title="Encryption information")
-        enc_table.add_column(
-            "Attribute", justify="right", style="cyan", no_wrap=True
-        )
-        enc_table.add_column("Value", style="white")
-        if meta.encryption:
-            enc_table.add_row(
-                "Security Handler Revision Number",
-                str(meta.encryption.revision),
-            )
-            enc_table.add_row("V value", str(meta.encryption.v_value))
-
         os_table = Table(title="Operating System Data")
         os_table.add_column(
             "Attribute", justify="right", style="cyan", no_wrap=True
@@ -254,8 +246,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
         console = Console()
         console.print(os_table)
         console.print(table)
-        if meta.encryption:
-            console.print(enc_table)
         console.print(
             "Use the 'pagemeta' subcommand to get details about a single page"
         )
