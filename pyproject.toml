@@ -12,6 +12,8 @@ dynamic = ["version"]
 license = { file = "LICENSE" }
 requires-python = ">=3.10.0"
 
+keywords = ["pdf", "cli", "tools", "compression", "metadata", "signature", "booklet"]
+
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
     "Development Status :: 1 - Planning",

@@ -1,6 +1,6 @@
 # sign
 
-Creates a signed PDF from an existing PDF file.
+Creates a digitally-signed PDF from an existing PDF file and a given certificate.
 
 ## Usage
 
