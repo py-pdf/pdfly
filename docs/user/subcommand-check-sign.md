@@ -1,5 +1,7 @@
 # check-sign
 
+Validate that a PDF document has a digital signature matching a given certificate.
+
 ## Usage
 
 ```

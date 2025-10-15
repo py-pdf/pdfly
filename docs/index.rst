@@ -97,6 +97,12 @@ You can see the help of every subcommand by typing ``--help``:
    │ --help          Show this message and exit.       │
    ╰───────────────────────────────────────────────────╯
 
+GitHub ⭐️
+---------
+
+.. image:: https://api.star-history.com/svg?repos=py-pdf/pdfly&type=date&legend=top-left
+   :target: https://www.star-history.com/#py-pdf/pdfly&type=date&legend=top-left
+
 .. note:: ``pdfly`` has nothing to do with ``pdfly.net`` or ``gopdfly.com``
 
 .. toctree::
