@@ -40,7 +40,7 @@ Installation
 
     pip install -U pdfly
 
-As ``pdfly`` is an application, you might want to install it with `pipx <https://pypi.org/project/pipx/>`__ or `uv tool <https://docs.astral.sh/uv/concepts/tools/>`__.
+As ``pdfly`` is an application, you might want to install it with `pipx <https://pypi.org/project/pipx/>`__ or `uv tool <https://docs.astral.sh/uv/concepts/tools/>`__: ``uvx pdfly --help``
 
 Usage
 -----

@@ -24,7 +24,7 @@ pdfly (say: PDF-li) is a pure-python cli application for manipulating PDF files.
 pip install -U pdfly
 ```
 
-As `pdfly` is an application, you might want to install it with [`pipx`](https://pypi.org/project/pipx/) or [`uv tool`](https://docs.astral.sh/uv/concepts/tools/)
+As `pdfly` is an application, you might want to install it with [`pipx`](https://pypi.org/project/pipx/) or [`uv tool`](https://docs.astral.sh/uv/concepts/tools/): `uvx pdfly --help`
 
 ## Usage
 
