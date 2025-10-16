@@ -3,6 +3,18 @@
 ## Version 0.6.0, not released yet
 
 
+## Version 0.5.2, 2025-10-15
+
+### New Features (ENH)
+- `meta` command now displays PDF permissions in a compact, single-line format ([#19](https://github.com/py-pdf/pdfly/issues/19))
+- Unencrypted PDFs show "n/a (unencrypted)" 
+- Encrypted PDFs show comma-separated list of allowed permissions (e.g., "print, modify, annotate, fill-forms")
+- When no permissions are allowed, shows "none (all denied)"
+
+### Bug Fixes (BUG)
+- Fixed header reading for encrypted PDFs by seeking to position 0 before reading the %PDF-... version
+
+
 ## Version 0.5.1, 2025-10-13
 
 ### Bug Fixes (BUG)

@@ -5,8 +5,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pypdf import PdfReader
+from pypdf.constants import UserAccessPermissions as UAP  # pypdf ≥ 4
 
 from ._utils import OutputOptions
 
@@ -25,7 +26,10 @@ class MetaInfo(BaseModel):
     attachments: str = "unknown"
     id1: Optional[bytes] = None
     id2: Optional[bytes] = None
-    images: list[int] = []
+    images: list[int] = Field(default_factory=list)
+
+    # Permissions (single-line, compact)
+    permissions: str = "unknown"
 
     # PDF /Info dictionary
     author: Optional[str] = None
@@ -44,10 +48,68 @@ class MetaInfo(BaseModel):
     access_time: datetime
 
 
+def _format_permissions(uap) -> str:
+    """
+    Return a compact, single-line summary of allowed permissions.
+    uap may be None (unencrypted), an IntFlag, or an object with .to_dict().
+    """
+    if uap is None:
+        return "n/a (unencrypted)"
+
+    # Prefer mapping via to_dict() if available
+    label_map = {
+        "PRINT": "print",
+        "PRINT_TO_REPRESENTATION": "print-high",
+        "MODIFY": "modify",
+        "EXTRACT": "extract",
+        "ADD_OR_MODIFY": "annotate",
+        "FILL_FORM_FIELDS": "fill-forms",
+        "EXTRACT_TEXT_AND_GRAPHICS": "accessibility-copy",
+        "ASSEMBLE_DOC": "assemble",
+    }
+
+    to_dict = getattr(uap, "to_dict", None)
+    if callable(to_dict):
+        try:
+            flags = to_dict()  # {"PRINT": True, ...}
+            items = [label_map.get(k, k.lower()) for k, v in flags.items() if v and k in label_map]
+            return ", ".join(items) if items else "none (all denied)"
+        except Exception:
+            pass
+
+    # Fallback: bitwise check if constants exist
+    if UAP is not None:
+        checks = [
+            (UAP.PRINT, "print"),
+            (UAP.PRINT_TO_REPRESENTATION, "print-high"),
+            (UAP.MODIFY, "modify"),
+            (UAP.EXTRACT, "extract"),
+            (UAP.ADD_OR_MODIFY, "annotate"),
+            (UAP.FILL_FORM_FIELDS, "fill-forms"),
+            (UAP.EXTRACT_TEXT_AND_GRAPHICS, "accessibility-copy"),
+            (UAP.ASSEMBLE_DOC, "assemble"),
+        ]
+        try:
+            mask = int(uap)
+            items = [label for flag, label in checks if (mask & int(flag)) != 0]
+            return ", ".join(items) if items else "none (all denied)"
+        except Exception:
+            pass
+
+    return "unknown"
+
+
 def main(pdf: Path, output: OutputOptions) -> None:
     reader = PdfReader(str(pdf))
+
+    # Compute permissions string for both encrypted/unencrypted files
+    perm_str = _format_permissions(getattr(reader, "user_access_permissions", None))
+
     if reader.is_encrypted:
         pdf_stat = pdf.stat()
+        # read header
+        reader.stream.seek(0)
+        pdf_file_version = reader.stream.read(8).decode("utf-8") 
         meta = MetaInfo(
             encryption=(
                 EncryptionData(
@@ -57,7 +119,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 if reader.is_encrypted and reader._encryption
                 else None
             ),
-            pdf_file_version=reader.stream.read(8).decode("utf-8"),
+            pdf_file_version=pdf_file_version,
+            permissions=perm_str,
             # OS Info
             file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
             file_size=pdf_stat.st_size,
@@ -88,6 +151,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
             attachments=str(list(reader.attachments.keys())),
             id1=pdf_id[0] if pdf_id is not None else None,
             id2=pdf_id[1] if pdf_id is not None and len(pdf_id) >= 2 else None,
+            permissions=perm_str,
             # OS Info
             file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
             file_size=pdf_stat.st_size,
@@ -138,6 +202,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
             table.add_row("Keywords", meta.keywords)
         table.add_row("Pages", f"{meta.pages:,}" if meta.pages else "unknown")
         table.add_row("Encrypted", f"{meta.encryption}")
+        table.add_row("Permissions", meta.permissions)
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
@@ -160,18 +225,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
             "Images", f"{len(meta.images)} images ({sum(meta.images):,} bytes)"
         )
 
-        enc_table = Table(title="Encryption information")
-        enc_table.add_column(
-            "Attribute", justify="right", style="cyan", no_wrap=True
-        )
-        enc_table.add_column("Value", style="white")
-        if meta.encryption:
-            enc_table.add_row(
-                "Security Handler Revision Number",
-                str(meta.encryption.revision),
-            )
-            enc_table.add_row("V value", str(meta.encryption.v_value))
-
         os_table = Table(title="Operating System Data")
         os_table.add_column(
             "Attribute", justify="right", style="cyan", no_wrap=True
@@ -193,8 +246,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
         console = Console()
         console.print(os_table)
         console.print(table)
-        if meta.encryption:
-            console.print(enc_table)
         console.print(
             "Use the 'pagemeta' subcommand to get details about a single page"
         )
