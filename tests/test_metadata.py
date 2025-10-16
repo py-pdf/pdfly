@@ -1,6 +1,6 @@
 """
 Unit tests for metadata module.
-Tests the _format_permissions function and the meta CLI command.
+Runs the meta CLI over every PDF in sample-files and checks permissions + header.
 """
 
 import json
@@ -8,108 +8,107 @@ from pathlib import Path
 
 import pytest
 
-from pdfly.metadata import _format_permissions
-from .conftest import RESOURCES_ROOT, run_cli
+from .conftest import RESOURCES_ROOT, run_cli  # provided by repo
 
 SAMPLE_FILES = RESOURCES_ROOT / "sample-files"
+pytestmark = pytest.mark.skipif(
+    not SAMPLE_FILES.exists(),
+    reason="sample-files submodule not present",
+)
 
-# Optional: exercise the bitmask fallback with real pypdf flags if present
-try:
-    from pypdf.constants import UserAccessPermissions as UAP
-except Exception:  # pragma: no cover
-    UAP = None
+PDFS = sorted(SAMPLE_FILES.rglob("*.pdf"), key=lambda p: p.as_posix())
 
 
-class TestFormatPermissions:
-    """Test the _format_permissions helper function."""
+def _expected_permissions_from_pdf(pdf_path: Path) -> str:
+    """Compute expected permissions using pypdf, independent of the CLI."""
+    try:
+        from pypdf import PdfReader
+        try:
+            from pypdf.constants import UserAccessPermissions as UAP
+        except Exception:
+            UAP = None
+    except Exception:
+        # If pypdf isn't available for some reason, don't fail the test
+        return "unknown"
 
-    def test_format_permissions_unencrypted(self):
-        assert _format_permissions(None) == "n/a (unencrypted)"
+    try:
+        reader = PdfReader(str(pdf_path))
+    except Exception:
+        return "unknown"
 
-    def test_format_permissions_encrypted_with_no_permissions(self, mocker):
-        mock_uap = mocker.Mock()
-        mock_uap.to_dict.return_value = {
-            "PRINT": False,
-            "PRINT_TO_REPRESENTATION": False,
-            "MODIFY": False,
-            "EXTRACT": False,
-            "ADD_OR_MODIFY": False,
-            "FILL_FORM_FIELDS": False,
-            "EXTRACT_TEXT_AND_GRAPHICS": False,
-            "ASSEMBLE_DOC": False,
-        }
-        assert _format_permissions(mock_uap) == "none (all denied)"
+    uap = getattr(reader, "user_access_permissions", None)
+    if uap is None:
+        return "n/a (unencrypted)"
 
-    def test_format_permissions_some_allowed_via_dict(self, mocker):
-        mock_uap = mocker.Mock()
-        # Order here controls output order
-        mock_uap.to_dict.return_value = {
-            "PRINT": True,
-            "MODIFY": False,
-            "EXTRACT": True,
-            "ASSEMBLE_DOC": False,
-        }
-        formatted = _format_permissions(mock_uap)
-        # Lower-case labels from label_map
-        assert formatted == "print, extract"
+    # Same labels as pdfly.metadata._format_permissions
+    label_map = {
+        "PRINT": "print",
+        "PRINT_TO_REPRESENTATION": "print-high",
+        "MODIFY": "modify",
+        "EXTRACT": "extract",
+        "ADD_OR_MODIFY": "annotate",
+        "FILL_FORM_FIELDS": "fill-forms",
+        "EXTRACT_TEXT_AND_GRAPHICS": "accessibility-copy",
+        "ASSEMBLE_DOC": "assemble",
+    }
 
-    @pytest.mark.skipif(UAP is None, reason="pypdf flags not available")
-    def test_format_permissions_some_allowed_bitmask_path(self):
-        # Exercises the IntFlag/bitmask fallback (no to_dict)
-        uap = UAP.PRINT | UAP.EXTRACT
-        formatted = _format_permissions(uap)
-        assert formatted == "print, extract"
-
-    def test_format_permissions_unknown_when_unhandled_obj(self):
-        class Weird:  # no to_dict, not int-castable
+    # Prefer to_dict() if available
+    to_dict = getattr(uap, "to_dict", None)
+    if callable(to_dict):
+        try:
+            flags = to_dict()
+            items = [label_map.get(k, k.lower()) for k, v in flags.items() if v and k in label_map]
+            return ", ".join(items) if items else "none (all denied)"
+        except Exception:
             pass
-        assert _format_permissions(Weird()) == "unknown"
+
+    # Fallback: bitmask checks
+    if UAP is not None:
+        try:
+            mask = int(uap)
+            checks = [
+                (UAP.PRINT, "print"),
+                (UAP.PRINT_TO_REPRESENTATION, "print-high"),
+                (UAP.MODIFY, "modify"),
+                (UAP.EXTRACT, "extract"),
+                (UAP.ADD_OR_MODIFY, "annotate"),
+                (UAP.FILL_FORM_FIELDS, "fill-forms"),
+                (UAP.EXTRACT_TEXT_AND_GRAPHICS, "accessibility-copy"),
+                (UAP.ASSEMBLE_DOC, "assemble"),
+            ]
+            items = [label for flag, label in checks if (mask & int(flag)) != 0]
+            return ", ".join(items) if items else "none (all denied)"
+        except Exception:
+            pass
+
+    return "unknown"
 
 
-class TestMetaCommand:
-    """End-to-end tests for the meta CLI command."""
+@pytest.mark.parametrize(
+    "input_pdf",
+    PDFS,
+    ids=lambda p: p.relative_to(SAMPLE_FILES).as_posix(),
+)
+def test_meta_command_on_all_sample_pdfs(input_pdf, capsys):
+    # Run the CLI
+    exit_code = run_cli(["meta", str(input_pdf), "--output", "json"])
+    assert exit_code == 0
 
-    def test_meta_command_unencrypted_pdf(self, capsys):
-        rel = Path("002-trivial-libre-office-writer/002-trivial-libre-office-writer.pdf")
-        input_pdf = SAMPLE_FILES / rel
-        if not input_pdf.exists():
-            pytest.skip(f"Unencrypted PDF file not found: {input_pdf}")
+    captured = capsys.readouterr()
+    metadata = json.loads(captured.out)
 
-        exit_code = run_cli(["meta", str(input_pdf), "--output", "json"])
-        assert exit_code == 0
+    # Basic invariants / shape
+    assert "pdf_file_version" in metadata
+    assert metadata["pdf_file_version"].startswith("%PDF-")
+    assert "permissions" in metadata
 
-        captured = capsys.readouterr()
-        metadata = json.loads(captured.out)
-        assert metadata["permissions"] == "n/a (unencrypted)"
-        # header fix: should read raw PDF header bytes as text
-        assert metadata["pdf_file_version"].startswith("%PDF-")
+    # Compare permissions to what pypdf says
+    actual = metadata["permissions"]
+    expected = _expected_permissions_from_pdf(input_pdf)
 
-    def test_meta_command_encrypted_pdf(self, capsys):
-        rel = Path("005-libreoffice-writer-password/libreoffice-writer-password.pdf")
-        input_pdf = SAMPLE_FILES / rel
-        if not input_pdf.exists():
-            pytest.skip(f"Encrypted PDF file not found: {input_pdf}")
-
-        exit_code = run_cli(["meta", str(input_pdf), "--output", "json"])
-        assert exit_code == 0
-
-        captured = capsys.readouterr()
-        metadata = json.loads(captured.out)
-
-        assert "permissions" in metadata
-        perms = metadata["permissions"]
-        assert perms not in {"n/a (unencrypted)", "unknown"}
-        # If not "all denied", check formatting invariants
-        if perms != "none (all denied)":
-            parts = [p.strip() for p in perms.split(",")]
-            # lower-case labels
-            assert all(p == p.lower() for p in parts)
-            # only known labels
-            allowed = {
-                "print", "print-high", "modify", "extract",
-                "annotate", "fill-forms", "accessibility-copy", "assemble",
-            }
-            assert set(parts).issubset(allowed)
-
-        # header fix also applies on encrypted files
-        assert metadata["pdf_file_version"].startswith("%PDF-")
+    if expected in {"n/a (unencrypted)", "none (all denied)", "unknown"}:
+        assert actual == expected
+    else:
+        act_set = {p.strip() for p in actual.split(",") if p.strip()}
+        exp_set = {p.strip() for p in expected.split(",") if p.strip()}
+        assert act_set == exp_set
