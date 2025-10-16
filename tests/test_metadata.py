@@ -8,15 +8,15 @@ from pathlib import Path
 
 import pytest
 
-from .conftest import RESOURCES_ROOT, run_cli  # provided by repo
+from .conftest import PROJECT_ROOT, run_cli  # provided by repo
 
-SAMPLE_FILES = RESOURCES_ROOT / "sample-files"
+SAMPLE_FILES = PROJECT_ROOT / "sample-files"
 pytestmark = pytest.mark.skipif(
     not SAMPLE_FILES.exists(),
     reason="sample-files submodule not present",
 )
 
-PDFS = sorted(SAMPLE_FILES.rglob("*.pdf"), key=lambda p: p.as_posix())
+PDFS = sorted(PROJECT_ROOT.rglob("*/*.pdf"))
 
 
 def _expected_permissions_from_pdf(pdf_path: Path) -> str:
