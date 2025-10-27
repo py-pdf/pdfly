@@ -30,3 +30,5 @@ Convert `document.pdf` into a booklet and write the output in `booklet.pdf`.
 pdfly 2-up document.pdf booklet.pdf
 
 ```
+
+![alt text](<../diagrams/2-up command.png>)

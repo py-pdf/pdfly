@@ -29,3 +29,5 @@ pdfly cat document.pdf 9 -o page.pdf
 pdfly extract-text page.pdf
 
 ```
+
+![alt text](../diagrams/extract-text.png)

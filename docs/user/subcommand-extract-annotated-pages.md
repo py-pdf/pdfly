@@ -42,3 +42,5 @@ Extracts only pages containing annotations from a file `input.pdf` into the give
 ```
 pdfly extract-annotated-pages input.pdf -o pages_to_rework.pdf
 ```
+
+![alt text](../diagrams/extract-annotated-pages.png)
