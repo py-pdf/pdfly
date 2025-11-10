@@ -12,7 +12,7 @@ from .conftest import run_cli
 
 
 def test_x2pdf_succeed_to_convert_jpg(
-    capsys: pytest.FixtureDef, tmp_path: Path
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Arrange
     output = tmp_path / "out.pdf"
@@ -35,7 +35,7 @@ def test_x2pdf_succeed_to_convert_jpg(
 
 
 def test_x2pdf_succeed_to_embed_pdfs(
-    capsys: pytest.FixtureDef, tmp_path: Path
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Arrange
     output = tmp_path / "out.pdf"
@@ -59,7 +59,7 @@ def test_x2pdf_succeed_to_embed_pdfs(
 
 
 def test_x2pdf_fail_to_open_file(
-    capsys: pytest.FixtureDef, tmp_path: Path
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Arrange & Act
     exit_code = run_cli(
@@ -78,7 +78,7 @@ def test_x2pdf_fail_to_open_file(
 
 
 def test_x2pdf_fail_to_convert(
-    capsys: pytest.FixtureDef, tmp_path: Path
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Arrange & Act
     exit_code = run_cli(

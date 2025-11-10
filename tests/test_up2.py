@@ -1,4 +1,5 @@
 import os.path
+from pathlib import Path
 
 import pytest
 from pypdf import PdfReader
@@ -6,9 +7,7 @@ from pypdf import PdfReader
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_up2_fewer_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
-) -> None:
+def test_up2_fewer_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["2-up", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
@@ -16,9 +15,7 @@ def test_up2_fewer_args(
     assert "Missing argument" in captured.err
 
 
-def test_up2_extra_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
-) -> None:
+def test_up2_extra_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -38,9 +35,7 @@ def test_up2_extra_args(
         assert not os.path.exists("out2.pdf"), "'out2.pdf' should not exist."
 
 
-def test_up2_8page_file(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
-) -> None:
+def test_up2_8page_file(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(

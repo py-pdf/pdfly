@@ -18,7 +18,7 @@ def extract_text_pages(pdf_filepath: Path) -> list[str]:
 
 
 def test_cat_incorrect_number_of_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
@@ -28,7 +28,7 @@ def test_cat_incorrect_number_of_args(
 
 
 def test_cat_two_files_ok(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -50,9 +50,7 @@ def test_cat_two_files_ok(
     assert len(reader.pages) == 2
 
 
-def test_cat_subset_ok(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
-) -> None:
+def test_cat_subset_ok(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -75,7 +73,7 @@ def test_cat_subset_ok(
     ["a", "-", "1-", "1-1-1", "1:1:1:1"],
 )
 def test_cat_subset_invalid_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef, page_range: str
+    capsys: pytest.CaptureFixture, tmp_path: Path, page_range: str
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -93,7 +91,7 @@ def test_cat_subset_invalid_args(
 
 
 def test_cat_subset_warn_on_missing_pages(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -111,7 +109,7 @@ def test_cat_subset_warn_on_missing_pages(
 
 
 def test_cat_subset_ensure_reduced_size(
-    tmp_path: pytest.FixtureDef, two_pages_pdf_filepath: Path
+    tmp_path: Path, two_pages_pdf_filepath: Path
 ) -> None:
     exit_code = run_cli(
         [
@@ -145,8 +143,8 @@ def test_cat_subset_ensure_reduced_size(
 def test_cat_combine_files(
     pdf_file_100: Path,
     pdf_file_abc: Path,
-    tmp_path: pytest.FixtureDef,
-    capsys: pytest.FixtureDef,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     with chdir(tmp_path):
         output_pdf_path = tmp_path / "out.pdf"
@@ -225,7 +223,7 @@ def test_cat_combine_files(
 )
 def test_cat_commands(
     pdf_file_100: Path,
-    tmp_path: pytest.FixtureDef,
+    tmp_path: Path,
     page_range: str,
     expected: list[str],
 ) -> None:

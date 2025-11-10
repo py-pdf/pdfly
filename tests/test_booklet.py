@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from pypdf import PdfReader
 
@@ -5,7 +7,7 @@ from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
 def test_booklet_fewer_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
@@ -15,7 +17,7 @@ def test_booklet_fewer_args(
 
 
 def test_booklet_extra_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -26,7 +28,7 @@ def test_booklet_extra_args(
     assert "unexpected extra argument" in captured.err
 
 
-def test_booklet_page_size(tmp_path: pytest.FixtureDef) -> None:
+def test_booklet_page_size(tmp_path: Path) -> None:
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
 
     with chdir(tmp_path):
@@ -68,8 +70,8 @@ def test_booklet_page_size(tmp_path: pytest.FixtureDef) -> None:
     ],
 )
 def test_booklet_order(
-    capsys: pytest.FixtureDef,
-    tmp_path: pytest.FixtureDef,
+    capsys: pytest.CaptureFixture,
+    tmp_path: Path,
     page_count: str,
     expected: str,
     expected_bc: str,

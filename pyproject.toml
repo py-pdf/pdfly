@@ -51,9 +51,8 @@ dependencies = [
 ]
 
 [dependency-groups]
-ci = ["black", "flake8", "flake8-bugbear", "flake8-comprehensions", "flake8-isort", "flake8-simplify", "mypy", "ruff"]
-dev = ["black", "pre-commit>=3.2.0", "pydantic", "pytest", "pytest-cov", "pytest-socket", "pytest-timeout", "rich", "twine", "wheel"]
-docs = ["sphinx", "sphinx_rtd_theme", "sphinx-autobuild", "myst_parser", "attrs"]  # attrs is required for myst, but not automatically installed by myst
+dev = ["black", "check-wheel-contents", "flake8", "flake8-bugbear", "flake8-comprehensions", "flake8-isort", "flake8-simplify", "flit", "mypy", "pre-commit>=3.2.0", "pydantic", "pytest", "pytest-cov", "pytest-socket", "pytest-timeout", "rich", "ruff"]
+docs = ["attrs", "sphinx", "sphinx_rtd_theme", "sphinx-autobuild", "myst_parser"]  # attrs is required for myst, but not automatically installed by myst
 
 [project.urls]
 Source = "https://github.com/py-pdf/pdfly"

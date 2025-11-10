@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from pypdf import PdfReader
 
@@ -5,7 +7,7 @@ from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
 def test_rotate_fewer_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -19,7 +21,7 @@ def test_rotate_fewer_args(
 
 
 def test_rotate_extra_args(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -52,7 +54,7 @@ def diff_rotations(
     return diffs
 
 
-def test_rotate_default(tmp_path: pytest.FixtureDef) -> None:
+def test_rotate_default(tmp_path: Path) -> None:
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
     out_fname = "output8.pdf"
     degrees = 90
@@ -97,8 +99,8 @@ def test_rotate_default(tmp_path: pytest.FixtureDef) -> None:
     ],
 )
 def test_rotate_slices(
-    capsys: pytest.FixtureDef,
-    tmp_path: pytest.FixtureDef,
+    capsys: pytest.CaptureFixture,
+    tmp_path: Path,
     degrees: int,
     slice: str,
     expected_diff: list[int],

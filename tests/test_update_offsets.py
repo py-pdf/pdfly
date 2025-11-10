@@ -12,7 +12,7 @@ import pytest
 from .conftest import RESOURCES_ROOT, run_cli
 
 
-def test_update_offsets(capsys: pytest.FixtureDef) -> None:
+def test_update_offsets(capsys: pytest.CaptureFixture) -> None:
     # Arrange
     input = RESOURCES_ROOT / "file-with-invalid-offsets.pdf"
     file_expected = str(RESOURCES_ROOT / "file-with-fixed-offsets.pdf")
@@ -76,7 +76,7 @@ def test_update_offsets(capsys: pytest.FixtureDef) -> None:
     ],
 )
 def test_update_offsets_on_all_reference_files(
-    capsys: pytest.FixtureDef, tmp_path: Path, input_pdf_filepath: Path
+    capsys: pytest.CaptureFixture, tmp_path: Path, input_pdf_filepath: Path
 ) -> None:
     # Arrange
     output_pdf_filepath = tmp_path / "out.pdf"

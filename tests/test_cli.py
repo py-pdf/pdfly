@@ -18,7 +18,7 @@ def test_pypdf_cli_can_be_invoked_as_a_module() -> None:
     )
 
 
-def test_pypdf_cli_version(capsys: pytest.FixtureDef) -> None:
+def test_pypdf_cli_version(capsys: pytest.CaptureFixture) -> None:
     exit_code = run_cli(["--version"])
     captured = capsys.readouterr()
     assert not captured.err

@@ -1,10 +1,12 @@
+from pathlib import Path
+
 import pytest
 
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
 def test_extract_images_jpg_png(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         run_cli(
@@ -19,7 +21,7 @@ def test_extract_images_jpg_png(
 
 
 def test_extract_images_monochrome(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # There used to be a bug for this case: https://github.com/py-pdf/pypdf/issues/2176
     with chdir(tmp_path):

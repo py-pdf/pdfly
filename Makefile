@@ -1,7 +1,7 @@
 maint:
 	pre-commit autoupdate
 	python -m pip install --upgrade .
-	python -m pip lock --group ci --group dev --group docs .
+	python -m pip lock --group dev --group docs .
 	uv pip install -r pylock.toml
 
 release:

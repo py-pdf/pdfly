@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from fpdf import FPDF
 
@@ -5,7 +7,7 @@ from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
 def test_check_sign_manipulated_content(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Arrange
     pdf = FPDF()
@@ -43,7 +45,7 @@ def test_check_sign_manipulated_content(
 
 
 def test_check_sign_missing_signature(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -63,7 +65,7 @@ def test_check_sign_missing_signature(
 
 
 def test_check_sign_signature_not_matching_to_certificate(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -85,9 +87,7 @@ def test_check_sign_signature_not_matching_to_certificate(
     assert "Certificate not ok" in captured.err
 
 
-def test_check_sign_pem(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
-) -> None:
+def test_check_sign_pem(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -106,7 +106,7 @@ def test_check_sign_pem(
 
 
 def test_check_sign_pdfly_signed_pdf(
-    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+    capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     # Arrange
     with chdir(tmp_path):
