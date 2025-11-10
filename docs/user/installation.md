@@ -53,9 +53,9 @@ If ✖ is given, it is guaranteed not to work.
 If it's not filled, we don't guarantee support, but it might still work.
 
 
-| Python                 | 3.13 | 3.12 | 3.11 | 3.10 | 2.7 |
-| ---------------------- | ---- | ---- | ---- | ---- | --- |
-| pdfly                  |  ✓   |  ✓  |  ✓   |  ✓   |  ✖  |
+| Python                 | 3.14 | 3.13 | 3.12 | 3.11 | 3.10 | 2.7 |
+| ---------------------- | ---- | ---- | ---- | ---- | ---- | --- |
+| pdfly                  |  ✓   |  ✓   |  ✓  |  ✓   |  ✓   |  ✖  |
 
 
 ## Development Version
