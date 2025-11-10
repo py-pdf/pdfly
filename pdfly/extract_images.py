@@ -15,7 +15,7 @@ def main(pdf: Path) -> None:
     extracted_images = []
     for page_index, page0 in enumerate(reader.pages):
         for image_file_object in page0.images:
-            path = f"{page_index}-{image_file_object.name}"
+            path = f"{page_index:04d}-{image_file_object.name}"
             with open(path, "wb") as fp:
                 fp.write(image_file_object.data)
             extracted_images.append(path)
