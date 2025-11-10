@@ -114,7 +114,7 @@ contributors, but we do value their contributions 🤗
       <td align="center" valign="top" width="20%"><a href="https://geoff.tuxpup.com/"><img src="https://avatars.githubusercontent.com/u/133355?v=4?s=100" width="100px;" alt="Geoff Beier"/><br /><sub><b>Geoff Beier</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/commits?author=geoffbeier" title="Code">💻</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="20%"><a href="https://leftparagraphs.com"><img src="https://avatars.githubusercontent.com/u/1121500?v=4?s=100" width="100px;" alt="Yuriy Chernyshov"/><br /><sub><b>Yuriy Chernyshov</b></sub></a><br /><a href="#ideas-georgthegreat" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://leftparagraphs.com"><img src="https://avatars.githubusercontent.com/u/1121500?v=4?s=100" width="100px;" alt="Yuriy Chernyshov"/><br /><sub><b>Yuriy Chernyshov</b></sub></a><br /><a href="#ideas-georgthegreat" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/py-pdf/pdfly/commits?author=georgthegreat" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
