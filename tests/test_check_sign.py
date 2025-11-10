@@ -1,10 +1,12 @@
-import io
+import pytest
 from fpdf import FPDF
-from pypdf import PdfReader, PdfWriter
+
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_check_sign_manipulated_content(capsys, tmp_path):
+def test_check_sign_manipulated_content(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     # Arrange
     pdf = FPDF()
     pdf.add_page()
@@ -40,7 +42,9 @@ def test_check_sign_manipulated_content(capsys, tmp_path):
     assert "Content hash not ok" in captured.err
 
 
-def test_check_sign_missing_signature(capsys, tmp_path):
+def test_check_sign_missing_signature(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -58,7 +62,9 @@ def test_check_sign_missing_signature(capsys, tmp_path):
     assert "Signature missing" in captured.err
 
 
-def test_check_sign_signature_not_matching_to_certificate(capsys, tmp_path):
+def test_check_sign_signature_not_matching_to_certificate(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -79,7 +85,9 @@ def test_check_sign_signature_not_matching_to_certificate(capsys, tmp_path):
     assert "Certificate not ok" in captured.err
 
 
-def test_check_sign_pem(capsys, tmp_path):
+def test_check_sign_pem(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -97,7 +105,9 @@ def test_check_sign_pem(capsys, tmp_path):
     assert not captured.err
 
 
-def test_check_sign_pdfly_signed_pdf(capsys, tmp_path):
+def test_check_sign_pdfly_signed_pdf(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     # Arrange
     with chdir(tmp_path):
         exit_code = run_cli(

@@ -17,7 +17,7 @@ import tempfile
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 import fpdf.sign
 import typer
@@ -30,10 +30,10 @@ from pypdf.generic import DictionaryObject, PdfObject
 
 def main(
     filename: Path,
-    output: Optional[Path],
+    output: Path | None,
     in_place: bool,
     p12: Path,
-    p12_password: Optional[str],
+    p12_password: str | None,
 ) -> None:
     validate_output_args_or_raise(output, in_place)
 
@@ -88,7 +88,7 @@ def _sign_pdf_contents(
     pdf_reader: PdfReader,
     output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper],
     p12: Path,
-    p12_password: Optional[str],
+    p12_password: str | None,
 ) -> None:
     unsigned_output_buffer = io.BytesIO()
 
@@ -154,9 +154,7 @@ def add_to_page(reader_page: PageObject, unit: str = "mm") -> Generator[FPDF]:
     reader_page.merge_page(page2=page_overlay)
 
 
-def validate_output_args_or_raise(
-    output: Optional[Path], in_place: bool
-) -> None:
+def validate_output_args_or_raise(output: Path | None, in_place: bool) -> None:
     if not in_place and output is None:
         raise typer.BadParameter(
             "One of the options --output or --in-place is required."

@@ -10,7 +10,7 @@ $ pdfly extract-images --help
  Extract images from PDF without resampling or altering.
 
  Adapted from work by Sylvain Pelissier
- http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-res 
+ http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-res
  ampling-in-python
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮

@@ -1,7 +1,6 @@
 """Tests for the `rm` command."""
 
 from pathlib import Path
-from typing import List
 
 import pytest
 from _pytest.capture import CaptureFixture
@@ -198,10 +197,9 @@ def test_rm_combine_files(
 )
 def test_rm_commands(
     pdf_file_100: Path,
-    capsys: CaptureFixture,
     tmp_path: Path,
     page_range: str,
-    expected: List[str],
+    expected: list[str],
 ) -> None:
     with chdir(tmp_path):
         output_pdf_path = tmp_path / "out.pdf"

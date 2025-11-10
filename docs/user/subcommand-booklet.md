@@ -9,7 +9,7 @@ $ pdfly booklet --help
  Usage: pdfly booklet [OPTIONS] FILENAME OUTPUT
 
  Reorder and two-up PDF pages for booklet printing.
-                                                                                
+
  If the number of pages is not a multiple of four, pages are
  added until it is a multiple of four. This includes a centerfold
  in the middle of the booklet and a single page on the inside

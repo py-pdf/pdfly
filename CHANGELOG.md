@@ -10,7 +10,7 @@
 - ensured support for Python 3.14
 
 ### Bug Fixes (BUG)
-- `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv` 
+- `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv`
 
 
 ## Version 0.5.0, 2025-10-13

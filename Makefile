@@ -1,8 +1,8 @@
 maint:
 	pre-commit autoupdate
-	pip-compile -U requirements/ci.in
-	pip-compile -U requirements/dev.in
-	pip-compile -U requirements/docs.in
+	python -m pip install --upgrade .
+	python -m pip lock --group ci --group dev --group docs .
+	uv pip install -r pylock.toml
 
 release:
 	python make_release.py
@@ -17,12 +17,9 @@ clean:
 	pyclean .
 	rm -rf tests/__pycache__ pdfly/__pycache__ Image9.png htmlcov docs/_build dist dont_commit_merged.pdf dont_commit_writer.pdf pdfly.egg-info
 
+lint:
+	mypy . --ignore-missing-imports --exclude build
+	ruff check --fix --unsafe-fixes
+
 test:
 	pytest tests --cov --cov-report term-missing -vv --cov-report html --durations=3 --timeout=30
-
-mutation-test:
-	mutmut run
-
-mutmut-results:
-	mutmut junitxml --suspicious-policy=ignore --untested-policy=ignore > mutmut-results.xml
-	junit2html mutmut-results.xml mutmut-results.html

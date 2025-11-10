@@ -1,7 +1,11 @@
+import pytest
+
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_extract_annotated_pages_input8(capsys, tmp_path):
+def test_extract_annotated_pages_input8(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     with chdir(tmp_path):
         run_cli(
             [

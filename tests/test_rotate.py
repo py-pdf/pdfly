@@ -1,12 +1,12 @@
-from pathlib import Path
-from typing import List
 import pytest
 from pypdf import PdfReader
 
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_rotate_fewer_args(capsys, tmp_path):
+def test_rotate_fewer_args(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -18,7 +18,9 @@ def test_rotate_fewer_args(capsys, tmp_path):
     assert "Missing argument" in captured.err
 
 
-def test_rotate_extra_args(capsys, tmp_path):
+def test_rotate_extra_args(
+    capsys: pytest.FixtureDef, tmp_path: pytest.FixtureDef
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -36,24 +38,21 @@ def test_rotate_extra_args(capsys, tmp_path):
     assert "unexpected extra argument" in captured.err
 
 
-def get_page_rotations(fname: Path) -> List[int]:
+def get_page_rotations(fname: str) -> list[int]:
     reader = PdfReader(fname)
-    rotations = []
-    for page in reader.pages:
-        rotations.append(page.rotation)
-    return rotations
+    return [page.rotation for page in reader.pages]
 
 
 def diff_rotations(
-    in_: List[int], out: List[int], degrees: int = 0
-) -> List[int]:
+    in_: list[int], out: list[int], degrees: int = 0
+) -> list[int]:
     diffs = []
     for orig, rotated in zip(in_, out):
         diffs.append(rotated - (orig + degrees))
     return diffs
 
 
-def test_rotate_default(capsys, tmp_path):
+def test_rotate_default(tmp_path: pytest.FixtureDef) -> None:
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
     out_fname = "output8.pdf"
     degrees = 90
@@ -97,7 +96,13 @@ def test_rotate_default(capsys, tmp_path):
         ),  # |degrees| > 360 is also supported
     ],
 )
-def test_rotate_slices(capsys, tmp_path, degrees, slice, expected_diff):
+def test_rotate_slices(
+    capsys: pytest.FixtureDef,
+    tmp_path: pytest.FixtureDef,
+    degrees: int,
+    slice: str,
+    expected_diff: list[int],
+) -> None:
     in_fname = str(RESOURCES_ROOT / "input8.pdf")
     out_fname = "output.pdf"
     with chdir(tmp_path):

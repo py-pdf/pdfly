@@ -6,11 +6,13 @@ A: https://github.com/py-pdf/pdfly/issues/97
 """
 
 from pathlib import Path
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from pypdf import PdfReader, PdfWriter
 from pypdf.annotations import AnnotationDictionary
-from pypdf.generic import ArrayObject  # noqa: TCH002
+
+if TYPE_CHECKING:
+    from pypdf.generic import ArrayObject
 
 
 # Check if an annotation is manipulable.
@@ -19,7 +21,7 @@ def is_manipulable(annot: AnnotationDictionary) -> bool:
 
 
 # Main function.
-def main(input_pdf: Path, output_pdf: Optional[Path]) -> None:
+def main(input_pdf: Path, output_pdf: Path | None) -> None:
     if not output_pdf:
         output_pdf = input_pdf.with_name(input_pdf.stem + "_annotated.pdf")
     input = PdfReader(input_pdf)

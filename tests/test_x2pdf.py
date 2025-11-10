@@ -6,10 +6,14 @@ Here should only be end-to-end tests.
 
 from pathlib import Path
 
+import pytest
+
 from .conftest import run_cli
 
 
-def test_x2pdf_succeed_to_convert_jpg(capsys, tmp_path: Path):
+def test_x2pdf_succeed_to_convert_jpg(
+    capsys: pytest.FixtureDef, tmp_path: Path
+) -> None:
     # Arrange
     output = tmp_path / "out.pdf"
 
@@ -30,7 +34,9 @@ def test_x2pdf_succeed_to_convert_jpg(capsys, tmp_path: Path):
     assert output.exists()
 
 
-def test_x2pdf_succeed_to_embed_pdfs(capsys, tmp_path: Path):
+def test_x2pdf_succeed_to_embed_pdfs(
+    capsys: pytest.FixtureDef, tmp_path: Path
+) -> None:
     # Arrange
     output = tmp_path / "out.pdf"
 
@@ -52,7 +58,9 @@ def test_x2pdf_succeed_to_embed_pdfs(capsys, tmp_path: Path):
     assert output.exists()
 
 
-def test_x2pdf_fail_to_open_file(capsys, tmp_path: Path):
+def test_x2pdf_fail_to_open_file(
+    capsys: pytest.FixtureDef, tmp_path: Path
+) -> None:
     # Arrange & Act
     exit_code = run_cli(
         [
@@ -69,7 +77,9 @@ def test_x2pdf_fail_to_open_file(capsys, tmp_path: Path):
     assert "No such file or directory" in captured.out
 
 
-def test_x2pdf_fail_to_convert(capsys, tmp_path: Path):
+def test_x2pdf_fail_to_convert(
+    capsys: pytest.FixtureDef, tmp_path: Path
+) -> None:
     # Arrange & Act
     exit_code = run_cli(
         [

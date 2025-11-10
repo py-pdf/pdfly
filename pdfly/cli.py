@@ -5,7 +5,7 @@ Subcommands are added here.
 """
 
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
@@ -86,7 +86,7 @@ def booklet(
         ),
     ],
     blank_page: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "-b",
             "--blank-page-file",
@@ -97,7 +97,7 @@ def booklet(
         ),
     ] = None,
     centerfold: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "-c",
             "--centerfold-file",
@@ -190,7 +190,7 @@ def extract_annotated_pages(
         ),
     ],
     output_pdf: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             "--output",
             "-o",
@@ -336,10 +336,10 @@ def sign(
             help="PKCS12 certificate container",
         ),
     ],
-    output: Annotated[Optional[Path], typer.Option("--output", "-o")] = None,
+    output: Annotated[Path | None, typer.Option("--output", "-o")] = None,
     in_place: bool = typer.Option(False, "--in-place", "-i"),
     p12_password: Annotated[
-        Optional[str],
+        str | None,
         typer.Option(
             "--p12-password",
             "-p",

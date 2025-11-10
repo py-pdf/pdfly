@@ -32,10 +32,10 @@ that no other applications interferes with its defpendencies.
 pdfly can be run without persistent installation using [uv tool run](https://docs.astral.sh/uv/guides/tools/#running-tools):
 
 ```bash
-uv tool run pdfly 
+uv tool run pdfly
 ```
 
-via the [uvx](https://docs.astral.sh/uv/guides/tools/#running-tools) alias: 
+via the [uvx](https://docs.astral.sh/uv/guides/tools/#running-tools) alias:
 
 ```bash
 uvx pdfly
