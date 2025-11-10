@@ -4,8 +4,14 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pdfly"
-authors = [{ name = "Martin Thoma", email = "info@martin-thoma.de" }]
-maintainers = [{ name = "Martin Thoma", email = "info@martin-thoma.de" }]
+authors = [
+  { name = "Martin Thoma", email = "info@martin-thoma.de" },
+  { name = "Lucas Cimon (@Lucas-C)" },
+]
+maintainers = [
+  { name = "Martin Thoma", email = "info@martin-thoma.de" },
+  { name = "Lucas Cimon (@Lucas-C)" },
+]
 description = "A pure-python CLI application to manipulate PDF files"
 readme = "README.md"
 dynamic = ["version"]
