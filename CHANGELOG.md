@@ -5,6 +5,9 @@
 
 ## Version 0.5.1, 2025-10-13
 
+### New Features (ENH)
+- `extract-images`: output filenames are now formatted using four digit for page numbers, in order for output files to be orderred alphabetically
+
 ### Bug Fixes (BUG)
 - `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv` 
 
