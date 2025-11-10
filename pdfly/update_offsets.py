@@ -150,13 +150,18 @@ def update_lines(
         elif curr_obj is not None and len_stream is not None:
             len_stream += len(line.encode(encoding))
         elif line_xref is not None and line_no > line_xref + 2:
-            objNo = line_no - line_xref - 2
-            if objNo <= len(map_obj_offset) and str(objNo) in map_obj_offset:
+            object_number = line_no - line_xref - 2
+            if (
+                object_number <= len(map_obj_offset)
+                and str(object_number) in map_obj_offset
+            ):
                 eol = line[-2:]
-                xrefUpd = ("%010d" % map_obj_offset[str(objNo)]) + " 00000 n"
+                xref_updated = (
+                    "%010d" % map_obj_offset[str(object_number)]
+                ) + " 00000 n"
                 if verbose:
-                    console.print(f"{content} -> {xrefUpd}")
-                line = xrefUpd + eol
+                    console.print(f"{content} -> {xref_updated}")
+                line = xref_updated + eol
         elif line_startxref is not None and line_no == line_startxref + 1:
             if offset_xref is None:
                 raise NotImplementedError(
@@ -280,7 +285,6 @@ def main(file_in: Path, file_out: Path, encoding: str, verbose: bool) -> None:
     lines_out = update_lines(lines_in, encoding, console, verbose)
 
     with open(file_out, "wb") as f:
-        for line in lines_out:
-            f.write(line.encode(encoding))
+        f.writelines(line.encode(encoding) for line in lines_out)
 
     console.print(f"Wrote {file_out}", soft_wrap=True)

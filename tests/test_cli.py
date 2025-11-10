@@ -1,14 +1,15 @@
 import sys
 from subprocess import check_output
 
+import pytest
 from pypdf import __version__ as pypdf_version
 
 from .conftest import run_cli
 
 
-def test_pypdf_cli_can_be_invoked_as_a_module():
-    stdout = check_output(
-        [sys.executable, "-m", "pdfly", "--help"]  # noqa: S603
+def test_pypdf_cli_can_be_invoked_as_a_module() -> None:
+    stdout = check_output(  # noqa: S603
+        [sys.executable, "-m", "pdfly", "--help"]
     ).decode()
     assert "pdfly [OPTIONS] COMMAND [ARGS]..." in stdout
     assert (
@@ -17,7 +18,7 @@ def test_pypdf_cli_can_be_invoked_as_a_module():
     )
 
 
-def test_pypdf_cli_version(capsys):
+def test_pypdf_cli_version(capsys: pytest.CaptureFixture) -> None:
     exit_code = run_cli(["--version"])
     captured = capsys.readouterr()
     assert not captured.err

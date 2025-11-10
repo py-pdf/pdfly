@@ -11,13 +11,12 @@ Examples
 
 import sys
 from pathlib import Path
-from typing import Optional
 
 import typer
 from endesive import pdf
 
 
-def main(filename: Path, pem: Path, verbose: Optional[bool]) -> None:
+def main(filename: Path, pem: Path, verbose: bool | None) -> None:
     x509_certificates = [pem.read_bytes()]
     results = pdf.verify(filename.read_bytes(), x509_certificates)
 

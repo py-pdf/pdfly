@@ -9,7 +9,7 @@ $ pdfly extract-text --help
 
  Extract text from a PDF file.
 
-                                                                                
+
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
 │ *    pdf      FILE  [default: None] [required]                               │
 ╰──────────────────────────────────────────────────────────────────────────────╯

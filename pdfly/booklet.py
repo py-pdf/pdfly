@@ -19,7 +19,6 @@ Example:
 
 from collections.abc import Generator
 from pathlib import Path
-from typing import Optional
 
 from pypdf import (
     PageObject,
@@ -32,8 +31,8 @@ from pypdf.generic import RectangleObject
 def main(
     filename: Path,
     output: Path,
-    inside_cover_file: Optional[Path],
-    centerfold_file: Optional[Path],
+    inside_cover_file: Path | None,
+    centerfold_file: Path | None,
 ) -> None:
     try:
         # Set up the streams

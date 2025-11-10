@@ -3,7 +3,6 @@
 import stat
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 from pydantic import BaseModel
 from pypdf import PdfReader
@@ -17,24 +16,24 @@ class EncryptionData(BaseModel):
 
 
 class MetaInfo(BaseModel):
-    encryption: Optional[EncryptionData] = None
+    encryption: EncryptionData | None = None
     pdf_file_version: str
-    pages: Optional[int] = None
-    page_mode: Optional[str] = None
-    page_layout: Optional[str] = None
+    pages: int | None = None
+    page_mode: str | None = None
+    page_layout: str | None = None
     attachments: str = "unknown"
-    id1: Optional[bytes] = None
-    id2: Optional[bytes] = None
+    id1: bytes | None = None
+    id2: bytes | None = None
     images: list[int] = []
 
     # PDF /Info dictionary
-    author: Optional[str] = None
-    creation_date: Optional[datetime] = None
-    creator: Optional[str] = None
-    keywords: Optional[str] = None
-    producer: Optional[str] = None
-    subject: Optional[str] = None
-    title: Optional[str] = None
+    author: str | None = None
+    creation_date: datetime | None = None
+    creator: str | None = None
+    keywords: str | None = None
+    producer: str | None = None
+    subject: str | None = None
+    title: str | None = None
 
     # OS Information
     file_permissions: str

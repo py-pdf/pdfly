@@ -2,7 +2,6 @@
 
 import zlib
 from pathlib import Path
-from typing import Optional
 
 from pypdf import PdfReader, PdfWriter
 from pypdf.generic import IndirectObject, PdfObject
@@ -14,7 +13,7 @@ def main(pdf: Path, output: Path) -> None:
 
     for page in reader.pages:
         if "/Contents" in page:
-            contents: Optional[PdfObject] = page["/Contents"]
+            contents: PdfObject | None = page["/Contents"]
             if isinstance(contents, IndirectObject):
                 contents = contents.get_object()
             if contents is not None:

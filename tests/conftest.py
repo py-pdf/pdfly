@@ -1,7 +1,9 @@
 """Utilities and fixtures that are available automatically for all tests."""
 
 import os
+from collections.abc import Iterator
 from pathlib import Path
+from typing import Union
 
 import pytest
 from fpdf import FPDF
@@ -14,7 +16,7 @@ except ImportError:  # Fallback when not available (< Python 3.11):
     from contextlib import contextmanager
 
     @contextmanager  # type: ignore
-    def chdir(dir_path):
+    def chdir(dir_path: Union[str, Path]) -> Iterator[None]:
         """Non thread-safe context manager to change the current working directory."""
         cwd = Path.cwd()
         os.chdir(dir_path)
@@ -29,16 +31,17 @@ PROJECT_ROOT = TESTS_ROOT.parent
 RESOURCES_ROOT = PROJECT_ROOT / "resources"
 
 
-def run_cli(args):
+def run_cli(args: list[str]) -> Union[None, int, str]:
     try:
         entry_point(args)
+        return None
     except SystemExit as error:
         return error.code
 
 
-@pytest.fixture()
-def two_pages_pdf_filepath(tmp_path):
-    "A PDF with 2 pages, and a different image on each page"
+@pytest.fixture
+def two_pages_pdf_filepath(tmp_path: Path) -> Path:
+    """A PDF with 2 pages, and a different image on each page"""
     # Note: prior to v2.7.9, fpdf2 produced incorrect /Resources dicts for each page (cf. fpdf2 PR #1133),
     # leading to an "abnormal" two_pages.pdf generated there, and for test_cat_subset_ensure_reduced_size() to fail.
     pdf = FPDF()
@@ -51,8 +54,8 @@ def two_pages_pdf_filepath(tmp_path):
     return pdf_filepath
 
 
-@pytest.fixture()
-def pdf_file_100(tmp_path):
+@pytest.fixture
+def pdf_file_100(tmp_path: Path) -> Path:
     """A PDF with 100 pages; each has only the page index on it."""
     pdf = FPDF()
 
@@ -66,8 +69,8 @@ def pdf_file_100(tmp_path):
     return pdf_filepath
 
 
-@pytest.fixture()
-def pdf_file_abc(tmp_path):
+@pytest.fixture
+def pdf_file_abc(tmp_path: Path) -> Path:
     """A PDF with 100 pages; each has only the page index on it."""
     pdf = FPDF()
 

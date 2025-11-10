@@ -1,7 +1,13 @@
+from pathlib import Path
+
+import pytest
+
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_extract_images_jpg_png(capsys, tmp_path):
+def test_extract_images_jpg_png(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         run_cli(
             [
@@ -14,7 +20,9 @@ def test_extract_images_jpg_png(capsys, tmp_path):
     assert "Extracted 3 images" in captured.out
 
 
-def test_extract_images_monochrome(capsys, tmp_path):
+def test_extract_images_monochrome(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
     # There used to be a bug for this case: https://github.com/py-pdf/pypdf/issues/2176
     with chdir(tmp_path):
         run_cli(["extract-images", str(RESOURCES_ROOT / "box.pdf")])

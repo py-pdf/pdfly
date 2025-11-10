@@ -26,7 +26,7 @@ $ pdfly pagemeta --help
 Get the metadata of the 101st page of `document.pdf` in text format.
 ```
 pdfly pagemeta document.pdf 100
-    /home/user/.../document.pdf, page index 100       
+    /home/user/.../document.pdf, page index 100
 
     ┏━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
     ┃   Attribute ┃ Value                                               ┃
@@ -37,7 +37,7 @@ pdfly pagemeta document.pdf 100
     │    bleedbox │ (0.0, 0.0, 504.0, 661.5): with=504.0 x height=661.5 │
     │ annotations │ 8                                                   │
     └─────────────┴─────────────────────────────────────────────────────┘
-    All annotations:                                                                
+    All annotations:
     1. /Link at [232.05524, 385.79007, 343.6091, 396.29007]
     2. /Link at [157.63988, 209.99002, 243.69913, 220.49002]
     3. /Link at [72, 178.19678, 249.65918, 188.69678]

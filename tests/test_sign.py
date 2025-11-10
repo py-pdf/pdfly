@@ -1,9 +1,14 @@
+from pathlib import Path
+
+import pytest
 from endesive import pdf
 
 from .conftest import RESOURCES_ROOT, chdir, run_cli
 
 
-def test_sign_missing_certificate_key_option(capsys, tmp_path):
+def test_sign_missing_certificate_key_option(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -16,7 +21,9 @@ def test_sign_missing_certificate_key_option(capsys, tmp_path):
     assert "Missing option" in captured.err
 
 
-def test_sign_already_signed_pdf(capsys, tmp_path):
+def test_sign_already_signed_pdf(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -38,7 +45,7 @@ def test_sign_already_signed_pdf(capsys, tmp_path):
     assert "already signed" in captured.err
 
 
-def test_sign_pkcs12(capsys, tmp_path):
+def test_sign_pkcs12(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -68,7 +75,9 @@ def test_sign_pkcs12(capsys, tmp_path):
         assert cert_ok
 
 
-def test_sign_pkcs12_in_place(capsys, tmp_path):
+def test_sign_pkcs12_in_place(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
     # Arrange
     input8pdf = RESOURCES_ROOT / "input8.pdf"
     outpdf = tmp_path / "out.pdf"

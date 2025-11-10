@@ -4,9 +4,8 @@ pdfly is an application and thus non-developers
 might also use it.
 
 ## Installing Requirements
-
 ```
-pip install -r requirements/dev.txt
+pip install . --group dev
 ```
 
 ## Running Tests

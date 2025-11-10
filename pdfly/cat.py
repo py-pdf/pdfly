@@ -49,7 +49,6 @@ Examples
 import os
 import sys
 from pathlib import Path
-from typing import Optional
 
 from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
 
@@ -60,7 +59,7 @@ def main(
     output: Path,
     verbose: bool,
     inverted_page_selection: bool = False,
-    password: Optional[str] = None,
+    password: str | None = None,
 ) -> None:
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         filename, fn_pgrgs
@@ -84,7 +83,7 @@ def main(
             if password is not None:
                 reader.decrypt(password)
             num_pages = len(reader.pages)
-            start, end, step = page_range.indices(num_pages)
+            start, end, _step = page_range.indices(num_pages)
             if (
                 start < 0
                 or end < 0

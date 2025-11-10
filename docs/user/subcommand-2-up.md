@@ -6,7 +6,7 @@ Create a booklet-style PDF from a single input.
 
 ```
 $ pdfly 2-up --help
- Usage: pdfly 2-up [OPTIONS] PDF OUT                                            
+ Usage: pdfly 2-up [OPTIONS] PDF OUT
 
  Create a booklet-style PDF from a single input.
 

@@ -7,9 +7,10 @@
 
 ### New Features (ENH)
 - `extract-images`: output filenames are now formatted using four digit for page numbers, in order for output files to be orderred alphabetically
+- ensured support for Python 3.14
 
 ### Bug Fixes (BUG)
-- `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv` 
+- `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv`
 
 
 ## Version 0.5.0, 2025-10-13
