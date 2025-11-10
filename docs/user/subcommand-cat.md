@@ -11,7 +11,7 @@ pdfly cat --help
 
  Usage: pdfly cat [OPTIONS] FILENAME FN_PGRGS...
 
- Concatenate pages from PDF files into a single PDF file.
+ Extract and concatenate pages from PDF files into a single PDF file.
  Page ranges refer to the previously-named file. A file not followed by a page
  range means all the pages of the file.
  PAGE RANGES are like Python slices.
