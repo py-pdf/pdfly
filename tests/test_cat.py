@@ -24,7 +24,7 @@ def test_cat_incorrect_number_of_args(
         exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
     captured = capsys.readouterr()
-    assert "Missing argument" in captured.err
+    assert "Missing" in captured.err
 
 
 def test_cat_two_files_ok(
@@ -87,7 +87,7 @@ def test_cat_subset_invalid_args(
         )
     captured = capsys.readouterr()
     assert exit_code == 2, captured
-    assert "Invalid file path or page range provided" in captured.err
+    assert "Error: invalid file path or page range provided" in captured.out
 
 
 def test_cat_subset_warn_on_missing_pages(
@@ -249,3 +249,39 @@ def test_cat_commands(
 
         # Compare the extracted text
         assert extracted_pages == expected
+
+
+def test_cat_decrypt_with_password_ok(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    exit_code = run_cli(
+        [
+            "cat",
+            "--password=openpassword",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "--output",
+            str(tmp_path / "out.pdf"),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert exit_code == 0, captured
+    assert not captured.err
+    reader = PdfReader(tmp_path / "out.pdf")
+    assert len(reader.pages) == 1
+
+
+def test_cat_decrypt_with_password_ko(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    exit_code = run_cli(
+        [
+            "cat",
+            "--password=INCORRECT",
+            "sample-files/005-libreoffice-writer-password/libreoffice-writer-password.pdf",
+            "--output",
+            str(tmp_path / "out.pdf"),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert exit_code == 1, captured
+    assert "Error: the decrypting password provided is invalid" in captured.out

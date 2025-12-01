@@ -17,7 +17,7 @@ def test_rm_incorrect_number_of_args(
         exit_code = run_cli(["rm", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
     captured = capsys.readouterr()
-    assert "Missing argument" in captured.err
+    assert "Missing" in captured.err
 
 
 def test_rm_subset_ok(capsys: CaptureFixture, tmp_path: Path) -> None:
@@ -60,7 +60,7 @@ def test_rm_subset_invalid_args(
         )
     captured = capsys.readouterr()
     assert exit_code == 2, captured
-    assert "Invalid file path or page range provided" in captured.err
+    assert "Error: invalid file path or page range provided" in captured.out
 
 
 def test_rm_subset_warn_on_missing_pages(

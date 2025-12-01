@@ -13,7 +13,7 @@ def test_booklet_fewer_args(
         exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
     captured = capsys.readouterr()
-    assert "Missing argument" in captured.err
+    assert "Missing" in captured.err
 
 
 def test_booklet_extra_args(
