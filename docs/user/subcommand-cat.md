@@ -93,3 +93,9 @@ Just combine two PDF files so that the pages come right after each other:
 ```
 pdfly cat input1.pdf input2.pdf -o out.pdf
 ```
+
+### Decrypt a PDF document
+
+```
+pdfly cat --password=SECRET doc.pdf -o doc-decrypted.pdf
+```

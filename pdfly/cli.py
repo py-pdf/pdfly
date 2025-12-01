@@ -122,8 +122,8 @@ def cat(
         ),
     ],
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
-    fn_pgrgs: list[str] = typer.Argument(  # noqa
-        ..., help="filenames and/or page ranges"
+    fn_pgrgs: list[str] | None = typer.Argument(  # noqa: B008
+        None, help="filenames and/or page ranges"
     ),
     verbose: bool = typer.Option(
         False, help="show page ranges as they are being read"
@@ -132,7 +132,9 @@ def cat(
         None, help="Document's user or owner password."
     ),
 ) -> None:
-    pdfly.cat.main(filename, fn_pgrgs, output, verbose, password=password)
+    pdfly.cat.main(
+        filename, fn_pgrgs, output=output, verbose=verbose, password=password
+    )
 
 
 @entry_point.command(name="check-sign", help=pdfly.check_sign.__doc__)

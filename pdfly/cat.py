@@ -50,19 +50,27 @@ import os
 import sys
 from pathlib import Path
 
-from pypdf import PageRange, PdfReader, PdfWriter, parse_filename_page_ranges
+from pypdf import (
+    PageRange,
+    PasswordType,
+    PdfReader,
+    PdfWriter,
+    parse_filename_page_ranges,
+)
+from rich.console import Console
 
 
 def main(
     filename: Path,
-    fn_pgrgs: list[str],
+    fn_pgrgs: list[str] | None,
     output: Path,
     verbose: bool,
     inverted_page_selection: bool = False,
     password: str | None = None,
 ) -> None:
+    console = Console()
     filename_page_ranges = parse_filepaths_and_pagerange_args(
-        filename, fn_pgrgs
+        console, filename, fn_pgrgs
     )
     if output:
         output_fh = open(output, "wb")
@@ -80,8 +88,14 @@ def main(
                 in_fs[filepath] = open(filepath, "rb")
 
             reader = PdfReader(in_fs[filepath])
-            if password is not None:
-                reader.decrypt(password)
+            if (
+                password is not None
+                and reader.decrypt(password) == PasswordType.NOT_DECRYPTED
+            ):
+                console.print(
+                    "[red]Error: the decrypting password provided is invalid"
+                )
+                sys.exit(1)
             num_pages = len(reader.pages)
             start, end, _step = page_range.indices(num_pages)
             if (
@@ -114,9 +128,9 @@ def main(
 
 
 def parse_filepaths_and_pagerange_args(
-    filename: Path, fn_pgrgs: list[str]
+    console: Console, filename: Path, fn_pgrgs: list[str] | None
 ) -> list[tuple[Path, PageRange]]:
-    fn_pgrgs_l = list(fn_pgrgs)
+    fn_pgrgs_l = list(fn_pgrgs) if fn_pgrgs else []
     fn_pgrgs_l.insert(0, str(filename))
     filename_page_ranges, invalid_filepaths = [], []
     for filepath, page_range in parse_filename_page_ranges(fn_pgrgs_l):  # type: ignore
@@ -125,9 +139,8 @@ def parse_filepaths_and_pagerange_args(
         else:
             invalid_filepaths.append(str(filepath))
     if invalid_filepaths:
-        print(
-            f"Invalid file path or page range provided: {' '.join(invalid_filepaths)}",
-            file=sys.stderr,
+        console.print(
+            f"[red]Error: invalid file path or page range provided: {' '.join(invalid_filepaths)}"
         )
         sys.exit(2)
     return filename_page_ranges
