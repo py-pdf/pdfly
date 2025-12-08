@@ -29,3 +29,43 @@ def test_extract_images_monochrome(
     captured = capsys.readouterr()
     assert not captured.err
     assert "Extracted 1 images" in captured.out
+
+
+def test_extract_images_range_first_only(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    # Use a file with multiple images; request only the first image
+    with chdir(tmp_path):
+        run_cli(
+            [
+                "extract-images",
+                str(RESOURCES_ROOT / "GeoBase_NHNC1_Data_Model_UML_EN.pdf"),
+                "--from",
+                "0",
+                "--end",
+                "0",
+            ]
+        )
+    captured = capsys.readouterr()
+    assert not captured.err
+    assert "Extracted 1 images" in captured.out
+
+
+def test_extract_images_range_start_to_end(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    # Request first two images from a file that has three
+    with chdir(tmp_path):
+        run_cli(
+            [
+                "extract-images",
+                str(RESOURCES_ROOT / "GeoBase_NHNC1_Data_Model_UML_EN.pdf"),
+                "--from",
+                "0",
+                "--end",
+                "1",
+            ]
+        )
+    captured = capsys.readouterr()
+    assert not captured.err
+    assert "Extracted 2 images" in captured.out
