@@ -2,6 +2,17 @@
 
 ## Version 0.6.0, not released yet
 
+### New Features (ENH)
+- `extract-images`: add `--from` and `--end` options to extract a range of images by global index.
+- `extract-text`: add `--from` and `--end` options to limit text extraction to a page range.
+- `extract-annotated-pages`: add `--from` and `--end` options to process only a subset of pages.
+
+### Documentation (DOC)
+- Update user docs for `extract-images`, `extract-text`, and `extract-annotated-pages` to include range options and examples.
+
+### Testing (TST)
+- Add tests covering image range extraction and page-range handling in `extract-annotated-pages` and `extract-text`.
+
 
 ## Version 0.5.1, 2025-10-13
 
