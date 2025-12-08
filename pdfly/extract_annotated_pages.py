@@ -21,14 +21,23 @@ def is_manipulable(annot: AnnotationDictionary) -> bool:
 
 
 # Main function.
-def main(input_pdf: Path, output_pdf: Path | None) -> None:
+def main(
+    input_pdf: Path,
+    output_pdf: Path | None,
+    start: int | None = None,
+    end: int | None = None,
+) -> None:
     if not output_pdf:
         output_pdf = input_pdf.with_name(input_pdf.stem + "_annotated.pdf")
     input = PdfReader(input_pdf)
     output = PdfWriter()
     output_pages = 0
     # Copy only the pages with annotations
-    for page in input.pages:
+    for i, page in enumerate(input.pages):
+        if start is not None and i < start:
+            continue
+        if end is not None and i > end:
+            continue
         if "/Annots" not in page:
             continue
         page_annots: ArrayObject = page["/Annots"]  # type: ignore[assignment]
