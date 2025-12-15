@@ -200,8 +200,24 @@ def extract_annotated_pages(
             help="Output PDF file. Defaults to 'input_pdf_annotated'.",
         ),
     ] = None,
+    start: Annotated[
+        int | None,
+        typer.Option(
+            "--from",
+            help="Inclusive starting page index (0-based).",
+        ),
+    ] = None,
+    end: Annotated[
+        int | None,
+        typer.Option(
+            "--end",
+            help="Inclusive ending page index (0-based).",
+        ),
+    ] = None,
 ) -> None:
-    pdfly.extract_annotated_pages.main(input_pdf, output_pdf)
+    pdfly.extract_annotated_pages.main(
+        input_pdf, output_pdf, start=start, end=end
+    )
 
 
 @entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)  # type: ignore[misc]
@@ -214,8 +230,22 @@ def extract_images(
             resolve_path=True,
         ),
     ],
+    start: Annotated[
+        int | None,
+        typer.Option(
+            "--from",
+            help="Inclusive starting image index (0-based).",
+        ),
+    ] = None,
+    end: Annotated[
+        int | None,
+        typer.Option(
+            "--end",
+            help="Inclusive ending image index (0-based).",
+        ),
+    ] = None,
 ) -> None:
-    pdfly.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf, start=start, end=end)
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]
@@ -228,12 +258,30 @@ def extract_text(
             resolve_path=True,
         ),
     ],
+    start: Annotated[
+        int | None,
+        typer.Option(
+            "--from",
+            help="Inclusive starting page index (0-based).",
+        ),
+    ] = None,
+    end: Annotated[
+        int | None,
+        typer.Option(
+            "--end",
+            help="Inclusive ending page index (0-based).",
+        ),
+    ] = None,
 ) -> None:
     """Extract text from a PDF file."""
     from pypdf import PdfReader
 
     reader = PdfReader(str(pdf))
-    for page in reader.pages:
+    for i, page in enumerate(reader.pages):
+        if start is not None and i < start:
+            continue
+        if end is not None and i > end:
+            continue
         typer.echo(page.extract_text())
 
 
