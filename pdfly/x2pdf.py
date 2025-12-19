@@ -19,8 +19,8 @@ def px_to_mm(px: float) -> float:
 
 def image_to_pdf(filepath: Path) -> BytesIO:
     with Image.open(filepath) as cover:
-        width, height = cover.size
-    width, height = px_to_mm(width), px_to_mm(height)
+        w, h = cover.size
+    width, height = px_to_mm(w), px_to_mm(h)
     pdf = FPDF(unit="mm")
     pdf.add_page(format=(width, height))
     pdf.image(filepath, x=0, y=0)

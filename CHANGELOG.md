@@ -2,6 +2,9 @@
 
 ## Version 0.6.0, not released yet
 
+### Bug Fixes (BUG)
+- `2up` incorrectly handled documents with an odd number of pages - [issue #219](https://github.com/py-pdf/pdfly/issues/218)
+
 
 ## Version 0.5.1, 2025-10-13
 
