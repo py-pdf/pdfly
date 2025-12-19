@@ -115,6 +115,7 @@ contributors, but we do value their contributions 🤗
     </tr>
     <tr>
       <td align="center" valign="top" width="20%"><a href="https://leftparagraphs.com"><img src="https://avatars.githubusercontent.com/u/1121500?v=4?s=100" width="100px;" alt="Yuriy Chernyshov"/><br /><sub><b>Yuriy Chernyshov</b></sub></a><br /><a href="#ideas-georgthegreat" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/py-pdf/pdfly/commits?author=georgthegreat" title="Code">💻</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/lkintact"><img src="https://avatars.githubusercontent.com/u/24726299?v=4?s=100" width="100px;" alt="lkintact"/><br /><sub><b>lkintact</b></sub></a><br /><a href="https://github.com/py-pdf/pdfly/issues?q=author%3Alkintact" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
