@@ -25,7 +25,7 @@ from pypdf import (
     PdfReader,
     PdfWriter,
 )
-from pypdf.generic import RectangleObject
+from pypdf.generic import FloatObject, RectangleObject
 
 
 def main(
@@ -67,6 +67,8 @@ def main(
                 expand=True,
                 over=True,
             )
+            # Double the CropBox width:
+            pages[lhs].cropbox[2] = FloatObject(2 * pages[lhs].cropbox[2])
             writer.add_page(pages[lhs])
 
         # If a centerfold was required, it is already

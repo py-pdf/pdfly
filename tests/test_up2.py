@@ -36,13 +36,21 @@ def test_up2_extra_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
 
 def test_up2_8page_file(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+    pdf_file = str(RESOURCES_ROOT / "input8.pdf")
+    out_file_name = "out.pdf"
+
+    in_reader = PdfReader(pdf_file)
+    assert len(in_reader.pages) == 8
+    in_height = in_reader.pages[0].mediabox.height
+    in_width = in_reader.pages[0].mediabox.width
+
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
             [
                 "2-up",
-                str(RESOURCES_ROOT / "input8.pdf"),
-                "./out.pdf",
+                pdf_file,
+                out_file_name,
             ]
         )
     captured = capsys.readouterr()
@@ -50,16 +58,41 @@ def test_up2_8page_file(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     # Assert
     assert exit_code == 0, captured
     assert not captured.err
-    in_reader = PdfReader(RESOURCES_ROOT / "input8.pdf")
-    out_reader = PdfReader(tmp_path / "./out.pdf")
 
-    assert len(in_reader.pages) == 8
+    out_reader = PdfReader(tmp_path / out_file_name)
     assert len(out_reader.pages) == 4
 
-    in_height = in_reader.pages[0].mediabox.height
-    in_width = in_reader.pages[0].mediabox.width
     out_width = out_reader.pages[0].mediabox.width
     out_height = out_reader.pages[0].mediabox.height
 
     assert out_width == 2 * in_width  # PR #78
     assert out_height == in_height
+
+
+# Fix issue #218
+def test_up2_odd_page_number(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    pdf_file = "sample-files/026-latex-multicolumn/multicolumn.pdf"
+    out_file_path = tmp_path / "out.pdf"
+
+    # Ensure original page number is odd:
+    in_reader = PdfReader(pdf_file)
+    assert len(in_reader.pages) % 2 == 1
+
+    # Act
+    exit_code = run_cli(
+        [
+            "2-up",
+            pdf_file,
+            str(out_file_path),
+        ]
+    )
+    captured = capsys.readouterr()
+
+    # Assert
+    assert exit_code == 0, captured
+    assert not captured.err
+
+    out_reader = PdfReader(out_file_path)
+    assert len(out_reader.pages) == (len(in_reader.pages) + 1) / 2
