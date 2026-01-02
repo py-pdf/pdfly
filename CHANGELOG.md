@@ -9,7 +9,7 @@
 ## Version 0.5.1, 2025-10-13
 
 ### New Features (ENH)
-- `extract-images`: output filenames are now formatted using four digit for page numbers, in order for output files to be orderred alphabetically
+- `extract-images`: output filenames are now formatted using four digit for page numbers, in order for output files to be ordered alphabetically
 - ensured support for Python 3.14
 
 ### Bug Fixes (BUG)
