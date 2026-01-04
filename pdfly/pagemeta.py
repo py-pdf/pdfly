@@ -55,7 +55,7 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
         ) -> None:
             width = box[2] - box[0]
             height = box[3] - box[1]
-            known_format = KNOWN_PAGE_FORMATS.get((width, height))
+            known_format = find_known_format(width, height)
             extra = f" ({known_format})" if known_format else ""
             table.add_row(
                 name,
@@ -80,3 +80,13 @@ def main(pdf: Path, page_index: int, output: OutputOptions) -> None:
             for i, annot in enumerate(page.annotations, start=1):
                 obj = annot.get_object()
                 console.print(f"{i}. {obj['/Subtype']} at {obj['/Rect']}")
+
+
+def find_known_format(width: float, height: float) -> str:
+    known_format = KNOWN_PAGE_FORMATS.get((width, height))
+    if known_format:
+        return known_format
+    for (w, h), name in KNOWN_PAGE_FORMATS.items():
+        if ((w - width) * (w - width) + (h - height) * (h - height)) < 1:
+            return f"close to format: {name}"
+    return ""
