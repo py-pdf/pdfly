@@ -5,6 +5,9 @@
 ### Bug Fixes (BUG)
 - `2up` incorrectly handled documents with an odd number of pages - [issue #219](https://github.com/py-pdf/pdfly/issues/218)
 
+### New Features (ENH)
+- `pagemeta` now displays the name of a known page format that is close to the page dimensions
+
 
 ## Version 0.5.1, 2025-10-13
 
@@ -22,7 +25,7 @@
 - New `extract-annotated-pages` to filter out only the user annotated pages ([PR #98](https://github.com/py-pdf/pdfly/pull/98))
 - New `rotate` sub-command to rotate specified pages ([PR #128](https://github.com/py-pdf/pdfly/pull/128))
 - Added optional `--password` argument to `cat` to perform decryption ([PR #61](https://github.com/py-pdf/pdfly/pull/61))
-- `pagemeta` now display known page formats when it can detect it: A3, A4, A5, Letter, Legal
+- `pagemeta` now displays known page formats when it can detect it: A3, A4, A5, Letter, Legal
 - `pagemeta` now displays the rotation value.
 - New `sign` sub-command to create a signed pdf from an existing pdf ([PR #165](https://github.com/py-pdf/pdfly/pull/165))
 - New `check-sign` sub-command to verify the signature of a signed pdf ([PR #166](https://github.com/py-pdf/pdfly/pull/166))
