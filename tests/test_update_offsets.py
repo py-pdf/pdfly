@@ -4,7 +4,7 @@ Every CLI command is called here with a typer CliRunner.
 Here should only be end-to-end tests.
 """
 
-import re
+import re, sys
 from pathlib import Path
 
 import pytest
@@ -12,6 +12,7 @@ import pytest
 from .conftest import RESOURCES_ROOT, run_cli
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Does not run on windows")
 def test_update_offsets(capsys: pytest.CaptureFixture) -> None:
     # Arrange
     input = RESOURCES_ROOT / "file-with-invalid-offsets.pdf"

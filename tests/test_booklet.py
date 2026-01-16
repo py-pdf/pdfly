@@ -59,14 +59,14 @@ def test_booklet_page_size(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     ("page_count", "expected", "expected_bc"),
     [
-        ("8", "81\n27\n63\n45\n", "81\n27\n63\n45\n"),
-        ("7", "71\n2\n63\n45\n", "71\n2b\n63\n45\n"),
-        ("6", "61\n25\n43\n\n", "61\n25\n43\nc\n"),
-        ("5", "51\n2\n43\n\n", "51\n2b\n43\nc\n"),
-        ("4", "41\n23\n", "41\n23\n"),
-        ("3", "31\n2\n", "31\n2b\n"),
-        ("2", "21\n\n", "21\nc\n"),
-        ("1", "1\n\n", "1b\nc\n"),
+        ("8", "8 1\n2 7\n6 3\n4 5\n", "8 1\n2 7\n6 3\n4 5\n"),
+        ("7", "7 1\n2\n6 3\n4 5\n", "7 1\n2 b\n6 3\n4 5\n"),
+        ("6", "6 1\n2 5\n4 3\n\n", "6 1\n2 5\n4 3\nc\n"),
+        ("5", "5 1\n2\n4 3\n\n", "5 1\n2 b\n4 3\nc\n"),
+        ("4", "4 1\n2 3\n", "4 1\n2 3\n"),
+        ("3", "3 1\n2\n", "3 1\n2 b\n"),
+        ("2", "2 1\n\n", "2 1\nc\n"),
+        ("1", "1\n\n", "1 b\nc\n"),
     ],
 )
 def test_booklet_order(

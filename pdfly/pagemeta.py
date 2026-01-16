@@ -11,9 +11,10 @@ from rich.table import Table
 from ._utils import OutputOptions
 
 KNOWN_PAGE_FORMATS = {
-    (841.89, 1190.55): "A3",
-    (595.28, 841.89): "A4",
-    (420.94, 595.28): "A5",
+    (841.89, 1190.55): "A3",  # 297mm x 420mm
+    (595.28, 841.89): "A4",  # 210mm x 297mm
+    (420.94, 595.28): "A5",  # 148mm x 210mm
+    (297.66, 420.94): "A6",  # 105mm x 148mm
     (612, 792): "Letter",
     (612, 1008): "Legal",
 }
@@ -87,6 +88,6 @@ def find_known_format(width: float, height: float) -> str:
     if known_format:
         return known_format
     for (w, h), name in KNOWN_PAGE_FORMATS.items():
-        if ((w - width) * (w - width) + (h - height) * (h - height)) < 1:
+        if ((w - width) * (w - width) + (h - height) * (h - height)) < 4:
             return f"close to format: {name}"
     return ""
