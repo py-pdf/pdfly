@@ -226,7 +226,7 @@ def extract_images(
             help="Output directory. Defaults to the input's directory.",
         ),
     ] = None,
-  ) -> None:
+) -> None:
     pdfly.extract_images.main(pdf, output_dir)
 
 
