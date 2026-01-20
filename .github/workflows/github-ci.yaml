@@ -53,7 +53,7 @@ jobs:
         submodules: 'recursive'
     - name: Cache Downloaded Files
       id: cache-downloaded-files
-      uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
       with:
         path: '**/tests/pdf_cache/*'
         key: cache-downloaded-files
@@ -69,7 +69,7 @@ jobs:
     - name: Test with ruff
       run: ruff check pdfly/
     - name: Spell Check Repo
-      uses: crate-ci/typos@bb4666ad77b539a6b4ce4eda7ebb6de553704021 # v1.42.0
+      uses: crate-ci/typos@65120634e79d8374d1aa2f27e54baa0c364fff5a # v1.42.1
 
   package:
     name: Build & verify package
