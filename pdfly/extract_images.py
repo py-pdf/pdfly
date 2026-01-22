@@ -17,7 +17,9 @@ def main(pdf: Path, output_dir: Path | None) -> None:
     extracted_images = []
     for page_index, page0 in enumerate(reader.pages):
         for image_file_object in page0.images:
-            path = output_dir / Path(f"{page_index:04d}-{image_file_object.name}")
+            path = output_dir / Path(
+                f"{page_index:04d}-{image_file_object.name}"
+            )
             with open(path, "wb") as fp:
                 fp.write(image_file_object.data)
             extracted_images.append(path)
@@ -28,5 +30,5 @@ def main(pdf: Path, output_dir: Path | None) -> None:
         print(f"Extracted {len(extracted_images)} images:")
         for path in extracted_images:
             print(f"- {path}")
-        if str(output_dir)!= ".":
+        if str(output_dir) != ".":
             print(f"Stored in {output_dir}")
