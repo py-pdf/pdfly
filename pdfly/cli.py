@@ -244,8 +244,8 @@ If there are no "[]" substrings, the output is stored in one file.""",
 ) -> None:
     """Extract text from a PDF file.
 
-Offers an option to store the whole output in a single file, or each page's text in a different file,
-allowing custom naming patterns for the output files."""
+    Offers an option to store the whole output in a single file, or each page's text in a different file,
+    allowing custom naming patterns for the output files."""
     from pypdf import PdfReader
 
     reader = PdfReader(str(pdf))
@@ -255,8 +255,8 @@ allowing custom naming patterns for the output files."""
             typer.echo(page.extract_text())
     else:
         for page in reader.pages:
-            filename = output_pattern.replace("[]", str(page.page_number) )
-            with open(filename,"a") as file:
+            filename = output_pattern.replace("[]", str(page.page_number))
+            with open(filename, "a") as file:
                 file.write(page.extract_text() + "\n")
 
 

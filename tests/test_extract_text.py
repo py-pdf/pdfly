@@ -17,14 +17,17 @@ def test_extract_text_echo(
         )
     captured = capsys.readouterr()
     assert not captured.err
-    assert """1
+    assert (
+        """1
 2
 3
 4
 5
 6
 7
-8""" in captured.out
+8"""
+        in captured.out
+    )
 
 
 def test_extract_text_with_pattern(
@@ -34,9 +37,9 @@ def test_extract_text_with_pattern(
         run_cli(
             [
                 "extract-text",
-                 str(RESOURCES_ROOT / "input8.pdf"),
+                str(RESOURCES_ROOT / "input8.pdf"),
                 "-o",
-                "page-[].txt"
+                "page-[].txt",
             ]
         )
     captured = capsys.readouterr()
@@ -45,8 +48,8 @@ def test_extract_text_with_pattern(
     output_correct = True
     for i in range(8):
         try:
-            file = open(tmp_path / f"page-{i}.txt","r")
-            if (file.read() != f"{i+1}\n"):
+            file = open(tmp_path / f"page-{i}.txt", "r")
+            if file.read() != f"{i+1}\n":
                 output_correct = False
         except:
             files_exist = False
