@@ -29,3 +29,22 @@ def test_extract_images_monochrome(
     captured = capsys.readouterr()
     assert not captured.err
     assert "Extracted 1 images" in captured.out
+
+
+def test_extract_images_specific_output_dir(
+    capsys: pytest.CaptureFixture,
+    tmp_path: Path,
+) -> None:
+    with chdir(tmp_path):
+        run_cli(
+            [
+                "extract-images",
+                str(RESOURCES_ROOT / "GeoBase_NHNC1_Data_Model_UML_EN.pdf"),
+                "--output-dir",
+                str(tmp_path),
+            ]
+        )
+    captured = capsys.readouterr()
+    assert not captured.err
+    assert "Extracted 3 images" in captured.out
+    assert f"Stored in {tmp_path}" in captured.out

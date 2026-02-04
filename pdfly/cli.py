@@ -214,8 +214,20 @@ def extract_images(
             resolve_path=True,
         ),
     ],
+    output_dir: Annotated[
+        Path | None,
+        typer.Option(
+            "--output-dir",
+            "-o",
+            file_okay=False,
+            exists=True,
+            resolve_path=True,
+            writable=True,
+            help="Output directory. Defaults to the input's directory.",
+        ),
+    ] = None,
 ) -> None:
-    pdfly.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf, output_dir)
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]
