@@ -4,7 +4,8 @@ Every CLI command is called here with a typer CliRunner.
 Here should only be end-to-end tests.
 """
 
-import re, sys
+import re
+import sys
 from pathlib import Path
 
 import pytest
