@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 # Check if an annotation is manipulable.
 def is_manipulable(annot: AnnotationDictionary) -> bool:
-    return annot.get("/Subtype") not in ["/Link"]
+    return annot.get("/Subtype") != "/Link"
 
 
 # Main function.
