@@ -49,7 +49,9 @@ def test_compress_no_compression_when_larger(tmp_path: Path) -> None:
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Short text", ln=True, align="C")
+    pdf.cell(
+        200, 10, text="Short text", new_x="LMARGIN", new_y="NEXT", align="C"
+    )
 
     input_pdf = tmp_path / "small.pdf"
     pdf.output(input_pdf)
@@ -79,10 +81,31 @@ def test_compress_file_integrity(tmp_path: Path) -> None:
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Test PDF for compression", ln=True, align="C")
-    pdf.cell(200, 10, text="This is a test document.", ln=True, align="L")
+    pdf.cell(
+        200,
+        10,
+        text="Test PDF for compression",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="C",
+    )
+    pdf.cell(
+        200,
+        10,
+        text="This is a test document.",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="L",
+    )
     pdf.add_page()
-    pdf.cell(200, 10, text="Second page content", ln=True, align="C")
+    pdf.cell(
+        200,
+        10,
+        text="Second page content",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="C",
+    )
 
     input_pdf = tmp_path / "test.pdf"
     pdf.output(input_pdf)
@@ -120,7 +143,8 @@ def test_compress_output_metrics(tmp_path: Path) -> None:
             200,
             10,
             text="This is repeated text on every page " * 5,
-            ln=True,
+            new_x="LMARGIN",
+            new_y="NEXT",
             align="L",
         )
 
@@ -162,7 +186,7 @@ def test_compress_same_input_output_not_allowed(tmp_path: Path) -> None:
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Test", ln=True, align="C")
+    pdf.cell(200, 10, text="Test", new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.output(input_pdf)
 
     # Try to compress to the same file (should work but might not compress)
@@ -181,7 +205,9 @@ def test_compress_preserves_metadata(tmp_path: Path) -> None:
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Test document", ln=True, align="C")
+    pdf.cell(
+        200, 10, text="Test document", new_x="LMARGIN", new_y="NEXT", align="C"
+    )
 
     # Set some metadata
     pdf.set_title("Test Title")

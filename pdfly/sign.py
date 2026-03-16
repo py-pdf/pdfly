@@ -103,7 +103,7 @@ def _sign_pdf_contents(
             )
         pdf.sign(
             key=key,
-            cert=cert,
+            cert=cert,  # type: ignore
             extra_certs=extra_certs,
             hashalgo=hashalgo,
             signing_time=sign_time,
@@ -135,7 +135,7 @@ def _sign_pdf_contents(
         signer,
         content_to_sign,
         key,
-        cert,
+        cert,  # type: ignore
         extra_certs,
         hashalgo,
         sign_time,

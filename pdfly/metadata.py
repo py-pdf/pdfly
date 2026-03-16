@@ -53,7 +53,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
                     v_value=reader._encryption.V,
                     revision=reader._encryption.R,
                 )
-                if reader.is_encrypted and reader._encryption
+                if reader._encryption
                 else None
             ),
             pdf_file_version=reader.stream.read(8).decode("utf-8"),
@@ -66,21 +66,12 @@ def main(pdf: Path, output: OutputOptions) -> None:
         )
     else:
         info = reader.metadata
-
         reader.stream.seek(0)
         pdf_file_version = reader.stream.read(8).decode("utf-8")
         pdf_stat = pdf.stat()
         pdf_id = reader.trailer.get("/ID")
         meta = MetaInfo(
             pages=len(reader.pages),
-            encryption=(
-                EncryptionData(
-                    v_value=reader._encryption.V,  # type: ignore
-                    revision=reader._encryption.R,  # type: ignore
-                )
-                if reader.is_encrypted and reader._encryption
-                else None
-            ),
             page_mode=reader.page_mode,
             pdf_file_version=pdf_file_version,
             page_layout=reader.page_layout,
@@ -188,7 +179,6 @@ def main(pdf: Path, output: OutputOptions) -> None:
         os_table.add_row(
             "Access Time", f"{meta.access_time:%Y-%m-%d %H:%M:%S}"
         )
-
         console = Console()
         console.print(os_table)
         console.print(table)

@@ -3,6 +3,7 @@ maint:
 	python -m pip install --upgrade .
 	python -m pip lock --group dev --group docs .
 	uv pip install -r pylock.toml
+	git submodule update --remote
 
 release:
 	python make_release.py
