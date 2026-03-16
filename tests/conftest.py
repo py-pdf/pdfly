@@ -62,7 +62,9 @@ def pdf_file_100(tmp_path: Path) -> Path:
     for i in range(100):
         pdf.add_page()
         pdf.set_font("helvetica", size=12)
-        pdf.cell(200, 10, text=f"{i}", ln=True, align="C")
+        pdf.cell(
+            200, 10, text=f"{i}", new_x="LMARGIN", new_y="NEXT", align="C"
+        )
 
     pdf_filepath = tmp_path / "pdf_file_100.pdf"
     pdf.output(pdf_filepath)
@@ -77,7 +79,9 @@ def pdf_file_abc(tmp_path: Path) -> Path:
     for char in [chr(i) for i in range(ord("a"), ord("z") + 1)]:
         pdf.add_page()
         pdf.set_font("helvetica", size=12)
-        pdf.cell(200, 10, text=f"{char}", ln=True, align="C")
+        pdf.cell(
+            200, 10, text=f"{char}", new_x="LMARGIN", new_y="NEXT", align="C"
+        )
 
     pdf_filepath = tmp_path / "abc.pdf"
     pdf.output(pdf_filepath)

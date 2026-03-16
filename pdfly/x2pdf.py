@@ -22,7 +22,7 @@ def image_to_pdf(filepath: Path) -> BytesIO:
         w, h = cover.size
     width, height = px_to_mm(w), px_to_mm(h)
     pdf = FPDF(unit="mm")
-    pdf.add_page(format=(width, height))
+    pdf.add_page(format=(width, height))  # type: ignore
     pdf.image(filepath, x=0, y=0)
     return BytesIO(pdf.output())
 

@@ -86,6 +86,16 @@ pdfly cat input.pdf 5 -o out.pdf
 
 Note that it is `5`, because the page indices always start at 0.
 
+### Specify a negative index
+
+Get the last page of a PDF:
+
+```
+pdfly cat -o out.pdf input.pdf -- -1
+```
+
+`--` must be used to escape negative indices.
+
 ### Concatenate two PDFs
 
 Just combine two PDF files so that the pages come right after each other:

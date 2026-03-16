@@ -121,15 +121,15 @@ def cat(
             resolve_path=True,
         ),
     ],
-    output: Path = typer.Option(..., "-o", "--output"),  # noqa
     fn_pgrgs: list[str] | None = typer.Argument(  # noqa: B008
-        None, help="filenames and/or page ranges"
+        None, allow_dash=True, help="filenames and/or page ranges"
+    ),
+    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    password: str = typer.Option(
+        None, help="Document's user or owner password."
     ),
     verbose: bool = typer.Option(
         False, help="show page ranges as they are being read"
-    ),
-    password: str = typer.Option(
-        None, help="Document's user or owner password."
     ),
 ) -> None:
     pdfly.cat.main(
