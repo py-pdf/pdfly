@@ -7,7 +7,10 @@
 
 ### New Features (ENH)
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
+- `extract-text` now has an option `--output-pattern` which allows either for the full output to be stored in a single file, or for each page's text to be stored in a different file whose name depends on the output pattern and the page index
 
+### Testing (TST)
+- Added unit tests for `extract-text`
 
 ## Version 0.5.1, 2025-10-13
 
@@ -18,6 +21,7 @@
 ### Bug Fixes (BUG)
 - `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv`
 
+### Testing (TST)
 
 ## Version 0.5.0, 2025-10-13
 
