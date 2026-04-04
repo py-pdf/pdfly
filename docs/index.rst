@@ -133,6 +133,7 @@ GitHub ⭐️
 
    dev/intro
    dev/testing
+   dev/skill
 
 .. toctree::
    :caption: About pdfly
