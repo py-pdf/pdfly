@@ -8,6 +8,9 @@
 ### New Features (ENH)
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
 
+### Developer Experience (DEV)
+- Add ``skills/pdfly-cli/`` skill for AI agents with verified command syntax
+
 
 ## Version 0.5.1, 2025-10-13
 
