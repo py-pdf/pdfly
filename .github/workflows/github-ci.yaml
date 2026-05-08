@@ -69,7 +69,7 @@ jobs:
     - name: Test with ruff
       run: ruff check pdfly/
     - name: Spell Check Repo
-      uses: crate-ci/typos@7c572958218557a3272c2d6719629443b5cc26fd # v1.45.2
+      uses: crate-ci/typos@5374cbf686e897b15713110e233094e2874de7ef # v1.46.1
 
   package:
     name: Build & verify package
