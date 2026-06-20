@@ -35,7 +35,7 @@ jobs:
           echo "$EOF" >> "$GITHUB_ENV"
 
       - name: Create GitHub Release 🚀
-        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
         with:
           tag_name: ${{ env.latest_tag }}
           name: Version ${{ env.latest_tag }}, ${{ env.date }}
