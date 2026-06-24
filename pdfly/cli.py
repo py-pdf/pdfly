@@ -228,13 +228,36 @@ def extract_text(
             resolve_path=True,
         ),
     ],
+    output_pattern: Annotated[
+        str | None,
+        typer.Option(
+            "--output-pattern",
+            "-o",
+            dir_okay=False,
+            writable=True,
+            help="""Naming pattern for output files. If none is entered, output is echoed.
+If it contains "[]" substrings, each page's text is output in a different file
+and the "[]" substrings in the filename are replaced by the page's index.
+If there are no "[]" substrings, the output is stored in one file.""",
+        ),
+    ] = None,
 ) -> None:
-    """Extract text from a PDF file."""
+    """Extract text from a PDF file.
+
+    Offers an option to store the whole output in a single file, or each page's text in a different file,
+    allowing custom naming patterns for the output files."""
     from pypdf import PdfReader
 
     reader = PdfReader(str(pdf))
-    for page in reader.pages:
-        typer.echo(page.extract_text())
+
+    if not output_pattern:
+        for page in reader.pages:
+            typer.echo(page.extract_text())
+    else:
+        for page in reader.pages:
+            filename = output_pattern.replace("[]", str(page.page_number))
+            with open(filename, "a") as file:
+                file.write(page.extract_text() + "\n")
 
 
 @entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]
