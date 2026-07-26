@@ -4,6 +4,7 @@
 
 ### Bug Fixes (BUG)
 - `2up` incorrectly handled documents with an odd number of pages - [issue #219](https://github.com/py-pdf/pdfly/issues/218)
+- `x2pdf` produced pages in reverse order of the input files - [issue #241](https://github.com/py-pdf/pdfly/issues/241)
 
 ### New Features (ENH)
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
