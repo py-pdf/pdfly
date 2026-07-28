@@ -5,10 +5,14 @@ from io import BytesIO
 from pathlib import Path
 
 from pypdf import PdfReader, PdfWriter
+from rich.console import Console
+
+from pdfly._utils import decrypt_or_exit
 
 
-def main(pdf: Path, output: Path) -> None:
+def main(pdf: Path, output: Path, password: str | None = None) -> None:
     reader = PdfReader(pdf)
+    decrypt_or_exit(reader, password, Console())
     writer = PdfWriter()
     for page in reader.pages:
         writer.add_page(page)

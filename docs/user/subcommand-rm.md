@@ -55,6 +55,7 @@ Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────╮
 │ *  --output   -o                  PATH  [default: None] [required]                                      │
+│    --password                     TEXT  Document's user or owner password. [default: None]              │
 │    --verbose      --no-verbose          show page ranges as they are being read [default: no-verbose]   │
 │    --help                               Show this message and exit.                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯
@@ -73,5 +74,12 @@ Remove the first and last page of `document.pdf`, producing `output.pdf`.
 
 ```
 pdfly rm -o output.pdf document.pdf 1:-1
+
+```
+
+Remove pages from a password-protected document.
+
+```
+pdfly rm --password=SECRET -o output.pdf document.pdf 1:-1
 
 ```

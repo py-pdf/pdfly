@@ -15,6 +15,7 @@ import pdfly.check_sign
 import pdfly.compress
 import pdfly.extract_annotated_pages
 import pdfly.extract_images
+import pdfly.extract_text
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
@@ -63,8 +64,10 @@ def up2(
         ),
     ],
     out: Path,
+    password: str = typer.Option(None, help="Document's user or owner password."),
+
 ) -> None:
-    pdfly.up2.main(pdf, out)
+    pdfly.up2.main(pdf, out, password=password)
 
 
 @entry_point.command(name="booklet", help=pdfly.booklet.__doc__)  # type: ignore[misc]
@@ -107,9 +110,9 @@ def booklet(
             resolve_path=True,
         ),
     ] = None,
+    password: str = typer.Option(None, help="Document's user or owner password."),
 ) -> None:
-    pdfly.booklet.main(filename, output, blank_page, centerfold)
-
+    pdfly.booklet.main(filename, output, blank_page, centerfold, password=password)
 
 @entry_point.command(name="cat", help=pdfly.cat.__doc__)  # type: ignore[misc]
 def cat(
@@ -176,8 +179,9 @@ def compress(
             writable=True,
         ),
     ],
+    password: str = typer.Option(None, help="Document's user or owner password."),
 ) -> None:
-    pdfly.compress.main(pdf, output)
+    pdfly.compress.main(pdf, output, password=password)
 
 
 @entry_point.command(name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__)  # type: ignore[misc]
@@ -200,8 +204,9 @@ def extract_annotated_pages(
             help="Output PDF file. Defaults to 'input_pdf_annotated'.",
         ),
     ] = None,
+    password: str = typer.Option(None, help="Document's user or owner password."),
 ) -> None:
-    pdfly.extract_annotated_pages.main(input_pdf, output_pdf)
+    pdfly.extract_annotated_pages.main(input_pdf, output_pdf, password=password)
 
 
 @entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)  # type: ignore[misc]
@@ -214,13 +219,14 @@ def extract_images(
             resolve_path=True,
         ),
     ],
+    password: str = typer.Option(None, help="Document's user or owner password."),
 ) -> None:
-    pdfly.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf, password=password)
 
 
-@entry_point.command(name="extract-text")  # type: ignore[misc]
+@entry_point.command(name="extract-text", help=pdfly.extract_text.__doc__)  # type: ignore[misc]
 def extract_text(
-    pdf: Annotated[
+    filename: Annotated[
         Path,
         typer.Argument(
             dir_okay=False,
@@ -228,13 +234,19 @@ def extract_text(
             resolve_path=True,
         ),
     ],
+    fn_pgrgs: list[str] | None = typer.Argument(  # noqa: B008
+        None, allow_dash=True, help="filenames and/or page ranges"
+    ),
+    output: Path = typer.Option( # noqa: B008
+        None, "-o", "--output", help="Write text to a file instead of stdout."
+    ),
+    password: str = typer.Option(
+        None, help="Document's user or owner password."
+    ),
 ) -> None:
-    """Extract text from a PDF file."""
-    from pypdf import PdfReader
-
-    reader = PdfReader(str(pdf))
-    for page in reader.pages:
-        typer.echo(page.extract_text())
+    pdfly.extract_text.main(
+        filename, fn_pgrgs, output=output, password=password
+    )
 
 
 @entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]
@@ -298,11 +310,12 @@ def rm(
     fn_pgrgs: list[str] = typer.Argument(  # noqa
         ..., help="filenames and/or page ranges"
     ),
+    password: str = typer.Option(None, help="Document's user or owner password."),
     verbose: bool = typer.Option(
-        False, help="show page ranges as they are being read"
+    False, help="show page ranges as they are being read"
     ),
 ) -> None:
-    pdfly.rm.main(filename, fn_pgrgs, output, verbose)
+    pdfly.rm.main(filename, fn_pgrgs, output, verbose, password=password)
 
 
 @entry_point.command(name="rotate", help=pdfly.rotate.__doc__)  # type: ignore[misc]
@@ -318,8 +331,9 @@ def rotate(
     degrees: Annotated[int, typer.Argument(..., help="degrees to rotate")],
     pgrgs: Annotated[str, typer.Argument(..., help="page range")] = ":",
     output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    password: str = typer.Option(None, help="Document's user or owner password."),
 ) -> None:
-    pdfly.rotate.main(filename, output, degrees, pgrgs)
+    pdfly.rotate.main(filename, output, degrees, pgrgs, password=password)
 
 
 @entry_point.command(name="sign", help=pdfly.sign.__doc__)

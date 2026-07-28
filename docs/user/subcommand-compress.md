@@ -15,8 +15,10 @@ $ pdfly compress --help
 ╭─ Arguments ───────────────────────────────────────────╮
 │ *    pdf         FILE  [default: None] [required]     │
 │ *    output      PATH  [default: None] [required]     │
-╰───────────────────────────────────────────────────────╯
+╰─────────────────────────────────────────────────────────╯
 ╭─ Options ─────────────────────────────────────────────╮
+│ --password       TEXT  Document's user or owner       │
+│                        password. [default: None]      │
 │ --help          Show this message and exit.           │
 ╰───────────────────────────────────────────────────────╯
 ```
@@ -26,6 +28,12 @@ Compress the file `document.pdf` and output `document_compressed.pdf`
 
 ```
 pdfly compress document.pdf document_compressed.pdf
+```
+
+Compress a password-protected file:
+
+```
+pdfly compress --password=SECRET document.pdf document_compressed.pdf
 ```
 
 Example output when compression succeeds:

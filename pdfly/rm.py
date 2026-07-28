@@ -52,6 +52,6 @@ from pdfly.cat import main as cat_main
 
 
 def main(
-    filename: Path, fn_pgrgs: list[str], output: Path, verbose: bool
+    filename: Path, fn_pgrgs: list[str], output: Path, verbose: bool, password: str | None = None
 ) -> None:
-    cat_main(filename, fn_pgrgs, output, verbose, inverted_page_selection=True)
+    cat_main(filename, fn_pgrgs, output, verbose, inverted_page_selection=True, password=password)
