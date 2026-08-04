@@ -7,7 +7,7 @@
 
 ### New Features (ENH)
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
-
+- Unified password support across `pdfly` commands and added page-range selection to `extract-text` ([PR #269](https://github.com/py-pdf/pdfly/pull/269))
 
 ## Version 0.5.1, 2025-10-13
 

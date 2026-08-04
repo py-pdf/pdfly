@@ -47,16 +47,20 @@ from pypdf import (
 )
 from rich.console import Console
 
+from pdfly._utils import decrypt_or_exit
+
 
 def main(
     filename: Path,
     output: Path,
     degrees: int,
     page_range: str,
+    password: str | None = None
 ) -> None:
     try:
         # set up the streams
         reader = PdfReader(filename)
+        decrypt_or_exit(reader, password, Console())
         pages = list(reader.pages)
         writer = PdfWriter()
 

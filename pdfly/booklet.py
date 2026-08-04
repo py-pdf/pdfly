@@ -26,6 +26,9 @@ from pypdf import (
     PdfWriter,
 )
 from pypdf.generic import FloatObject, RectangleObject
+from rich.console import Console
+
+from pdfly._utils import decrypt_or_exit
 
 
 def main(
@@ -33,10 +36,12 @@ def main(
     output: Path,
     inside_cover_file: Path | None,
     centerfold_file: Path | None,
+    password: str | None = None
 ) -> None:
     try:
         # Set up the streams
         reader = PdfReader(filename)
+        decrypt_or_exit(reader, password, Console())
         pages = list(reader.pages)
         writer = PdfWriter()
 

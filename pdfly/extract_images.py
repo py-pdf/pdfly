@@ -8,10 +8,14 @@ http://stackoverflow.com/questions/2693820/extract-images-from-pdf-without-resam
 from pathlib import Path
 
 from pypdf import PdfReader
+from rich.console import Console
+
+from pdfly._utils import decrypt_or_exit
 
 
-def main(pdf: Path) -> None:
+def main(pdf: Path, password: str | None = None) -> None:
     reader = PdfReader(str(pdf))
+    decrypt_or_exit(reader, password, Console())
     extracted_images = []
     for page_index, page0 in enumerate(reader.pages):
         for image_file_object in page0.images:

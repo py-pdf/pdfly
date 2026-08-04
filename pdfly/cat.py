@@ -52,12 +52,13 @@ from pathlib import Path
 
 from pypdf import (
     PageRange,
-    PasswordType,
     PdfReader,
     PdfWriter,
     parse_filename_page_ranges,
 )
 from rich.console import Console
+
+from pdfly._utils import decrypt_or_exit
 
 
 def main(
@@ -88,14 +89,7 @@ def main(
                 in_fs[filepath] = open(filepath, "rb")
 
             reader = PdfReader(in_fs[filepath])
-            if (
-                password is not None
-                and reader.decrypt(password) == PasswordType.NOT_DECRYPTED
-            ):
-                console.print(
-                    "[red]Error: the decrypting password provided is invalid"
-                )
-                sys.exit(1)
+            decrypt_or_exit(reader, password, console)
             num_pages = len(reader.pages)
             start, end, _step = page_range.indices(num_pages)
             if (

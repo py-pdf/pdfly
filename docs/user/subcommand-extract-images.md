@@ -1,6 +1,6 @@
 # extract-images
 
-Extract text from a PDF file.
+Extract images from a PDF file.
 ## Usage
 
 ```
@@ -17,20 +17,27 @@ $ pdfly extract-images --help
 │ *    pdf      FILE  [default: None] [required]                               │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
+│ --password        TEXT  Document's user or owner password. [default: None]  │
+│ --help                   Show this message and exit.                        │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
 ```
 
 ## Examples
 
-Extract the first page of `document.pdf` and extract the images present in it.
+Extract the tenth page of `document.pdf` and extract the images present in it.
 
 ```
 pdfly cat document.pdf 9 -o page.pdf
 
-pdfly extract-text page.pdf
+pdfly extract-images page.pdf
  Extracted 1 images:
- - 0-Im0.png
+ - 0000-Im0.png
 
+```
+
+Extract images from a password-protected document:
+
+```
+pdfly extract-images --password=SECRET document.pdf
 ```

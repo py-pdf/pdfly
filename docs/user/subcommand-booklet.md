@@ -30,6 +30,8 @@ $ pdfly booklet --help
 │ --centerfold-file  -c      FILE  double-page added if input is missing >= 2  │
 │                                  pages                                       │
 │                                  [default: None]                             │
+│ --password                 TEXT  Document's user or owner password.         │
+│                                  [default: None]                            │
 │ --help                           Show this message and exit.                 │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
@@ -40,5 +42,11 @@ $ pdfly booklet --help
 Convert `document.pdf` into a booklet and write the output in `booklet.pdf`.
 ```
 pdfly booklet document.pdf booklet.pdf
+
+```
+
+Convert a password-protected `document.pdf` into a booklet.
+```
+pdfly booklet --password=SECRET document.pdf booklet.pdf
 
 ```

@@ -18,8 +18,9 @@ pdfly extract-annotated-pages --help
 │ *    input_pdf      FILE  Input PDF file. [required]                                                                             │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --output  -o      PATH  Output PDF file. Defaults to 'input_pdf_annotated'.                                                      │
-│ --help                  Show this message and exit.                                                                              │
+│ --output    -o      PATH  Output PDF file. Defaults to 'input_pdf_annotated'.                                                    │
+│ --password          TEXT  Document's user or owner password. [default: None]                                                    │
+│ --help                    Show this message and exit.                                                                            │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
 ```
@@ -41,4 +42,10 @@ Extracts only pages containing annotations from a file `input.pdf` into the give
 
 ```
 pdfly extract-annotated-pages input.pdf -o pages_to_rework.pdf
+```
+
+### Decrypt a PDF document
+
+```
+pdfly extract-annotated-pages --password=SECRET input.pdf -o pages_to_rework.pdf
 ```

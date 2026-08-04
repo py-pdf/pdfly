@@ -10,10 +10,14 @@ from pathlib import Path
 
 from pypdf import PdfReader, PdfWriter
 from pypdf.generic import FloatObject
+from rich.console import Console
+
+from pdfly._utils import decrypt_or_exit
 
 
-def main(pdf: Path, output: Path) -> None:
+def main(pdf: Path, output: Path, password: str | None = None) -> None:
     reader = PdfReader(str(pdf))
+    decrypt_or_exit(reader, password, Console())
     writer = PdfWriter()
     for i in range(0, len(reader.pages), 2):
         lhs = reader.pages[i]

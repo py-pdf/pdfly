@@ -59,6 +59,8 @@ pdfly cat --help
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ *  --output   -o                  PATH  [default: None] [required]           │
+│    --password                     TEXT  Document's user or owner password.   │
+│                                         [default: None]                      │
 │    --verbose      --no-verbose          show page ranges as they are being   │
 │                                         read                                 │
 │                                         [default: no-verbose]                │

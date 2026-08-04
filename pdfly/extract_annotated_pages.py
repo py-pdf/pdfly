@@ -10,6 +10,9 @@ from typing import TYPE_CHECKING
 
 from pypdf import PdfReader, PdfWriter
 from pypdf.annotations import AnnotationDictionary
+from rich.console import Console
+
+from pdfly._utils import decrypt_or_exit
 
 if TYPE_CHECKING:
     from pypdf.generic import ArrayObject
@@ -21,10 +24,11 @@ def is_manipulable(annot: AnnotationDictionary) -> bool:
 
 
 # Main function.
-def main(input_pdf: Path, output_pdf: Path | None) -> None:
+def main(input_pdf: Path, output_pdf: Path | None, password: str | None = None) -> None:
     if not output_pdf:
         output_pdf = input_pdf.with_name(input_pdf.stem + "_annotated.pdf")
     input = PdfReader(input_pdf)
+    decrypt_or_exit(input, password, Console())
     output = PdfWriter()
     output_pages = 0
     # Copy only the pages with annotations

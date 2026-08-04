@@ -49,8 +49,9 @@ pdfly rotate --help
 │      pgrgs         [PGRGS]  page range [default: :]                                                                                                                                        │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *  --output  -o      PATH  [required]                                                                                                                                                      │
-│    --help                  Show this message and exit.                                                                                                                                     │
+│ *  --output    -o      PATH  [required]                                                                                                                                                    │
+│    --password          TEXT  Document's user or owner password. [default: None]                                                                                                            │
+│    --help                    Show this message and exit.                                                                                                                                   │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -78,4 +79,10 @@ Rotate last page from `input.pdf` by 90 degrees (clockwise) and write the result
 
 ```
 pdfly rotate --output output.pdf input.pdf 90 -- -1
+```
+
+### Rotate pages in a password-protected document
+
+```
+pdfly rotate --output output.pdf --password=SECRET input.pdf 90
 ```
