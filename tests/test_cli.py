@@ -8,9 +8,7 @@ from .conftest import run_cli
 
 
 def test_pypdf_cli_can_be_invoked_as_a_module() -> None:
-    stdout = check_output(  # noqa: S603
-        [sys.executable, "-m", "pdfly", "--help"]
-    ).decode()
+    stdout = check_output([sys.executable, "-m", "pdfly", "--help"]).decode()
     assert "pdfly [OPTIONS] COMMAND [ARGS]..." in stdout
     assert (
         "pdfly is a pure-python cli application for manipulating PDF files."

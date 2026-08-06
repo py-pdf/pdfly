@@ -20,8 +20,9 @@ class UriLink(BaseModel):
 
 def main(pdf: Path, output_format: OutputOptions) -> None:
     reader = PdfReader(str(pdf))
-    # Loop through pages and extract hyperlink metadata
-    links = []
+    # Links sometimes appear with duplicates /Rect,
+    # so we skip duplicates and only display the 1st occurrence per (page, URI)
+    links = {}
     for page_number, page in enumerate(reader.pages, start=1):
         if "/Annots" in page:
             page_annots: ArrayObject = page["/Annots"]  # type: ignore[assignment]
@@ -32,21 +33,18 @@ def main(pdf: Path, output_format: OutputOptions) -> None:
                     uri = annotation["/A"]["/URI"]
                     # Extract bounding rectangle
                     rect = annotation.get("/Rect", "N/A")
-                    links.append(
-                        UriLink(
-                            uri=uri,
-                            page=page_number,
-                            rect=rect,
-                        )
+                    link = UriLink(
+                        uri=uri,
+                        page=page_number,
+                        rect=rect,
                     )
+                    links[link.copy(update={"rect": []}).json()] = link
 
     if output_format == OutputOptions.json:
         print("[")
-        for i, link in enumerate(links, start=1):
+        for i, link in enumerate(links.values(), start=1):
             print("", link.json() + ("," if i < len(links) else ""))
         print("]")
     else:
-        for link in links:
-            print(
-                f"Page {link.page}: Hyperlink: {link.uri}, Rect: {link.rect}"
-            )
+        for link in links.values():
+            print(f"Page {link.page}: {link.uri} - Rect: {link.rect}")
