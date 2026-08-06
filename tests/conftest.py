@@ -31,7 +31,7 @@ PROJECT_ROOT = TESTS_ROOT.parent
 RESOURCES_ROOT = PROJECT_ROOT / "resources"
 
 
-def run_cli(args: list[str]) -> Union[None, int, str]:
+def run_cli(args: list[str]) -> Union[int, str, None]:
     try:
         entry_point(args)
         return None

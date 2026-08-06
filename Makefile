@@ -19,8 +19,8 @@ clean:
 	rm -rf tests/__pycache__ pdfly/__pycache__ Image9.png htmlcov docs/_build dist dont_commit_merged.pdf dont_commit_writer.pdf pdfly.egg-info
 
 lint:
-	mypy . --ignore-missing-imports --exclude build --exclude sample-files
-	ruff check --fix --unsafe-fixes
+	mypy --ignore-missing-imports pdfly/ tests/
+	ruff check --fix --unsafe-fixes pdfly/ tests/
 
 test:
 	pytest tests --cov --cov-report term-missing -vv --cov-report html --durations=3 --timeout=30
