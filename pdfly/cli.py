@@ -15,6 +15,7 @@ import pdfly.check_sign
 import pdfly.compress
 import pdfly.extract_annotated_pages
 import pdfly.extract_images
+import pdfly.extract_links
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
@@ -216,6 +217,27 @@ def extract_images(
     ],
 ) -> None:
     pdfly.extract_images.main(pdf)
+
+
+@entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)  # type: ignore[misc]
+def extract_links(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    output_format: pdfly._utils.OutputOptions = typer.Option(  # noqa
+        pdfly._utils.OutputOptions.text.value,
+        "--format",
+        "-f",
+        help="Output format",
+        show_default=True,
+    ),
+) -> None:
+    pdfly.extract_links.main(pdf, output_format)
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]

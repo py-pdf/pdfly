@@ -82,7 +82,7 @@ line-length = 120
 select = ["ALL"]
 ignore = [
     "D401",  # First line of docstring should be in imperative mood - false positives
-    "UP031",  # Use format specifiers instead of percent format
+    "CPY001",  # Missing copyright notice at top of file
     "D205",  # 1 blank line required between summary line and description
     "D400",  # First line should end with a period
     "D415",  # First line should end with a period
@@ -110,6 +110,7 @@ ignore = [
     "TRY", # I don't know what this is about
     # As long as we are not on Python 3.11+
     "UP006", "UP007",
+    "UP031",  # Use format specifiers instead of percent format
     # for the moment, fix it later:
     "T201",  # print
     "DTZ006",  # datetime without timezone
@@ -130,6 +131,7 @@ ignore = [
     "PLR0912", # Too many branches
     "PLR0913",  # Too many arguments to function call
     "PLR0915", # Too many statements
+    "PLR0917",  # Too many positional arguments
     "PLR2004", # Magic value
     "PLW",  # global variables
     "PTH110",  # `os.path.exists()` should be replaced by `Path.exists()`
