@@ -6,6 +6,7 @@
 - `2up` incorrectly handled documents with an odd number of pages - [issue #219](https://github.com/py-pdf/pdfly/issues/218)
 
 ### New Features (ENH)
+- New `extract-links` command ([PR #271](https://github.com/py-pdf/pdfly/pull/271))
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
 
 

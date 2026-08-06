@@ -47,6 +47,7 @@ $ pdfly --help
 │ compress                  Compress a PDF.                                                      │
 │ extract-annotated-pages   Extract only the annotated pages from a PDF.                         │
 │ extract-images            Extract images from PDF without resampling or altering.              │
+│ extract-links             Extract all links from a PDF document.                               │
 │ extract-text              Extract text from a PDF file.                                        │
 │ meta                      Show metadata of a PDF file                                          │
 │ pagemeta                  Give details about a single page.                                    │

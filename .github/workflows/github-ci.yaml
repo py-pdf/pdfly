@@ -65,7 +65,7 @@ jobs:
     - name: Lint with black
       run: black --check --extend-exclude sample-files .
     - name: Lint with mypy
-      run: mypy . --ignore-missing-imports --exclude build
+      run: mypy . --ignore-missing-imports --exclude build --exclude sample-files
     - name: Test with ruff
       run: ruff check pdfly/
     - name: Spell Check Repo
