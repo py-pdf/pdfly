@@ -133,14 +133,14 @@ def main(pdf: Path, output: OutputOptions) -> None:
         table.add_row("Page Mode", meta.page_mode)
         table.add_row("PDF ID", f"ID1={meta.id1!r} ID2={meta.id2!r}")
         embedded_fonts: set[str] = set()
-        unemedded_fonts: set[str] = set()
+        unembedded_fonts: set[str] = set()
         if not reader.is_encrypted:
             for page in reader.pages:
                 emb, unemb = page._get_fonts()
                 embedded_fonts = embedded_fonts.union(set(emb))
-                unemedded_fonts = unemedded_fonts.union(set(unemb))
+                unembedded_fonts = unembedded_fonts.union(set(unemb))
             table.add_row(
-                "Fonts (unembedded)", ", ".join(sorted(unemedded_fonts))
+                "Fonts (unembedded)", ", ".join(sorted(unembedded_fonts))
             )
             table.add_row(
                 "Fonts (embedded)", ", ".join(sorted(embedded_fonts))

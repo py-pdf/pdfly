@@ -109,8 +109,8 @@ def _sign_pdf_contents(
             signing_time=sign_time,
         )
 
-        # defer actual signing until after the input pdfs contents are merged
-        # _sign_key = None prevents FDPF.output() from calculating the signature hash too early
+        # defer actual signing until after the input pdfs' contents are merged
+        # _sign_key = None prevents FPDF.output() from calculating the signature hash too early
         pdf._sign_key = None
 
     writer = PdfWriter()
