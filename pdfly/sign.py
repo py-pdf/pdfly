@@ -17,7 +17,6 @@ import tempfile
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Union
 
 import fpdf.sign
 import typer
@@ -40,7 +39,7 @@ def main(
     pdf_reader = PdfReader(filename)
     pdf_is_unsigned_or_raise(pdf_reader)
 
-    output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper]
+    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper
     if output:
         output_file = open(output, "wb")
     else:
@@ -86,7 +85,7 @@ def is_signature(annotation: PdfObject) -> bool:
 
 def _sign_pdf_contents(
     pdf_reader: PdfReader,
-    output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper],
+    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper,
     p12: Path,
     p12_password: str | None,
 ) -> None:

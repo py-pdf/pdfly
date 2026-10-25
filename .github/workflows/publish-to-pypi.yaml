@@ -10,31 +10,59 @@ on:
     types:
       - completed
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
-  build_and_publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    name: Publish a new version
+  build:
+    # Tags pushed by "Create git tag" use the GITHUB_TOKEN and therefore don't
+    # trigger the push event, so we also listen to that workflow finishing.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       startsWith(github.event.workflow_run.head_commit.message, 'REL: '))
+    name: Build distribution
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: 3.x
 
-      - name: Install Flit
+      - name: Build sdist and wheel
         run: |
-          python -m pip install --upgrade pip
-          pip install flit
+          python -m pip install --upgrade build
+          python -m build
 
-      - name: Checkout Repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: python-package-distributions
+          path: dist/
+          if-no-files-found: error
 
-      - name: Publish Package to PyPI🚀
-        env:
-          FLIT_USERNAME: '__token__'
-          FLIT_PASSWORD: ${{ secrets.FLIT_PASSWORD }}
-        run: |
-          flit publish
+  publish:
+    name: Publish to PyPI 🚀
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pdfly
+    permissions:
+      id-token: write  # Required for PyPI Trusted Publishing
+    steps:
+      - name: Download the distribution packages
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3

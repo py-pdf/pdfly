@@ -133,7 +133,7 @@ dmypy.json
 .pyre/
 
 *.pdf
-.envrc
+!resources/*.pdf
 
 # Documentation files copied when building:
 docs/meta/CHANGELOG.md

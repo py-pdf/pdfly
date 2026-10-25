@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: CI
 
 on:
@@ -10,9 +7,24 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  PYTHON_LATEST: "3.14"
+  # oscrypto 1.3.0 (latest on PyPI) can't parse two-digit OpenSSL patch
+  # versions: https://github.com/wbond/oscrypto/issues/75
+  # The fixed commit still reports 1.3.0, hence --force-reinstall.
+  OSCRYPTO_FIX: "oscrypto @ git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
+
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
         platform: [ubuntu-latest, windows-latest, macos-latest]
@@ -23,56 +35,80 @@ jobs:
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         submodules: 'recursive'
+        persist-credentials: false
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Upgrade pip
-      run: python -m pip install --upgrade pip
-    - name: Install requirements
-      run: pip install . --group dev
-    - name: Install pdfly
-      if: matrix.python-version != '3.8'
-      run: pip install .
-    - name: Install pdfly using the minimal versions of the dependencies
-      if: matrix.python-version == '3.8'
+        cache: pip
+        cache-dependency-path: pyproject.toml
+    - name: Install pdfly and its dev dependencies
       run: |
-        # We ensure that those minimal versions remain compatible:
-        sed -i '/dependencies = \[/,/\]/s/>=/==/' pyproject.toml
-        pip install .
+        python -m pip install --upgrade pip
+        pip install . --group dev
     - name: Install oscrypto with OpenSSL >= 3.0.10 support
-      # oscrypto 1.3.0 (latest on PyPI) can't parse two-digit OpenSSL patch
-      # versions: https://github.com/wbond/oscrypto/issues/75
-      # The fixed commit still reports 1.3.0, hence --force-reinstall.
-      run: pip install --force-reinstall --no-deps "oscrypto @ git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
+      run: pip install --force-reinstall --no-deps "${{ env.OSCRYPTO_FIX }}"
     - name: Run tests
       run: pytest -vv
 
-  codestyle:
-    name: Check code with black, mypy, ruff & typos
+  tests-min-versions:
+    name: pytest with minimal dependency versions
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         submodules: 'recursive'
-    - name: Cache Downloaded Files
-      id: cache-downloaded-files
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        persist-credentials: false
+    - name: Pin the lower bounds of the dependencies
+      # Uses the runner's system Python, as tomllib requires Python 3.11+
+      run: |
+        python3 - > constraints.txt <<'EOF'
+        import re, tomllib
+        deps = tomllib.load(open("pyproject.toml", "rb"))["project"]["dependencies"]
+        for dep in deps:
+            if m := re.fullmatch(r"([\w.-]+)(?:\[[^\]]*\])?>=([^,;\s]+)", dep):
+                print(f"{m[1]}=={m[2]}")
+        EOF
+        cat constraints.txt
+    - name: Setup Python 3.10
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
-        path: '**/tests/pdf_cache/*'
-        key: cache-downloaded-files
-    - name: Upgrade pip, install pdfly and its dev dependencies
+        python-version: "3.10"
+    - name: Install pdfly using the minimal versions of the dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .
+        pip install . --group dev -c constraints.txt
+    - name: Install oscrypto with OpenSSL >= 3.0.10 support
+      run: pip install --force-reinstall --no-deps "${{ env.OSCRYPTO_FIX }}"
+    - name: Run tests
+      run: pytest -vv
+
+  codestyle:
+    name: Check code with ruff, mypy & typos
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        submodules: 'recursive'
+        persist-credentials: false
+    - name: Setup Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: ${{ env.PYTHON_LATEST }}
+        cache: pip
+        cache-dependency-path: pyproject.toml
+    - name: Install pdfly and its dev dependencies
+      run: |
+        python -m pip install --upgrade pip
         pip install . --group dev
-    - name: Lint with black
-      run: black --check --extend-exclude sample-files .
+    - name: Check formatting with ruff
+      run: ruff format --check .
+    - name: Lint with ruff
+      run: ruff check --output-format=github .
     - name: Lint with mypy
-      run: mypy --ignore-missing-imports pdfly/ tests/
-    - name: Test with ruff
-      run: ruff check pdfly/ tests/
+      run: mypy pdfly/ tests/
     - name: Spell Check Repo
       uses: crate-ci/typos@8a48f81b6c64dcfea44b3633223084c4be58ac5f # v1.49.0
 
@@ -81,27 +117,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: ${{env.PYTHON_LATEST}}
-      - name: Build package 
+          python-version: ${{ env.PYTHON_LATEST }}
+      - name: Build package
         run: |
-          python -m pip install flit check-wheel-contents
-          flit build
+          python -m pip install build check-wheel-contents
+          python -m build
           ls -l dist
           check-wheel-contents dist/*.whl
       - name: Test installing package
-        run: python -m pip install .
+        run: python -m pip install dist/*.whl
       - name: Test running installed package
         working-directory: /tmp
         run: python -c "import pdfly;print(pdfly.__version__)"
+
+  docs:
+    name: Build documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ env.PYTHON_LATEST }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install pdfly and its docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install . --group docs
+      - name: Build docs, treating warnings as errors
+        working-directory: docs
+        run: sphinx-build -W -b html . _build/html
 
   # Single stable check to mark as "required" in the branch protection rules,
   # so the matrix can change without touching the repository settings.
   ci-success:
     name: CI success
     if: always()
-    needs: [tests, codestyle, package]
+    needs: [tests, tests-min-versions, codestyle, package, docs]
     runs-on: ubuntu-latest
     steps:
       - name: Fail if any required job did not succeed

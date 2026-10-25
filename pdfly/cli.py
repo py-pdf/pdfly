@@ -181,7 +181,9 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
-@entry_point.command(name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__)  # type: ignore[misc]
+@entry_point.command(
+    name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__
+)  # type: ignore[misc]
 def extract_annotated_pages(
     input_pdf: Annotated[
         Path,

@@ -3,7 +3,6 @@
 import os
 from collections.abc import Iterator
 from pathlib import Path
-from typing import Union
 
 import pytest
 from fpdf import FPDF
@@ -16,7 +15,7 @@ except ImportError:  # Fallback when not available (< Python 3.11):
     from contextlib import contextmanager
 
     @contextmanager  # type: ignore
-    def chdir(dir_path: Union[str, Path]) -> Iterator[None]:
+    def chdir(dir_path: str | Path) -> Iterator[None]:
         """Non thread-safe context manager to change the current working directory."""
         cwd = Path.cwd()
         os.chdir(dir_path)
@@ -31,7 +30,7 @@ PROJECT_ROOT = TESTS_ROOT.parent
 RESOURCES_ROOT = PROJECT_ROOT / "resources"
 
 
-def run_cli(args: list[str]) -> Union[int, str, None]:
+def run_cli(args: list[str]) -> int | str | None:
     try:
         entry_point(args)
         return None
