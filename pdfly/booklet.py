@@ -4,7 +4,7 @@ Reorder and two-up PDF pages for booklet printing.
 If the number of pages is not a multiple of four, pages are
 added until it is a multiple of four. This includes a centerfold
 in the middle of the booklet and a single page on the inside
-back cover. The content of those pages are from the
+back cover. The content of those pages is from the
 centerfold-file and blank-page-file files, if specified, otherwise
 they are blank pages.
 
