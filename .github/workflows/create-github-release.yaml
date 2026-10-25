@@ -10,24 +10,32 @@ on:
     types:
       - completed
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   build_and_publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # Tags pushed by "Create git tag" use the GITHUB_TOKEN and therefore don't
+    # trigger the push event, so we also listen to that workflow finishing.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       startsWith(github.event.workflow_run.head_commit.message, 'REL: '))
     name: Create a GitHub release page
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create the release
     steps:
       - name: Checkout Repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
 
       - name: Prepare variables
-        id: prepare_variables
         run: |
           git fetch --tags --force
           latest_tag=$(git describe --tags --abbrev=0)
-          echo "latest_tag=$(git describe --tags --abbrev=0)" >> "$GITHUB_ENV"
+          echo "latest_tag=${latest_tag}" >> "$GITHUB_ENV"
           echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "tag_body<<$EOF" >> "$GITHUB_ENV"

@@ -38,12 +38,12 @@ classifiers = [
 ]
 
 dependencies = [
-    "pypdf[full]>=5.1.0",
-    "typer>=0.12.4",
+    "pypdf[full]>=6.6.0",
+    "typer>=0.16.0",
     "pillow",
     "pydantic",
     "rich",
-    "fpdf2>=2.8.1",
+    "fpdf2>=2.8.2",
     "asn1crypto",
     "cryptography",
     "endesive<3",  # 3.x changed pdf.verify() to return Result objects
@@ -51,11 +51,14 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["black", "check-wheel-contents", "flake8", "flake8-bugbear", "flake8-comprehensions", "flake8-isort", "flake8-simplify", "flit", "mypy", "pre-commit>=3.2.0", "pydantic", "pytest", "pytest-cov", "pytest-socket", "pytest-timeout", "rich", "ruff"]
+dev = ["build", "check-wheel-contents", "mypy", "pre-commit>=3.2.0", "pydantic", "pytest", "pytest-cov", "pytest-socket", "pytest-timeout", "rich", "ruff"]
 docs = ["attrs", "sphinx", "sphinx_rtd_theme", "sphinx-autobuild", "myst_parser"]  # attrs is required for myst, but not automatically installed by myst
 
 [project.urls]
 Source = "https://github.com/py-pdf/pdfly"
+Documentation = "https://pdfly.readthedocs.io/"
+Changelog = "https://github.com/py-pdf/pdfly/blob/main/CHANGELOG.md"
+Issues = "https://github.com/py-pdf/pdfly/issues"
 
 [project.scripts]
 pdfly = "pdfly.cli:entry_point"
@@ -65,18 +68,13 @@ addopts = "--disable-socket --doctest-modules --cov=. --cov-report html:tests/re
 doctest_encoding = "utf-8"
 testpaths = ["tests"]
 
-[tool.black]
-line-length = 79
-
-[tool.isort]
-line_length = 79
-indent = '    '
-multi_line_output = 3
-include_trailing_comma = true
-known_third_party = ["pytest", "setuptools"]
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
 
 [tool.ruff]
-line-length = 120
+line-length = 79  # used by `ruff format`
+extend-exclude = ["sample-files"]
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -108,8 +106,6 @@ ignore = [
     "SIM300",  # yoda conditions
     "TID252",  # we want relative imports
     "TRY", # I don't know what this is about
-    # As long as we are not on Python 3.11+
-    "UP006", "UP007",
     "UP031",  # Use format specifiers instead of percent format
     # for the moment, fix it later:
     "T201",  # print
@@ -141,9 +137,11 @@ ignore = [
     "INP001",  # File `docs/conf.py` is part of an implicit namespace package. Add an `__init__.py`.
 ]
 
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
+
 [tool.ruff.lint.mccabe]
 max-complexity = 20  # Recommended: 10
 
 [tool.ruff.lint.per-file-ignores]
-"sample-files/*" = ["D100", "INP001", "FA102", "I001"]
 "make_release.py" = ["T201", "S603", "S607"]
