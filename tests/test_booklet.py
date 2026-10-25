@@ -106,7 +106,8 @@ def test_booklet_order(
         )
         captured = capsys.readouterr()
         assert exit_code == 0, captured.err
-        assert captured.out == expected
+        assert captured.out.split() == expected.split()
+        assert page_words(f"output{page_count}.pdf") == page_words_of(expected)
 
         exit_code = run_cli(
             [
@@ -130,4 +131,18 @@ def test_booklet_order(
         )
         captured = capsys.readouterr()
         assert exit_code == 0, captured.err
-        assert captured.out == expected_bc
+        assert captured.out.split() == expected_bc.split()
+        assert page_words(f"outputbc{page_count}.pdf") == page_words_of(
+            expected_bc
+        )
+
+
+def page_words(filename: str) -> list[list[str]]:
+    # Compare words rather than raw text: whether pypdf joins the two halves
+    # of a booklet page with a space or a newline depends on its version.
+    return [page.extract_text().split() for page in PdfReader(filename).pages]
+
+
+def page_words_of(expected: str) -> list[list[str]]:
+    """Parse an expectation with one line per output page."""
+    return [line.split() for line in expected.splitlines()]
