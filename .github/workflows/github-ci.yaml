@@ -40,6 +40,11 @@ jobs:
         # We ensure that those minimal versions remain compatible:
         sed -i '/dependencies = \[/,/\]/s/>=/==/' pyproject.toml
         pip install .
+    - name: Install oscrypto with OpenSSL >= 3.0.10 support
+      # oscrypto 1.3.0 (latest on PyPI) can't parse two-digit OpenSSL patch
+      # versions: https://github.com/wbond/oscrypto/issues/75
+      # The fixed commit still reports 1.3.0, hence --force-reinstall.
+      run: pip install --force-reinstall --no-deps "oscrypto @ git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
     - name: Run tests
       run: pytest -vv
 
@@ -90,3 +95,15 @@ jobs:
       - name: Test running installed package
         working-directory: /tmp
         run: python -c "import pdfly;print(pdfly.__version__)"
+
+  # Single stable check to mark as "required" in the branch protection rules,
+  # so the matrix can change without touching the repository settings.
+  ci-success:
+    name: CI success
+    if: always()
+    needs: [tests, codestyle, package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if any required job did not succeed
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: exit 1
