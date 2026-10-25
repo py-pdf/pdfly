@@ -67,9 +67,7 @@ def update_lines(
     offset_xref = None  # offset of xref-section
     map_stream_len = {}  # map from object-number to /Length of stream
     map_obj_length_line = {}  # map from object-number to /Length-line
-    map_obj_length_ref = (
-        {}
-    )  # map from object-number to /Length-reference (e.g. "3")
+    map_obj_length_ref = {}  # map from object-number to /Length-reference (e.g. "3")
     map_obj_length_line_no = {}  # map from object-number to line_no of length
     # of /Length-line
     for idx, line in enumerate(lines_in):
