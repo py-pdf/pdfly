@@ -13,10 +13,13 @@ import sys
 from pathlib import Path
 
 import typer
-from endesive import pdf
 
 
 def main(filename: Path, pem: Path, verbose: bool | None) -> None:
+    # Imported lazily: endesive.pdf pulls in oscrypto, which fails to import
+    # on some OpenSSL versions. That should only break this command.
+    from endesive import pdf
+
     x509_certificates = [pem.read_bytes()]
     results = pdf.verify(filename.read_bytes(), x509_certificates)
 
