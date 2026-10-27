@@ -46,7 +46,7 @@ dependencies = [
     "fpdf2>=2.8.1",
     "asn1crypto",
     "cryptography",
-    "endesive<3",  # 3.x changed pdf.verify() to return Result objects
+    "endesive<4",  # 3.x changed pdf.verify() to return Result objects
     "requests>=2.32.5",  # required by endesive.signer
 ]
 
