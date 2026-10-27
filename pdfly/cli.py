@@ -215,8 +215,17 @@ def extract_images(
             resolve_path=True,
         ),
     ],
+    pages: Annotated[
+        str | None,
+        typer.Option(
+            "--pages",
+            help="Only extract images from these pages; same Python-slice "
+            "page-range syntax as 'rotate' (e.g. '1:', '0', ':3'). "
+            "Defaults to all pages.",
+        ),
+    ] = None,
 ) -> None:
-    pdfly.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf, pages)
 
 
 @entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)  # type: ignore[misc]
