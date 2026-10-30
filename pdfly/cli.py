@@ -215,8 +215,12 @@ def extract_images(
             resolve_path=True,
         ),
     ],
+    pgrgs: Annotated[
+        str,
+        typer.Argument(help="page range of the pages to extract images from"),
+    ] = ":",
 ) -> None:
-    pdfly.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf, pgrgs)
 
 
 @entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)  # type: ignore[misc]
