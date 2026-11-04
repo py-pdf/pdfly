@@ -8,6 +8,7 @@
 ### New Features (ENH)
 - New `extract-links` command ([PR #271](https://github.com/py-pdf/pdfly/pull/271))
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
+- `extract-images`: added optional `--output-dir` argument to specify the folder where the extracted images are stored
 
 
 ## Version 0.5.1, 2025-10-13
