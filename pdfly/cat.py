@@ -97,13 +97,16 @@ def main(
                 )
                 sys.exit(1)
             num_pages = len(reader.pages)
-            start, end, _step = page_range.indices(num_pages)
+            start, end, step = page_range.indices(num_pages)
+            # NOTE: for reverse ranges, slice.indices() returns end == -1
+            # as a sentinel meaning "down to (and including) page 0",
+            # and start > end is expected; neither is out of bounds.
             if (
                 start < 0
-                or end < 0
+                or end < -1
                 or start >= num_pages
                 or end > num_pages
-                or start > end
+                or (step > 0 and start > end)
             ):
                 print(
                     f"WARNING: Page range {page_range} is out of bounds",
