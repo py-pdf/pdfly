@@ -285,3 +285,25 @@ def test_cat_decrypt_with_password_ko(
     captured = capsys.readouterr()
     assert exit_code == 1, captured
     assert "Error: the decrypting password provided is invalid" in captured.out
+
+
+def test_cat_reverse_range_no_spurious_warning(
+    pdf_file_100: Path, tmp_path: Path, capsys: pytest.CaptureFixture
+) -> None:
+    with chdir(tmp_path):
+        output_pdf_path = tmp_path / "out.pdf"
+        exit_code = run_cli(
+            [
+                "cat",
+                str(pdf_file_100),
+                "::-1",
+                "--output",
+                str(output_pdf_path),
+            ]
+        )
+    captured = capsys.readouterr()
+    assert exit_code == 0, captured
+    assert "out of bounds" not in captured.err
+    reader = PdfReader(output_pdf_path)
+    extracted_pages = [page.extract_text() for page in reader.pages]
+    assert extracted_pages == [str(el) for el in reversed(range(100))]
