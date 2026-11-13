@@ -21,10 +21,31 @@ def test_cat_incorrect_number_of_args(
     capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
-        exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
+        exit_code = run_cli(["cat"])
     assert exit_code == 2
     captured = capsys.readouterr()
     assert "Missing" in captured.err
+
+
+def test_cat_without_output_writes_to_stdout(
+    capsysbinary: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    # Same as the example "pdfly cat chapter*.pdf >book.pdf" in the help:
+    # without -o, the PDF is written to standard output.
+    exit_code = run_cli(
+        [
+            "cat",
+            str(RESOURCES_ROOT / "box.pdf"),
+            str(RESOURCES_ROOT / "jpeg.pdf"),
+        ]
+    )
+    captured = capsysbinary.readouterr()
+    assert exit_code == 0, captured.err
+    assert captured.out.startswith(b"%PDF-")
+    out_pdf = tmp_path / "out.pdf"
+    out_pdf.write_bytes(captured.out)
+    reader = PdfReader(out_pdf)
+    assert len(reader.pages) == 2
 
 
 def test_cat_two_files_ok(

@@ -46,8 +46,8 @@ Examples
 # All rights reserved. This software is available under a BSD license;
 # see https://github.com/py-pdf/pypdf/LICENSE
 
-import os
 import sys
+from io import BytesIO
 from pathlib import Path
 
 from pypdf import (
@@ -63,7 +63,7 @@ from rich.console import Console
 def main(
     filename: Path,
     fn_pgrgs: list[str] | None,
-    output: Path,
+    output: Path | None,
     verbose: bool,
     inverted_page_selection: bool = False,
     password: str | None = None,
@@ -72,11 +72,10 @@ def main(
     filename_page_ranges = parse_filepaths_and_pagerange_args(
         console, filename, fn_pgrgs
     )
-    if output:
-        output_fh = open(output, "wb")
-    else:
-        sys.stdout.flush()
-        output_fh = os.fdopen(sys.stdout.fileno(), "wb")
+    # Without an output file, the PDF is written to standard output.
+    # pypdf needs to seek in the stream it writes to, and stdout can be a pipe,
+    # so the PDF is first written to a buffer, then copied to stdout.
+    output_fh = open(output, "wb") if output else BytesIO()
 
     writer = PdfWriter()
     in_fs = {}
@@ -119,6 +118,10 @@ def main(
                 for page_num in range(*page_range.indices(len(reader.pages))):
                     writer.add_page(reader.pages[page_num])
         writer.write(output_fh)
+        if isinstance(output_fh, BytesIO):
+            sys.stdout.flush()
+            sys.stdout.buffer.write(output_fh.getvalue())
+            sys.stdout.buffer.flush()
     except Exception as error:
         raise RuntimeError(f"Error while reading {filename}") from error
     finally:
