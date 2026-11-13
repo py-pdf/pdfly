@@ -39,7 +39,7 @@ classifiers = [
 
 dependencies = [
     "pypdf[full]>=6.6.0",
-    "typer>=0.16.0",
+    "typer>=0.17.1",
     "pillow",
     "pydantic",
     "rich",
