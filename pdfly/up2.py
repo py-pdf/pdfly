@@ -16,7 +16,8 @@ def main(pdf: Path, output: Path) -> None:
     reader = PdfReader(str(pdf))
     writer = PdfWriter()
     for i in range(0, len(reader.pages), 2):
-        lhs = reader.pages[i]
+        # pypdf >= 7 only allows merging into pages owned by a writer
+        lhs = writer.add_page(reader.pages[i])
         if i + 1 < len(reader.pages):
             rhs = reader.pages[i + 1]
             lhs.merge_translated_page(
@@ -27,7 +28,6 @@ def main(pdf: Path, output: Path) -> None:
             lhs.mediabox[2] = FloatObject(2 * lhs.mediabox[2])
         # Double the CropBox width:
         lhs.cropbox[2] = FloatObject(2 * lhs.cropbox[2])
-        writer.add_page(lhs)
     with open(output, "wb") as fp:
         writer.write(fp)
     print(f"{output} was created")
