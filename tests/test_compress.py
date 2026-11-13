@@ -22,20 +22,20 @@ def test_compress_sample_files(
         ["compress", str(input_pdf_filepath), str(output_pdf_filepath)],
     )
 
-    assert (
-        result.exit_code == 0
-    ), f"Compression failed for {input_pdf_filepath}: {result.output}"
+    assert result.exit_code == 0, (
+        f"Compression failed for {input_pdf_filepath}: {result.output}"
+    )
 
-    assert (
-        output_pdf_filepath.exists()
-    ), f"Output PDF {output_pdf_filepath} does not exist."
+    assert output_pdf_filepath.exists(), (
+        f"Output PDF {output_pdf_filepath} does not exist."
+    )
 
     # Verify output file is a valid PDF
     with open(output_pdf_filepath, "rb") as f:
         content = f.read()
-        assert content.startswith(
-            b"%PDF-"
-        ), f"Output is not a valid PDF file: {output_pdf_filepath}"
+        assert content.startswith(b"%PDF-"), (
+            f"Output is not a valid PDF file: {output_pdf_filepath}"
+        )
 
     assert "Original Size" in result.output
     assert "Final Size" in result.output
