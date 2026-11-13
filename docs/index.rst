@@ -19,7 +19,7 @@ Welcome to pdfly
 .. image:: https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly
    :target: https://github.com/py-pdf/pdfly/pulls
 
-.. image:: https://img.shields.io/badge/linters-black,ruff,mypi-green.svg
+.. image:: https://img.shields.io/badge/linters-ruff,mypy-green.svg
    :target: https://github.com/py-pdf/pdfly/actions
 .. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat
    :target: https://makeapullrequest.com
@@ -99,7 +99,7 @@ You can see the help of every subcommand by typing ``--help``:
    ╰───────────────────────────────────────────────────╯
 
 GitHub ⭐️
----------
+-----------
 
 .. image:: https://api.star-history.com/svg?repos=py-pdf/pdfly&type=date&legend=top-left
    :target: https://www.star-history.com/#py-pdf/pdfly&type=date&legend=top-left
@@ -118,6 +118,7 @@ GitHub ⭐️
    user/subcommand-compress
    user/subcommand-extract-annotated-pages
    user/subcommand-extract-images
+   user/subcommand-extract-links
    user/subcommand-extract-text
    user/subcommand-meta
    user/subcommand-pagemeta

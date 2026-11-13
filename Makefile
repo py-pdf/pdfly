@@ -9,18 +9,14 @@ release:
 	python make_release.py
 	git commit -eF RELEASE_COMMIT_MSG.md
 
-upload:
-	make clean
-	flit publish
-
 clean:
-	python setup.py clean --all
-	pyclean .
-	rm -rf tests/__pycache__ pdfly/__pycache__ Image9.png htmlcov docs/_build dist dont_commit_merged.pdf dont_commit_writer.pdf pdfly.egg-info
+	find pdfly tests docs -name __pycache__ -type d -prune -exec rm -rf {} +
+	rm -rf Image9.png htmlcov docs/_build build dist dont_commit_merged.pdf dont_commit_writer.pdf pdfly.egg-info
 
 lint:
-	mypy --ignore-missing-imports pdfly/ tests/
-	ruff check --fix --unsafe-fixes pdfly/ tests/
+	ruff format .
+	ruff check --fix --unsafe-fixes .
+	mypy pdfly/ tests/
 
 test:
 	pytest tests --cov --cov-report term-missing -vv --cov-report html --durations=3 --timeout=30

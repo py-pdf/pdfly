@@ -24,17 +24,17 @@ def test_uncompress_all_sample_files(
         ["uncompress", str(input_pdf_filepath), str(output_pdf_filepath)],
     )
 
-    assert (
-        result.exit_code == 0
-    ), f"Error in uncompressing {input_pdf_filepath}: {result.output}"
-    assert (
-        output_pdf_filepath.exists()
-    ), f"Output PDF {output_pdf_filepath} does not exist."
+    assert result.exit_code == 0, (
+        f"Error in uncompressing {input_pdf_filepath}: {result.output}"
+    )
+    assert output_pdf_filepath.exists(), (
+        f"Output PDF {output_pdf_filepath} does not exist."
+    )
 
     reader = PdfReader(str(output_pdf_filepath))
     for page in reader.pages:
         contents = page.get("/Contents")
         if contents:
-            assert (
-                "/Filter" not in contents
-            ), "Content stream is still compressed"
+            assert "/Filter" not in contents, (
+                "Content stream is still compressed"
+            )
