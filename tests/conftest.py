@@ -1,37 +1,33 @@
 """Utilities and fixtures that are available automatically for all tests."""
 
-import os
-from collections.abc import Iterator
+import re
 from pathlib import Path
-from typing import Union
 
 import pytest
 from fpdf import FPDF
 
 from pdfly.cli import entry_point
 
-try:
-    from contextlib import chdir  # type: ignore
-except ImportError:  # Fallback when not available (< Python 3.11):
-    from contextlib import contextmanager
-
-    @contextmanager  # type: ignore
-    def chdir(dir_path: Union[str, Path]) -> Iterator[None]:
-        """Non thread-safe context manager to change the current working directory."""
-        cwd = Path.cwd()
-        os.chdir(dir_path)
-        try:
-            yield
-        finally:
-            os.chdir(cwd)
-
-
 TESTS_ROOT = Path(__file__).parent.resolve()
 PROJECT_ROOT = TESTS_ROOT.parent
 RESOURCES_ROOT = PROJECT_ROOT / "resources"
 
 
-def run_cli(args: list[str]) -> Union[None, int, str]:
+ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
+BOX_DRAWING = re.compile("[\u2500-\u257f]")  # the borders of Typer's messages
+
+
+def plain(text: str) -> str:
+    """
+    Remove the colors, borders and line wrapping of the output of Typer.
+
+    On GitHub Actions, Typer colors its error messages, which splits
+    the text, e.g. "--output", with escape codes.
+    """
+    return " ".join(BOX_DRAWING.sub(" ", ANSI_ESCAPE.sub("", text)).split())
+
+
+def run_cli(args: list[str]) -> int | str | None:
     try:
         entry_point(args)
         return None
@@ -62,7 +58,9 @@ def pdf_file_100(tmp_path: Path) -> Path:
     for i in range(100):
         pdf.add_page()
         pdf.set_font("helvetica", size=12)
-        pdf.cell(200, 10, text=f"{i}", ln=True, align="C")
+        pdf.cell(
+            200, 10, text=f"{i}", new_x="LMARGIN", new_y="NEXT", align="C"
+        )
 
     pdf_filepath = tmp_path / "pdf_file_100.pdf"
     pdf.output(pdf_filepath)
@@ -77,7 +75,9 @@ def pdf_file_abc(tmp_path: Path) -> Path:
     for char in [chr(i) for i in range(ord("a"), ord("z") + 1)]:
         pdf.add_page()
         pdf.set_font("helvetica", size=12)
-        pdf.cell(200, 10, text=f"{char}", ln=True, align="C")
+        pdf.cell(
+            200, 10, text=f"{char}", new_x="LMARGIN", new_y="NEXT", align="C"
+        )
 
     pdf_filepath = tmp_path / "abc.pdf"
     pdf.output(pdf_filepath)

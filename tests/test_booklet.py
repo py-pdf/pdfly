@@ -1,16 +1,19 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
-from pypdf import PdfReader
+from pypdf import PdfReader, PdfWriter
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from pdfly import booklet
+
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_booklet_fewer_args(
     capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
-        exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
+        exit_code = run_cli(["booklet", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
     captured = capsys.readouterr()
     assert "Missing" in captured.err
@@ -106,7 +109,8 @@ def test_booklet_order(
         )
         captured = capsys.readouterr()
         assert exit_code == 0, captured.err
-        assert captured.out == expected
+        assert captured.out.split() == expected.split()
+        assert page_words(f"output{page_count}.pdf") == page_words_of(expected)
 
         exit_code = run_cli(
             [
@@ -130,4 +134,67 @@ def test_booklet_order(
         )
         captured = capsys.readouterr()
         assert exit_code == 0, captured.err
-        assert captured.out == expected_bc
+        assert captured.out.split() == expected_bc.split()
+        assert page_words(f"outputbc{page_count}.pdf") == page_words_of(
+            expected_bc
+        )
+
+
+def page_words(filename: str) -> list[list[str]]:
+    # Compare words rather than raw text: whether pypdf joins the two halves
+    # of a booklet page with a space or a newline depends on its version.
+    return [page.extract_text().split() for page in PdfReader(filename).pages]
+
+
+def page_words_of(expected: str) -> list[list[str]]:
+    """Parse an expectation with one line per output page."""
+    return [line.split() for line in expected.splitlines()]
+
+
+def test_booklet_rotated_centerfold(tmp_path: Path) -> None:
+    # A /Rotate 90 portrait page is landscape once its rotation is
+    # transferred to its content, like the booklet sheet it is merged into:
+    centerfold = tmp_path / "rotated-c.pdf"
+    writer = PdfWriter(clone_from=RESOURCES_ROOT / "c.pdf")
+    writer.pages[0].rotate(90)
+    writer.write(centerfold)
+    input6 = tmp_path / "input6.pdf"
+    writer = PdfWriter()
+    writer.append(RESOURCES_ROOT / "input8.pdf", pages=(0, 6))
+    writer.write(input6)
+
+    exit_code = run_cli(
+        [
+            "booklet",
+            "--centerfold-file",
+            str(centerfold),
+            str(input6),
+            str(tmp_path / "output.pdf"),
+        ]
+    )
+
+    assert exit_code == 0
+    assert page_words(str(tmp_path / "output.pdf")) == page_words_of(
+        "6 1\n2 5\n4 3\nc\n"
+    )
+    last_page = PdfReader(tmp_path / "output.pdf").pages[-1]
+    assert last_page.rotation == 0
+
+
+def test_booklet_invalid_input(tmp_path: Path) -> None:
+    not_a_pdf = tmp_path / "not-a-pdf.pdf"
+    not_a_pdf.write_text("This is not a PDF")
+
+    with pytest.raises(RuntimeError, match="Error while processing"):
+        booklet.main(not_a_pdf, tmp_path / "out.pdf", None, None)
+    assert not (tmp_path / "out.pdf").exists()
+
+
+@pytest.mark.parametrize("num_pages", [1, 2, 3, 5, 6, 7])
+def test_page_iter_requires_multiple_of_4(num_pages: int) -> None:
+    with pytest.raises(ValueError, match="divisible by 4"):
+        list(booklet.page_iter(num_pages))
+
+
+def test_page_iter() -> None:
+    assert list(booklet.page_iter(8)) == [(7, 0), (1, 6), (5, 2), (3, 4)]

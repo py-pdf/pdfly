@@ -6,8 +6,17 @@
 - `2up` incorrectly handled documents with an odd number of pages - [issue #219](https://github.com/py-pdf/pdfly/issues/218)
 
 ### New Features (ENH)
+- New `extract-links` command ([PR #271](https://github.com/py-pdf/pdfly/pull/271))
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
 - `extract-text` now has an option `--output-pattern` which allows either for the full output to be stored in a single file, or for each page's text to be stored in a different file whose name depends on the output pattern and the page index
+- `extract-images` now accepts an optional page range, to only extract images from specific pages - [issue #194](https://github.com/py-pdf/pdfly/issues/194)
+- ensured support for Python 3.15
+
+### Deprecations (DEP)
+- support for Python 3.10 has been dropped, as it reached its end of life on 2026-10-01: `pdfly` now requires Python 3.11+
+
+### Maintenance (MAINT)
+- `check-sign` and `sign` now use endesive 3, which no longer depends on oscrypto
 
 ### Testing (TST)
 - Added unit tests for `extract-text`

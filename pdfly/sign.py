@@ -17,7 +17,6 @@ import tempfile
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Union
 
 import fpdf.sign
 import typer
@@ -40,7 +39,7 @@ def main(
     pdf_reader = PdfReader(filename)
     pdf_is_unsigned_or_raise(pdf_reader)
 
-    output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper]
+    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper
     if output:
         output_file = open(output, "wb")
     else:
@@ -70,9 +69,7 @@ def pdf_is_unsigned_or_raise(pdf_reader: PdfReader) -> None:
 
 def is_signature(annotation: PdfObject) -> bool:
     resolved_annotation_object = annotation.get_object()
-    if resolved_annotation_object is None:
-        return False
-
+    # Also covers a reference to a missing object, resolved to NullObject:
     if type(resolved_annotation_object) is not DictionaryObject:
         return False
 
@@ -86,13 +83,17 @@ def is_signature(annotation: PdfObject) -> bool:
 
 def _sign_pdf_contents(
     pdf_reader: PdfReader,
-    output_file: Union[io.BufferedWriter, tempfile._TemporaryFileWrapper],
+    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper,
     p12: Path,
     p12_password: str | None,
 ) -> None:
     unsigned_output_buffer = io.BytesIO()
 
-    with add_to_page(pdf_reader.pages[-1]) as pdf:
+    # pypdf >= 7 only allows merging into pages owned by a writer
+    writer = PdfWriter()
+    writer.append_pages_from_reader(pdf_reader)
+
+    with add_to_page(writer.pages[-1]) as pdf:
         with p12.open("rb") as pkcs_file:
             hashalgo = "sha256"
             sign_time = pdf.creation_date
@@ -103,18 +104,16 @@ def _sign_pdf_contents(
             )
         pdf.sign(
             key=key,
-            cert=cert,
+            cert=cert,  # type: ignore
             extra_certs=extra_certs,
             hashalgo=hashalgo,
             signing_time=sign_time,
         )
 
-        # defer actual signing until after the input pdfs contents are merged
-        # _sign_key = None prevents FDPF.output() from calculating the signature hash too early
+        # defer actual signing until after the input pdfs' contents are merged
+        # _sign_key = None prevents FPDF.output() from calculating the signature hash too early
         pdf._sign_key = None
 
-    writer = PdfWriter()
-    writer.append_pages_from_reader(pdf_reader)
     writer.write(unsigned_output_buffer)
 
     # Now that output_buffer contains the contents to be signed
@@ -135,7 +134,7 @@ def _sign_pdf_contents(
         signer,
         content_to_sign,
         key,
-        cert,
+        cert,  # type: ignore
         extra_certs,
         hashalgo,
         sign_time,

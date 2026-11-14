@@ -1,9 +1,11 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from pypdf import PdfReader
+from pypdf.errors import PdfStreamError
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_rotate_fewer_args(
@@ -126,3 +128,21 @@ def test_rotate_slices(
         actual_diff = diff_rotations(in_rotations, out_rotations)
 
     assert not any(diff_rotations(actual_diff, expected_diff))
+
+
+def test_rotate_invalid_pdf(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    not_a_pdf = tmp_path / "not-a-pdf.pdf"
+    not_a_pdf.write_text("This is not a PDF")
+
+    with pytest.raises(PdfStreamError):
+        run_cli(
+            ["rotate", "-o", str(tmp_path / "out.pdf"), str(not_a_pdf), "90"]
+        )
+
+    # Rich wraps long lines, even in the middle of a path,
+    # so compare without any whitespace:
+    out = "".join(capsys.readouterr().out.split())
+    assert "".join(f"Error while rotating {not_a_pdf}".split()) in out
+    assert not (tmp_path / "out.pdf").exists()

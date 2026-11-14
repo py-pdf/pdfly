@@ -1,0 +1,38 @@
+import json
+from contextlib import chdir
+from pathlib import Path
+
+import pytest
+
+from .conftest import RESOURCES_ROOT, run_cli
+
+
+def test_extract_links(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+    with chdir(tmp_path):
+        run_cli(
+            [
+                "extract-links",
+                str(RESOURCES_ROOT / "GeoBase_NHNC1_Data_Model_UML_EN.pdf"),
+            ]
+        )
+    captured = capsys.readouterr()
+    assert not captured.err
+    assert "mailto:geoginfo@RNCan.gc.ca" in captured.out
+
+
+def test_extract_links_json(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    with chdir(tmp_path):
+        run_cli(
+            [
+                "extract-links",
+                "--format",
+                "json",
+                str(RESOURCES_ROOT / "GeoBase_NHNC1_Data_Model_UML_EN.pdf"),
+            ]
+        )
+    captured = capsys.readouterr()
+    assert not captured.err
+    links = json.loads(captured.out)
+    assert len(links) == 2

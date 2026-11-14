@@ -48,7 +48,6 @@ myst_all_links_external = True
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
@@ -57,10 +56,6 @@ extensions = [
     # External
     "myst_parser",
 ]
-
-intersphinx_mapping = {
-    "py-pdf organization": ("https://py-pdf.github.io/", None),
-}
 
 nitpick_ignore_regex = [
     # For reasons unclear at this stage the io module prefixes everything with _io
@@ -100,7 +95,6 @@ html_theme_options = {
     "canonical_url": "",
     "analytics_id": "",
     "logo_only": True,
-    "display_version": True,
     "prev_next_buttons_location": "bottom",
     "style_external_links": False,
     # Toc options
@@ -114,7 +108,6 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
 html_logo = "pdfly-logo.png"
 
 # -- Options for Napoleon  -----------------------------------------------------

@@ -3,6 +3,8 @@
 from pathlib import Path
 
 import pytest
+from fpdf import FPDF
+from pypdf import PdfReader, PdfWriter
 from typer.testing import CliRunner
 
 from pdfly.cli import entry_point
@@ -22,20 +24,20 @@ def test_compress_sample_files(
         ["compress", str(input_pdf_filepath), str(output_pdf_filepath)],
     )
 
-    assert (
-        result.exit_code == 0
-    ), f"Compression failed for {input_pdf_filepath}: {result.output}"
+    assert result.exit_code == 0, (
+        f"Compression failed for {input_pdf_filepath}: {result.output}"
+    )
 
-    assert (
-        output_pdf_filepath.exists()
-    ), f"Output PDF {output_pdf_filepath} does not exist."
+    assert output_pdf_filepath.exists(), (
+        f"Output PDF {output_pdf_filepath} does not exist."
+    )
 
     # Verify output file is a valid PDF
     with open(output_pdf_filepath, "rb") as f:
         content = f.read()
-        assert content.startswith(
-            b"%PDF-"
-        ), f"Output is not a valid PDF file: {output_pdf_filepath}"
+        assert content.startswith(b"%PDF-"), (
+            f"Output is not a valid PDF file: {output_pdf_filepath}"
+        )
 
     assert "Original Size" in result.output
     assert "Final Size" in result.output
@@ -44,12 +46,13 @@ def test_compress_sample_files(
 def test_compress_no_compression_when_larger(tmp_path: Path) -> None:
     """Test that compression doesn't apply when result would be larger."""
     # Create a small PDF that might not compress well
-    from fpdf import FPDF
 
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Short text", ln=True, align="C")
+    pdf.cell(
+        200, 10, text="Short text", new_x="LMARGIN", new_y="NEXT", align="C"
+    )
 
     input_pdf = tmp_path / "small.pdf"
     pdf.output(input_pdf)
@@ -74,15 +77,34 @@ def test_compress_no_compression_when_larger(tmp_path: Path) -> None:
 
 def test_compress_file_integrity(tmp_path: Path) -> None:
     """Test that compressed files maintain PDF integrity."""
-    from fpdf import FPDF
-
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Test PDF for compression", ln=True, align="C")
-    pdf.cell(200, 10, text="This is a test document.", ln=True, align="L")
+    pdf.cell(
+        200,
+        10,
+        text="Test PDF for compression",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="C",
+    )
+    pdf.cell(
+        200,
+        10,
+        text="This is a test document.",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="L",
+    )
     pdf.add_page()
-    pdf.cell(200, 10, text="Second page content", ln=True, align="C")
+    pdf.cell(
+        200,
+        10,
+        text="Second page content",
+        new_x="LMARGIN",
+        new_y="NEXT",
+        align="C",
+    )
 
     input_pdf = tmp_path / "test.pdf"
     pdf.output(input_pdf)
@@ -96,8 +118,6 @@ def test_compress_file_integrity(tmp_path: Path) -> None:
 
     assert result.exit_code == 0
 
-    from pypdf import PdfReader
-
     reader = PdfReader(str(output_pdf))
     assert len(reader.pages) == 2
 
@@ -110,8 +130,6 @@ def test_compress_file_integrity(tmp_path: Path) -> None:
 
 def test_compress_output_metrics(tmp_path: Path) -> None:
     """Test that compression metrics are properly displayed."""
-    from fpdf import FPDF
-
     pdf = FPDF()
     for _i in range(10):
         pdf.add_page()
@@ -120,7 +138,8 @@ def test_compress_output_metrics(tmp_path: Path) -> None:
             200,
             10,
             text="This is repeated text on every page " * 5,
-            ln=True,
+            new_x="LMARGIN",
+            new_y="NEXT",
             align="L",
         )
 
@@ -157,12 +176,11 @@ def test_compress_same_input_output_not_allowed(tmp_path: Path) -> None:
     input_pdf = tmp_path / "test.pdf"
 
     # Create a simple PDF
-    from fpdf import FPDF
 
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Test", ln=True, align="C")
+    pdf.cell(200, 10, text="Test", new_x="LMARGIN", new_y="NEXT", align="C")
     pdf.output(input_pdf)
 
     # Try to compress to the same file (should work but might not compress)
@@ -176,12 +194,12 @@ def test_compress_same_input_output_not_allowed(tmp_path: Path) -> None:
 
 def test_compress_preserves_metadata(tmp_path: Path) -> None:
     """Test that compression preserves PDF metadata."""
-    from fpdf import FPDF
-
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
-    pdf.cell(200, 10, text="Test document", ln=True, align="C")
+    pdf.cell(
+        200, 10, text="Test document", new_x="LMARGIN", new_y="NEXT", align="C"
+    )
 
     # Set some metadata
     pdf.set_title("Test Title")
@@ -200,8 +218,6 @@ def test_compress_preserves_metadata(tmp_path: Path) -> None:
 
     assert result.exit_code == 0
 
-    from pypdf import PdfReader
-
     reader = PdfReader(str(output_pdf))
     metadata = reader.metadata
 
@@ -209,3 +225,28 @@ def test_compress_preserves_metadata(tmp_path: Path) -> None:
     assert metadata.get("/Title") == "Test Title"
     assert metadata.get("/Author") == "Test Author"
     assert metadata.get("/Subject") == "Test Subject"
+
+
+def test_compress_pdf_without_metadata(tmp_path: Path) -> None:
+    pdf = FPDF()
+    pdf.set_compression(False)
+    pdf.add_page()
+    pdf.set_font("helvetica")
+    pdf.multi_cell(w=0, text="Some text to compress. " * 50)
+    input_pdf = tmp_path / "no-metadata.pdf"
+    pdf.output(input_pdf)
+    writer = PdfWriter(clone_from=input_pdf)
+    writer.metadata = None
+    writer.write(input_pdf)
+    assert PdfReader(input_pdf).metadata is None
+    output_pdf = tmp_path / "out.pdf"
+
+    result = runner.invoke(
+        entry_point, ["compress", str(input_pdf), str(output_pdf)]
+    )
+
+    assert result.exit_code == 0, result.output
+    assert output_pdf.stat().st_size < input_pdf.stat().st_size
+    reader = PdfReader(output_pdf)
+    assert len(reader.pages) == 1
+    assert "Some text to compress." in reader.pages[0].extract_text()

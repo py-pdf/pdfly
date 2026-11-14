@@ -4,7 +4,7 @@ Reorder and two-up PDF pages for booklet printing.
 If the number of pages is not a multiple of four, pages are
 added until it is a multiple of four. This includes a centerfold
 in the middle of the booklet and a single page on the inside
-back cover. The content of those pages are from the
+back cover. The content of those pages is from the
 centerfold-file and blank-page-file files, if specified, otherwise
 they are blank pages.
 
@@ -60,22 +60,24 @@ def main(
 
         # Reorder the pages and place two pages side by side (2-up) on each sheet
         for lhs, rhs in page_iter(len(pages)):
-            pages[lhs].merge_translated_page(
+            # pypdf >= 7 only allows merging into pages owned by a writer
+            sheet = writer.add_page(pages[lhs])
+            sheet.merge_translated_page(
                 page2=pages[rhs],
-                tx=pages[lhs].mediabox.width,
+                tx=sheet.mediabox.width,
                 ty=0,
                 expand=True,
                 over=True,
             )
             # Double the CropBox width:
-            pages[lhs].cropbox[2] = FloatObject(2 * pages[lhs].cropbox[2])
-            writer.add_page(pages[lhs])
+            sheet.cropbox[2] = FloatObject(2 * sheet.cropbox[2])
 
         # If a centerfold was required, it is already
         # present as a pair of blank pages. If the user
         # specified a centerfold file, use it instead.
         if requires_centerfold and centerfold_file:
-            centerfold_page = fetch_first_page(centerfold_file)
+            # writer-owned, so pypdf >= 7 allows transforming its content
+            centerfold_page = PdfWriter(clone_from=centerfold_file).pages[0]
             last_page = writer.pages[-1]
             if centerfold_page.rotation != 0:
                 centerfold_page.transfer_rotation_to_content()

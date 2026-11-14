@@ -1,10 +1,11 @@
+from contextlib import chdir
 from pathlib import Path
 from typing import Any
 
 import pytest
 from pypdf import PdfReader
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def extract_embedded_images(pdf_filepath: Path) -> list[Any]:
@@ -21,10 +22,31 @@ def test_cat_incorrect_number_of_args(
     capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
-        exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
+        exit_code = run_cli(["cat"])
     assert exit_code == 2
     captured = capsys.readouterr()
     assert "Missing" in captured.err
+
+
+def test_cat_without_output_writes_to_stdout(
+    capsysbinary: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    # Same as the example "pdfly cat chapter*.pdf >book.pdf" in the help:
+    # without -o, the PDF is written to standard output.
+    exit_code = run_cli(
+        [
+            "cat",
+            str(RESOURCES_ROOT / "box.pdf"),
+            str(RESOURCES_ROOT / "jpeg.pdf"),
+        ]
+    )
+    captured = capsysbinary.readouterr()
+    assert exit_code == 0, captured.err
+    assert captured.out.startswith(b"%PDF-")
+    out_pdf = tmp_path / "out.pdf"
+    out_pdf.write_bytes(captured.out)
+    reader = PdfReader(out_pdf)
+    assert len(reader.pages) == 2
 
 
 def test_cat_two_files_ok(
@@ -285,3 +307,31 @@ def test_cat_decrypt_with_password_ko(
     captured = capsys.readouterr()
     assert exit_code == 1, captured
     assert "Error: the decrypting password provided is invalid" in captured.out
+
+
+def test_cat_verbose(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+    exit_code = run_cli(
+        [
+            "cat",
+            "--verbose",
+            str(RESOURCES_ROOT / "input8.pdf"),
+            "1:3",
+            "--output",
+            str(tmp_path / "out.pdf"),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0, captured.err
+    # The verbose output goes to stderr, so it never mixes with a PDF
+    # written to stdout:
+    assert f"{RESOURCES_ROOT / 'input8.pdf'} 1:3" in captured.err
+    assert len(PdfReader(tmp_path / "out.pdf").pages) == 2
+
+
+def test_cat_invalid_pdf(tmp_path: Path) -> None:
+    not_a_pdf = tmp_path / "not-a-pdf.pdf"
+    not_a_pdf.write_text("This is not a PDF")
+
+    with pytest.raises(RuntimeError, match="Error while reading"):
+        run_cli(["cat", str(not_a_pdf), "--output", str(tmp_path / "out.pdf")])

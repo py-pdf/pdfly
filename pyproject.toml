@@ -17,7 +17,7 @@ readme = "README.md"
 dynamic = ["version"]
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
-requires-python = ">=3.10.0"
+requires-python = ">=3.11"
 
 keywords = ["pdf", "cli", "tools", "compression", "metadata", "signature", "booklet"]
 
@@ -30,59 +30,65 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
 ]
 
 dependencies = [
-    "pypdf[full]>=5.1.0",
-    "typer>=0.12.4",
+    "pypdf[full]>=6.6.0",
+    "typer>=0.18.0",
     "pillow",
     "pydantic",
     "rich",
-    "fpdf2>=2.8.1",
+    "fpdf2>=2.8.2",
     "asn1crypto",
     "cryptography",
-    "endesive",
+    "endesive>=3.0.3,<4",
     "requests>=2.32.5",  # required by endesive.signer
 ]
 
 [dependency-groups]
-dev = ["black", "check-wheel-contents", "flake8", "flake8-bugbear", "flake8-comprehensions", "flake8-isort", "flake8-simplify", "flit", "mypy", "pre-commit>=3.2.0", "pydantic", "pytest", "pytest-cov", "pytest-socket", "pytest-timeout", "rich", "ruff"]
+dev = ["build", "check-wheel-contents", "mypy", "pre-commit>=3.2.0", "pydantic", "pytest", "pytest-cov", "pytest-socket", "pytest-timeout", "rich", "ruff"]
 docs = ["attrs", "sphinx", "sphinx_rtd_theme", "sphinx-autobuild", "myst_parser"]  # attrs is required for myst, but not automatically installed by myst
 
 [project.urls]
 Source = "https://github.com/py-pdf/pdfly"
+Documentation = "https://pdfly.readthedocs.io/"
+Changelog = "https://github.com/py-pdf/pdfly/blob/main/CHANGELOG.md"
+Issues = "https://github.com/py-pdf/pdfly/issues"
 
 [project.scripts]
 pdfly = "pdfly.cli:entry_point"
 
 [tool.pytest.ini_options]
-addopts = "--disable-socket --doctest-modules --cov=. --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
+addopts = "--disable-socket --doctest-modules --cov --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
 doctest_encoding = "utf-8"
 testpaths = ["tests"]
 
-[tool.black]
-line-length = 79
+[tool.coverage.run]
+source = ["pdfly"]
+branch = true
 
-[tool.isort]
-line_length = 79
-indent = '    '
-multi_line_output = 3
-include_trailing_comma = true
-known_third_party = ["pytest", "setuptools"]
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
 
 [tool.ruff]
-line-length = 120
+line-length = 79  # used by `ruff format`
+extend-exclude = ["sample-files"]
 
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "D401",  # First line of docstring should be in imperative mood - false positives
-    "UP031",  # Use format specifiers instead of percent format
+    "CPY001",  # Missing copyright notice at top of file
     "D205",  # 1 blank line required between summary line and description
     "D400",  # First line should end with a period
     "D415",  # First line should end with a period
@@ -108,8 +114,7 @@ ignore = [
     "SIM300",  # yoda conditions
     "TID252",  # we want relative imports
     "TRY", # I don't know what this is about
-    # As long as we are not on Python 3.11+
-    "UP006", "UP007",
+    "UP031",  # Use format specifiers instead of percent format
     # for the moment, fix it later:
     "T201",  # print
     "DTZ006",  # datetime without timezone
@@ -130,6 +135,7 @@ ignore = [
     "PLR0912", # Too many branches
     "PLR0913",  # Too many arguments to function call
     "PLR0915", # Too many statements
+    "PLR0917",  # Too many positional arguments
     "PLR2004", # Magic value
     "PLW",  # global variables
     "PTH110",  # `os.path.exists()` should be replaced by `Path.exists()`
@@ -139,9 +145,11 @@ ignore = [
     "INP001",  # File `docs/conf.py` is part of an implicit namespace package. Add an `__init__.py`.
 ]
 
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
+
 [tool.ruff.lint.mccabe]
 max-complexity = 20  # Recommended: 10
 
 [tool.ruff.lint.per-file-ignores]
-"sample-files/*" = ["D100", "INP001", "FA102", "I001"]
 "make_release.py" = ["T201", "S603", "S607"]

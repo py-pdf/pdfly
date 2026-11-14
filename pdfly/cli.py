@@ -15,6 +15,7 @@ import pdfly.check_sign
 import pdfly.compress
 import pdfly.extract_annotated_pages
 import pdfly.extract_images
+import pdfly.extract_links
 import pdfly.metadata
 import pdfly.pagemeta
 import pdfly.rm
@@ -121,15 +122,20 @@ def cat(
             resolve_path=True,
         ),
     ],
-    output: Path = typer.Option(..., "-o", "--output"),  # noqa
     fn_pgrgs: list[str] | None = typer.Argument(  # noqa: B008
-        None, help="filenames and/or page ranges"
+        None, allow_dash=True, help="filenames and/or page ranges"
     ),
-    verbose: bool = typer.Option(
-        False, help="show page ranges as they are being read"
+    output: Path | None = typer.Option(  # noqa: B008
+        None,
+        "-o",
+        "--output",
+        help="Output file. If omitted, the PDF is written to standard output.",
     ),
     password: str = typer.Option(
         None, help="Document's user or owner password."
+    ),
+    verbose: bool = typer.Option(
+        False, help="show page ranges as they are being read"
     ),
 ) -> None:
     pdfly.cat.main(
@@ -180,7 +186,9 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
-@entry_point.command(name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__)  # type: ignore[misc]
+@entry_point.command(
+    name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__
+)  # type: ignore[misc]
 def extract_annotated_pages(
     input_pdf: Annotated[
         Path,
@@ -214,8 +222,33 @@ def extract_images(
             resolve_path=True,
         ),
     ],
+    pgrgs: Annotated[
+        str,
+        typer.Argument(help="page range of the pages to extract images from"),
+    ] = ":",
 ) -> None:
-    pdfly.extract_images.main(pdf)
+    pdfly.extract_images.main(pdf, pgrgs)
+
+
+@entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)  # type: ignore[misc]
+def extract_links(
+    pdf: Annotated[
+        Path,
+        typer.Argument(
+            dir_okay=False,
+            exists=True,
+            resolve_path=True,
+        ),
+    ],
+    output_format: pdfly._utils.OutputOptions = typer.Option(  # noqa
+        pdfly._utils.OutputOptions.text.value,
+        "--format",
+        "-f",
+        help="Output format",
+        show_default=True,
+    ),
+) -> None:
+    pdfly.extract_links.main(pdf, output_format)
 
 
 @entry_point.command(name="extract-text")  # type: ignore[misc]

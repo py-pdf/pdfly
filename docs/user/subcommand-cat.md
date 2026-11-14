@@ -58,7 +58,8 @@ pdfly cat --help
 │                                 [required]                                   │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ *  --output   -o                  PATH  [default: None] [required]           │
+│    --output   -o                  PATH  Output file. If omitted, the PDF     │
+│                                         is written to standard output.       │
 │    --verbose      --no-verbose          show page ranges as they are being   │
 │                                         read                                 │
 │                                         [default: no-verbose]                │
@@ -86,12 +87,31 @@ pdfly cat input.pdf 5 -o out.pdf
 
 Note that it is `5`, because the page indices always start at 0.
 
+### Specify a negative index
+
+Get the last page of a PDF:
+
+```
+pdfly cat -o out.pdf input.pdf -- -1
+```
+
+`--` must be used to escape negative indices.
+
 ### Concatenate two PDFs
 
 Just combine two PDF files so that the pages come right after each other:
 
 ```
 pdfly cat input1.pdf input2.pdf -o out.pdf
+```
+
+### Write the result to standard output
+
+Without `-o`, the PDF is written to standard output, so it can be redirected
+to a file or piped to another command:
+
+```
+pdfly cat input.pdf 0:2 > first-pages.pdf
 ```
 
 ### Decrypt a PDF document

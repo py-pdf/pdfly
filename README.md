@@ -8,7 +8,7 @@
 [![issues closed](https://img.shields.io/github/issues-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/issues)
 [![PRs closed](https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly)](https://github.com/py-pdf/pdfly/pulls)
 
-[![linters: black, ruff, mypi](https://img.shields.io/badge/linters-black,ruff,mypi-green.svg)](https://github.com/py-pdf/pdfly/actions)
+[![linters: ruff, mypy](https://img.shields.io/badge/linters-ruff,mypy-green.svg)](https://github.com/py-pdf/pdfly/actions)
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://makeapullrequest.com)
 [![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/)
 
@@ -47,6 +47,7 @@ $ pdfly --help
 │ compress                  Compress a PDF.                                                      │
 │ extract-annotated-pages   Extract only the annotated pages from a PDF.                         │
 │ extract-images            Extract images from PDF without resampling or altering.              │
+│ extract-links             Extract all links from a PDF document.                               │
 │ extract-text              Extract text from a PDF file.                                        │
 │ meta                      Show metadata of a PDF file                                          │
 │ pagemeta                  Give details about a single page.                                    │
