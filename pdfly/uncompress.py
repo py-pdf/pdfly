@@ -1,29 +1,18 @@
 """Module for uncompressing PDF content streams."""
 
-import zlib
 from pathlib import Path
 
-from pypdf import PdfReader, PdfWriter
-from pypdf.generic import IndirectObject, PdfObject
+from pypdf import PdfWriter
 
 
 def main(pdf: Path, output: Path) -> None:
-    reader = PdfReader(pdf)
-    writer = PdfWriter()
+    writer = PdfWriter(clone_from=pdf)
 
-    for page in reader.pages:
-        if "/Contents" in page:
-            contents: PdfObject | None = page["/Contents"]
-            if isinstance(contents, IndirectObject):
-                contents = contents.get_object()
-            if contents is not None:
-                if isinstance(contents, list):
-                    for content in contents:
-                        if isinstance(content, IndirectObject):
-                            decompress_content_stream(content)
-                elif isinstance(contents, IndirectObject):
-                    decompress_content_stream(contents)
-        writer.add_page(page)
+    for page in writer.pages:
+        # get_contents() decodes all the filters of the content stream(s):
+        contents = page.get_contents()
+        if contents is not None:
+            page.replace_contents(contents)
 
     with open(output, "wb") as fp:
         writer.write(fp)
@@ -35,17 +24,3 @@ def main(pdf: Path, output: Path) -> None:
     print(
         f"Uncompressed Size: {uncomp_size:,} ({(uncomp_size / orig_size) * 100:.1f}% of original)"
     )
-
-
-def decompress_content_stream(content: IndirectObject) -> None:
-    """Decompress a content stream if it uses FlateDecode."""
-    if content.get("/Filter") == "/FlateDecode":
-        try:
-            compressed_data = content.get_data()
-            uncompressed_data = zlib.decompress(compressed_data)
-            content.set_data(uncompressed_data)
-            del content["/Filter"]
-        except zlib.error as error:
-            print(
-                f"Some content stream with /FlateDecode failed to be decompressed: {error}"
-            )

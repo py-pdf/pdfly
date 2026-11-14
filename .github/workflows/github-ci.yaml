@@ -44,6 +44,10 @@ jobs:
         pip install . --group dev
     - name: Run tests
       run: pytest -vv
+    - name: Require 100% test coverage
+      # Checked on a single job, which reuses the coverage data of "Run tests"
+      if: matrix.platform == 'ubuntu-latest' && matrix.python-version == env.PYTHON_LATEST
+      run: coverage report --fail-under=100
 
   tests-min-versions:
     name: pytest with minimal dependency versions

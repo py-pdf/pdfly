@@ -3,6 +3,15 @@ from pathlib import Path
 
 import pytest
 from endesive.pdf import PDFVerifier
+from pypdf.generic import (
+    ArrayObject,
+    DictionaryObject,
+    NameObject,
+    NullObject,
+    PdfObject,
+)
+
+from pdfly.sign import is_signature
 
 from .conftest import RESOURCES_ROOT, run_cli
 
@@ -116,3 +125,58 @@ def test_sign_pkcs12_in_place(
         assert result.signatureok
         assert result.hashok
         assert result.certok
+
+
+def test_sign_requires_output_or_in_place(
+    capsys: pytest.CaptureFixture, tmp_path: Path
+) -> None:
+    with chdir(tmp_path):
+        exit_code = run_cli(
+            [
+                "sign",
+                str(RESOURCES_ROOT / "input8.pdf"),
+                "--p12",
+                str(RESOURCES_ROOT / "signing-certificate.p12"),
+            ]
+        )
+    captured = capsys.readouterr()
+
+    assert exit_code == 2
+    assert "One of the options --output or --in-place is required" in (
+        captured.err
+    )
+    assert list(tmp_path.iterdir()) == []
+
+
+@pytest.mark.parametrize(
+    ("annotation", "expected"),
+    [
+        (
+            DictionaryObject(
+                {
+                    NameObject("/Subtype"): NameObject("/Widget"),
+                    NameObject("/FT"): NameObject("/Sig"),
+                }
+            ),
+            True,
+        ),
+        (
+            DictionaryObject(
+                {
+                    NameObject("/Subtype"): NameObject("/Widget"),
+                    NameObject("/FT"): NameObject("/Tx"),
+                }
+            ),
+            False,
+        ),
+        (
+            DictionaryObject({NameObject("/Subtype"): NameObject("/Link")}),
+            False,
+        ),
+        (ArrayObject(), False),
+        # What pypdf resolves a reference to a missing object to:
+        (NullObject(), False),
+    ],
+)
+def test_is_signature(annotation: PdfObject, expected: bool) -> None:
+    assert is_signature(annotation) is expected

@@ -56,7 +56,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 if reader._encryption
                 else None
             ),
-            pdf_file_version=reader.stream.read(8).decode("utf-8"),
+            pdf_file_version=reader.pdf_header,
             # OS Info
             file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
             file_size=pdf_stat.st_size,
@@ -66,14 +66,12 @@ def main(pdf: Path, output: OutputOptions) -> None:
         )
     else:
         info = reader.metadata
-        reader.stream.seek(0)
-        pdf_file_version = reader.stream.read(8).decode("utf-8")
         pdf_stat = pdf.stat()
         pdf_id = reader.trailer.get("/ID")
         meta = MetaInfo(
             pages=len(reader.pages),
             page_mode=reader.page_mode,
-            pdf_file_version=pdf_file_version,
+            pdf_file_version=reader.pdf_header,
             page_layout=reader.page_layout,
             attachments=str(list(reader.attachments.keys())),
             id1=pdf_id[0] if pdf_id is not None else None,
