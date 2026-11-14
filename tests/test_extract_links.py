@@ -7,7 +7,9 @@ import pytest
 from .conftest import RESOURCES_ROOT, run_cli
 
 
-def test_extract_links(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_extract_links(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         run_cli(
             [
@@ -21,7 +23,7 @@ def test_extract_links(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
 
 def test_extract_links_json(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         run_cli(

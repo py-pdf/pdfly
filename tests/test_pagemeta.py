@@ -10,7 +10,9 @@ from pypdf import PdfWriter
 from .conftest import RESOURCES_ROOT, run_cli
 
 
-def test_pagemeta_json(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_pagemeta_json(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         run_cli(
             ["pagemeta", str(RESOURCES_ROOT / "box.pdf"), "0", "-o", "json"]
@@ -25,7 +27,7 @@ def test_pagemeta_json(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
 
 def test_pagemeta_text_with_known_format(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         run_cli(["pagemeta", str(RESOURCES_ROOT / "c.pdf"), "0"])
@@ -35,7 +37,7 @@ def test_pagemeta_text_with_known_format(
 
 
 def test_pagemeta_text_with_close_format(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         run_cli(["pagemeta", str(RESOURCES_ROOT / "jpeg.pdf"), "0"])
@@ -45,7 +47,7 @@ def test_pagemeta_text_with_close_format(
 
 
 def test_pagemeta_text_with_annotations_and_rotation(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     pdf = FPDF()
     pdf.add_page()
@@ -68,7 +70,7 @@ def test_pagemeta_text_with_annotations_and_rotation(
 
 
 def test_pagemeta_text_with_unknown_format(
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     # box.pdf is 60x60 pt: no paper format is close to that
     exit_code = run_cli(["pagemeta", str(RESOURCES_ROOT / "box.pdf"), "0"])

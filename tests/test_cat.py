@@ -19,7 +19,7 @@ def extract_text_pages(pdf_filepath: Path) -> list[str]:
 
 
 def test_cat_incorrect_number_of_args(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["cat"])
@@ -29,7 +29,7 @@ def test_cat_incorrect_number_of_args(
 
 
 def test_cat_without_output_writes_to_stdout(
-    capsysbinary: pytest.CaptureFixture, tmp_path: Path
+    capsysbinary: pytest.CaptureFixture[bytes], tmp_path: Path
 ) -> None:
     # Same as the example "pdfly cat chapter*.pdf >book.pdf" in the help:
     # without -o, the PDF is written to standard output.
@@ -50,7 +50,7 @@ def test_cat_without_output_writes_to_stdout(
 
 
 def test_cat_two_files_ok(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -72,7 +72,9 @@ def test_cat_two_files_ok(
     assert len(reader.pages) == 2
 
 
-def test_cat_subset_ok(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_cat_subset_ok(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -95,7 +97,7 @@ def test_cat_subset_ok(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     ["a", "-", "1-", "1-1-1", "1:1:1:1"],
 )
 def test_cat_subset_invalid_args(
-    capsys: pytest.CaptureFixture, tmp_path: Path, page_range: str
+    capsys: pytest.CaptureFixture[str], tmp_path: Path, page_range: str
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -113,7 +115,7 @@ def test_cat_subset_invalid_args(
 
 
 def test_cat_subset_warn_on_missing_pages(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -166,7 +168,7 @@ def test_cat_combine_files(
     pdf_file_100: Path,
     pdf_file_abc: Path,
     tmp_path: Path,
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     with chdir(tmp_path):
         output_pdf_path = tmp_path / "out.pdf"
@@ -274,7 +276,7 @@ def test_cat_commands(
 
 
 def test_cat_decrypt_with_password_ok(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     exit_code = run_cli(
         [
@@ -293,7 +295,7 @@ def test_cat_decrypt_with_password_ok(
 
 
 def test_cat_decrypt_with_password_ko(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     exit_code = run_cli(
         [
@@ -309,7 +311,9 @@ def test_cat_decrypt_with_password_ko(
     assert "Error: the decrypting password provided is invalid" in captured.out
 
 
-def test_cat_verbose(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_cat_verbose(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     exit_code = run_cli(
         [
             "cat",

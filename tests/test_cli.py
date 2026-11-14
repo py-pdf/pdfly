@@ -18,7 +18,7 @@ def test_pypdf_cli_can_be_invoked_as_a_module() -> None:
     )
 
 
-def test_pypdf_cli_version(capsys: pytest.CaptureFixture) -> None:
+def test_pypdf_cli_version(capsys: pytest.CaptureFixture[str]) -> None:
     exit_code = run_cli(["--version"])
     captured = capsys.readouterr()
     assert not captured.err
@@ -27,7 +27,7 @@ def test_pypdf_cli_version(capsys: pytest.CaptureFixture) -> None:
 
 
 def test_main_module(
-    capsys: pytest.CaptureFixture, monkeypatch: pytest.MonkeyPatch
+    capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:
     # Same as `python -m pdfly --version`, but in this process,
     # so that coverage measures pdfly/__main__.py
@@ -41,7 +41,7 @@ def test_main_module(
 
 
 def test_importing_main_module_does_not_run_the_cli(
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     sys.modules.pop("pdfly.__main__", None)
 

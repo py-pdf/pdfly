@@ -9,6 +9,7 @@ from typing import Annotated
 
 import typer
 
+import pdfly._utils
 import pdfly.booklet
 import pdfly.cat
 import pdfly.check_sign
@@ -46,7 +47,7 @@ entry_point = typer.Typer(
 )
 
 
-@entry_point.callback()  # type: ignore[misc]
+@entry_point.callback()
 def common(
     ctx: typer.Context,
     version: bool = typer.Option(None, "--version", callback=version_callback),
@@ -54,7 +55,7 @@ def common(
     pass
 
 
-@entry_point.command(name="2-up", help=pdfly.up2.__doc__)  # type: ignore[misc]
+@entry_point.command(name="2-up", help=pdfly.up2.__doc__)
 def up2(
     pdf: Annotated[
         Path,
@@ -69,7 +70,7 @@ def up2(
     pdfly.up2.main(pdf, out)
 
 
-@entry_point.command(name="booklet", help=pdfly.booklet.__doc__)  # type: ignore[misc]
+@entry_point.command(name="booklet", help=pdfly.booklet.__doc__)
 def booklet(
     filename: Annotated[
         Path,
@@ -113,7 +114,7 @@ def booklet(
     pdfly.booklet.main(filename, output, blank_page, centerfold)
 
 
-@entry_point.command(name="cat", help=pdfly.cat.__doc__)  # type: ignore[misc]
+@entry_point.command(name="cat", help=pdfly.cat.__doc__)
 def cat(
     filename: Annotated[
         Path,
@@ -167,7 +168,7 @@ def check_sign(
     pdfly.check_sign.main(filename, pem, verbose)
 
 
-@entry_point.command(name="compress", help=pdfly.compress.__doc__)  # type: ignore[misc]
+@entry_point.command(name="compress", help=pdfly.compress.__doc__)
 def compress(
     pdf: Annotated[
         Path,
@@ -189,7 +190,7 @@ def compress(
 
 @entry_point.command(
     name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__
-)  # type: ignore[misc]
+)
 def extract_annotated_pages(
     input_pdf: Annotated[
         Path,
@@ -213,7 +214,7 @@ def extract_annotated_pages(
     pdfly.extract_annotated_pages.main(input_pdf, output_pdf)
 
 
-@entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)  # type: ignore[misc]
+@entry_point.command(name="extract-images", help=pdfly.extract_images.__doc__)
 def extract_images(
     pdf: Annotated[
         Path,
@@ -231,7 +232,7 @@ def extract_images(
     pdfly.extract_images.main(pdf, pgrgs)
 
 
-@entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)  # type: ignore[misc]
+@entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)
 def extract_links(
     pdf: Annotated[
         Path,
@@ -252,7 +253,7 @@ def extract_links(
     pdfly.extract_links.main(pdf, output_format)
 
 
-@entry_point.command(name="extract-text")  # type: ignore[misc]
+@entry_point.command(name="extract-text")
 def extract_text(
     pdf: Annotated[
         Path,
@@ -271,7 +272,7 @@ def extract_text(
         typer.echo(page.extract_text())
 
 
-@entry_point.command(name="meta", help=pdfly.metadata.__doc__)  # type: ignore[misc]
+@entry_point.command(name="meta", help=pdfly.metadata.__doc__)
 def metadata(
     pdf: Annotated[
         Path,
@@ -281,8 +282,8 @@ def metadata(
             resolve_path=True,
         ),
     ],
-    output: pdfly.metadata.OutputOptions = typer.Option(  # noqa
-        pdfly.metadata.OutputOptions.text.value,
+    output: pdfly._utils.OutputOptions = typer.Option(  # noqa
+        pdfly._utils.OutputOptions.text.value,
         "--output",
         "-o",
         help="output format",
@@ -292,7 +293,7 @@ def metadata(
     pdfly.metadata.main(pdf, output)
 
 
-@entry_point.command(name="pagemeta", help=pdfly.pagemeta.__doc__)  # type: ignore[misc]
+@entry_point.command(name="pagemeta", help=pdfly.pagemeta.__doc__)
 def pagemeta(
     pdf: Annotated[
         Path,
@@ -303,8 +304,8 @@ def pagemeta(
         ),
     ],
     page_index: int,
-    output: pdfly.metadata.OutputOptions = typer.Option(  # noqa
-        pdfly.metadata.OutputOptions.text.value,
+    output: pdfly._utils.OutputOptions = typer.Option(  # noqa
+        pdfly._utils.OutputOptions.text.value,
         "--output",
         "-o",
         help="output format",
@@ -339,7 +340,7 @@ def rm(
     pdfly.rm.main(filename, fn_pgrgs, output, verbose)
 
 
-@entry_point.command(name="rotate", help=pdfly.rotate.__doc__)  # type: ignore[misc]
+@entry_point.command(name="rotate", help=pdfly.rotate.__doc__)
 def rotate(
     filename: Annotated[
         Path,
@@ -386,7 +387,7 @@ def sign(
     pdfly.sign.main(filename, output, in_place, p12, p12_password)
 
 
-@entry_point.command(name="decrypt", help=pdfly.decrypt.__doc__)  # type: ignore[misc]
+@entry_point.command(name="decrypt", help=pdfly.decrypt.__doc__)
 def decrypt(
     input_file: Annotated[
         Path | None,
@@ -415,7 +416,7 @@ def decrypt(
     pdfly.decrypt.main(input_file, output_file, password)
 
 
-@entry_point.command(name="uncompress", help=pdfly.uncompress.__doc__)  # type: ignore[misc]
+@entry_point.command(name="uncompress", help=pdfly.uncompress.__doc__)
 def uncompress(
     pdf: Annotated[
         Path,
@@ -435,7 +436,7 @@ def uncompress(
     pdfly.uncompress.main(pdf, output)
 
 
-@entry_point.command(name="update-offsets", help=pdfly.update_offsets.__doc__)  # type: ignore[misc]
+@entry_point.command(name="update-offsets", help=pdfly.update_offsets.__doc__)
 def update_offsets(
     file_in: Annotated[
         Path,
@@ -459,7 +460,7 @@ def update_offsets(
     pdfly.update_offsets.main(file_in, file_out, encoding, verbose)
 
 
-@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)  # type: ignore[misc]
+@entry_point.command(name="x2pdf", help=pdfly.x2pdf.__doc__)
 def x2pdf(
     x: list[
         Annotated[

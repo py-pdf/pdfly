@@ -79,6 +79,7 @@ skip_covered = true
 [tool.mypy]
 plugins = ["pydantic.mypy"]
 ignore_missing_imports = true
+strict = true
 
 [tool.ruff]
 line-length = 79  # used by `ruff format`

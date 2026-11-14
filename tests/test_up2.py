@@ -8,7 +8,9 @@ from pypdf import PdfReader
 from .conftest import RESOURCES_ROOT, run_cli
 
 
-def test_up2_fewer_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_up2_fewer_args(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["2-up", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
@@ -16,7 +18,9 @@ def test_up2_fewer_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
     assert "Missing argument" in captured.err
 
 
-def test_up2_extra_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_up2_extra_args(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -36,7 +40,9 @@ def test_up2_extra_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
         assert not os.path.exists("out2.pdf"), "'out2.pdf' should not exist."
 
 
-def test_up2_8page_file(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_up2_8page_file(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     pdf_file = str(RESOURCES_ROOT / "input8.pdf")
     out_file_name = "out.pdf"
 
@@ -72,7 +78,7 @@ def test_up2_8page_file(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
 # Fix issue #218
 def test_up2_odd_page_number(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     pdf_file = "sample-files/026-latex-multicolumn/multicolumn.pdf"
     out_file_path = tmp_path / "out.pdf"

@@ -12,11 +12,13 @@ Examples
 
 """
 
+from __future__ import annotations
+
 import io
 import tempfile
-from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import fpdf.sign
 import typer
@@ -25,6 +27,9 @@ from endesive import signer
 from fpdf import FPDF, get_scale_factor
 from pypdf import PageObject, PdfReader, PdfWriter
 from pypdf.generic import DictionaryObject, PdfObject
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 def main(
@@ -39,7 +44,7 @@ def main(
     pdf_reader = PdfReader(filename)
     pdf_is_unsigned_or_raise(pdf_reader)
 
-    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper
+    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper[bytes]
     if output:
         output_file = open(output, "wb")
     else:
@@ -74,16 +79,16 @@ def is_signature(annotation: PdfObject) -> bool:
         return False
 
     subtype = resolved_annotation_object["/Subtype"]
-    if subtype != "/Widget":
+    if str(subtype) != "/Widget":
         return False
 
     fieldtype = resolved_annotation_object["/FT"]
-    return fieldtype == "/Sig"
+    return str(fieldtype) == "/Sig"
 
 
 def _sign_pdf_contents(
     pdf_reader: PdfReader,
-    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper,
+    output_file: io.BufferedWriter | tempfile._TemporaryFileWrapper[bytes],
     p12: Path,
     p12_password: str | None,
 ) -> None:
