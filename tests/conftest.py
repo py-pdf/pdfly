@@ -1,5 +1,6 @@
 """Utilities and fixtures that are available automatically for all tests."""
 
+import re
 from pathlib import Path
 
 import pytest
@@ -10,6 +11,20 @@ from pdfly.cli import entry_point
 TESTS_ROOT = Path(__file__).parent.resolve()
 PROJECT_ROOT = TESTS_ROOT.parent
 RESOURCES_ROOT = PROJECT_ROOT / "resources"
+
+
+ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
+BOX_DRAWING = re.compile("[\u2500-\u257f]")  # the borders of Typer's messages
+
+
+def plain(text: str) -> str:
+    """
+    Remove the colors, borders and line wrapping of the output of Typer.
+
+    On GitHub Actions, Typer colors its error messages, which splits
+    the text, e.g. "--output", with escape codes.
+    """
+    return " ".join(BOX_DRAWING.sub(" ", ANSI_ESCAPE.sub("", text)).split())
 
 
 def run_cli(args: list[str]) -> int | str | None:

@@ -64,9 +64,17 @@ Issues = "https://github.com/py-pdf/pdfly/issues"
 pdfly = "pdfly.cli:entry_point"
 
 [tool.pytest.ini_options]
-addopts = "--disable-socket --doctest-modules --cov=. --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
+addopts = "--disable-socket --doctest-modules --cov --cov-report html:tests/reports/coverage-html --cov-report term-missing --ignore=docs/ --durations=3 --timeout=30"
 doctest_encoding = "utf-8"
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["pdfly"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
 
 [tool.mypy]
 plugins = ["pydantic.mypy"]

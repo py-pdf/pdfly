@@ -307,3 +307,31 @@ def test_cat_decrypt_with_password_ko(
     captured = capsys.readouterr()
     assert exit_code == 1, captured
     assert "Error: the decrypting password provided is invalid" in captured.out
+
+
+def test_cat_verbose(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+    exit_code = run_cli(
+        [
+            "cat",
+            "--verbose",
+            str(RESOURCES_ROOT / "input8.pdf"),
+            "1:3",
+            "--output",
+            str(tmp_path / "out.pdf"),
+        ]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0, captured.err
+    # The verbose output goes to stderr, so it never mixes with a PDF
+    # written to stdout:
+    assert f"{RESOURCES_ROOT / 'input8.pdf'} 1:3" in captured.err
+    assert len(PdfReader(tmp_path / "out.pdf").pages) == 2
+
+
+def test_cat_invalid_pdf(tmp_path: Path) -> None:
+    not_a_pdf = tmp_path / "not-a-pdf.pdf"
+    not_a_pdf.write_text("This is not a PDF")
+
+    with pytest.raises(RuntimeError, match="Error while reading"):
+        run_cli(["cat", str(not_a_pdf), "--output", str(tmp_path / "out.pdf")])

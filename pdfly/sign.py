@@ -69,9 +69,7 @@ def pdf_is_unsigned_or_raise(pdf_reader: PdfReader) -> None:
 
 def is_signature(annotation: PdfObject) -> bool:
     resolved_annotation_object = annotation.get_object()
-    if resolved_annotation_object is None:
-        return False
-
+    # Also covers a reference to a missing object, resolved to NullObject:
     if type(resolved_annotation_object) is not DictionaryObject:
         return False
 

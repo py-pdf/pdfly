@@ -3,6 +3,8 @@
 from pathlib import Path
 
 import pytest
+from fpdf import FPDF
+from pypdf import PdfReader, PdfWriter
 from typer.testing import CliRunner
 
 from pdfly.cli import entry_point
@@ -44,7 +46,6 @@ def test_compress_sample_files(
 def test_compress_no_compression_when_larger(tmp_path: Path) -> None:
     """Test that compression doesn't apply when result would be larger."""
     # Create a small PDF that might not compress well
-    from fpdf import FPDF
 
     pdf = FPDF()
     pdf.add_page()
@@ -76,8 +77,6 @@ def test_compress_no_compression_when_larger(tmp_path: Path) -> None:
 
 def test_compress_file_integrity(tmp_path: Path) -> None:
     """Test that compressed files maintain PDF integrity."""
-    from fpdf import FPDF
-
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
@@ -119,8 +118,6 @@ def test_compress_file_integrity(tmp_path: Path) -> None:
 
     assert result.exit_code == 0
 
-    from pypdf import PdfReader
-
     reader = PdfReader(str(output_pdf))
     assert len(reader.pages) == 2
 
@@ -133,8 +130,6 @@ def test_compress_file_integrity(tmp_path: Path) -> None:
 
 def test_compress_output_metrics(tmp_path: Path) -> None:
     """Test that compression metrics are properly displayed."""
-    from fpdf import FPDF
-
     pdf = FPDF()
     for _i in range(10):
         pdf.add_page()
@@ -181,7 +176,6 @@ def test_compress_same_input_output_not_allowed(tmp_path: Path) -> None:
     input_pdf = tmp_path / "test.pdf"
 
     # Create a simple PDF
-    from fpdf import FPDF
 
     pdf = FPDF()
     pdf.add_page()
@@ -200,8 +194,6 @@ def test_compress_same_input_output_not_allowed(tmp_path: Path) -> None:
 
 def test_compress_preserves_metadata(tmp_path: Path) -> None:
     """Test that compression preserves PDF metadata."""
-    from fpdf import FPDF
-
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("helvetica", size=12)
@@ -226,8 +218,6 @@ def test_compress_preserves_metadata(tmp_path: Path) -> None:
 
     assert result.exit_code == 0
 
-    from pypdf import PdfReader
-
     reader = PdfReader(str(output_pdf))
     metadata = reader.metadata
 
@@ -235,3 +225,28 @@ def test_compress_preserves_metadata(tmp_path: Path) -> None:
     assert metadata.get("/Title") == "Test Title"
     assert metadata.get("/Author") == "Test Author"
     assert metadata.get("/Subject") == "Test Subject"
+
+
+def test_compress_pdf_without_metadata(tmp_path: Path) -> None:
+    pdf = FPDF()
+    pdf.set_compression(False)
+    pdf.add_page()
+    pdf.set_font("helvetica")
+    pdf.multi_cell(w=0, text="Some text to compress. " * 50)
+    input_pdf = tmp_path / "no-metadata.pdf"
+    pdf.output(input_pdf)
+    writer = PdfWriter(clone_from=input_pdf)
+    writer.metadata = None
+    writer.write(input_pdf)
+    assert PdfReader(input_pdf).metadata is None
+    output_pdf = tmp_path / "out.pdf"
+
+    result = runner.invoke(
+        entry_point, ["compress", str(input_pdf), str(output_pdf)]
+    )
+
+    assert result.exit_code == 0, result.output
+    assert output_pdf.stat().st_size < input_pdf.stat().st_size
+    reader = PdfReader(output_pdf)
+    assert len(reader.pages) == 1
+    assert "Some text to compress." in reader.pages[0].extract_text()

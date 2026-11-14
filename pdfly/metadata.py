@@ -4,7 +4,7 @@ import stat
 from datetime import datetime
 from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 from pypdf import PdfReader
 
 from ._utils import OutputOptions
@@ -42,6 +42,11 @@ class MetaInfo(BaseModel):
     modification_time: datetime
     access_time: datetime
 
+    @field_serializer("id1", "id2", when_used="json")
+    def _serialize_pdf_id(self, value: bytes | None) -> str:
+        # The PDF /ID entries are binary data, not UTF-8 strings.
+        return value.hex() if value is not None else ""
+
 
 def main(pdf: Path, output: OutputOptions) -> None:
     reader = PdfReader(str(pdf))
@@ -56,7 +61,7 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 if reader._encryption
                 else None
             ),
-            pdf_file_version=reader.stream.read(8).decode("utf-8"),
+            pdf_file_version=reader.pdf_header,
             # OS Info
             file_permissions=f"{stat.filemode(pdf_stat.st_mode)}",
             file_size=pdf_stat.st_size,
@@ -66,14 +71,12 @@ def main(pdf: Path, output: OutputOptions) -> None:
         )
     else:
         info = reader.metadata
-        reader.stream.seek(0)
-        pdf_file_version = reader.stream.read(8).decode("utf-8")
         pdf_stat = pdf.stat()
         pdf_id = reader.trailer.get("/ID")
         meta = MetaInfo(
             pages=len(reader.pages),
             page_mode=reader.page_mode,
-            pdf_file_version=pdf_file_version,
+            pdf_file_version=reader.pdf_header,
             page_layout=reader.page_layout,
             attachments=str(list(reader.attachments.keys())),
             id1=pdf_id[0] if pdf_id is not None else None,

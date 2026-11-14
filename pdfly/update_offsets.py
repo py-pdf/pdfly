@@ -32,7 +32,7 @@ from rich.console import Console
 # Here, only simple regular expressions are used.
 # Beyond a certain level of complexity, switching to a proper PDF dictionary parser would be better.
 RE_OBJ = re.compile(r"^([0-9]+) ([0-9]+) obj *")
-RE_CONTENT = re.compile(r"^([^\r\n]*)", re.DOTALL)
+RE_LINE_BREAK = re.compile(r"[\r\n]")
 RE_LENGTH_REF = re.compile(r"^(.*/Length )([0-9]+) ([0-9]+) R(.*)", re.DOTALL)
 RE_LENGTH = re.compile(
     r"^(.*/Length )([0-9]+)([ />\x00\t\f\r\n].*)", re.DOTALL
@@ -66,18 +66,13 @@ def update_lines(
     len_stream = None  # length of stream (in stream only)
     offset_xref = None  # offset of xref-section
     map_stream_len = {}  # map from object-number to /Length of stream
-    map_obj_length_line = {}  # map from object-number to /Length-line
+    map_obj_length_match = {}  # map from object-number to /Length-match
     map_obj_length_ref = {}  # map from object-number to /Length-reference (e.g. "3")
     map_obj_length_line_no = {}  # map from object-number to line_no of length
     # of /Length-line
     for idx, line in enumerate(lines_in):
         line_no = idx + 1
-        m_content = RE_CONTENT.match(line)
-        if m_content is None:
-            raise RuntimeError(
-                f"Invalid PDF file: line {line_no} without line-break."
-            )
-        content = m_content.group(1)
+        content = RE_LINE_BREAK.split(line, maxsplit=1)[0]
         map_line_offset[line_no] = offset_out
         m_obj = RE_OBJ.match(line)
         if m_obj is not None:
@@ -143,7 +138,7 @@ def update_lines(
                 if m_length is not None:
                     if verbose:
                         console.print(f"line {line_no}, /Length: {content}")
-                    map_obj_length_line[curr_obj] = line
+                    map_obj_length_match[curr_obj] = m_length
                     map_obj_length_line_no[curr_obj] = line_no
         elif curr_obj is not None and len_stream is not None:
             len_stream += len(line.encode(encoding))
@@ -185,13 +180,8 @@ def update_lines(
         )
 
     for curr_obj, stream_len in map_stream_len.items():
-        if curr_obj in map_obj_length_line:
-            line = map_obj_length_line[curr_obj]
-            m_length = RE_LENGTH.match(line)
-            if m_length is None:
-                raise RuntimeError(
-                    f"Invalid PDF file: line '{line}' does not contain a valid /Length."
-                )
+        if curr_obj in map_obj_length_match:
+            m_length = map_obj_length_match[curr_obj]
             prev_length = m_length.group(2)
             len_digits = len(prev_length)
             len_format = "%%0%dd" % len_digits
@@ -229,7 +219,7 @@ def update_lines(
                 lines_out[len_obj_line] = updated_length + "\n"
         else:
             raise RuntimeError(
-                f"obj {curr_obj} with stream-len {stream_len} has no object-length-line: {map_obj_length_line}"
+                f"obj {curr_obj} with stream-len {stream_len} has no object-length-line"
             )
 
     return lines_out
