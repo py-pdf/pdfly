@@ -141,7 +141,8 @@ def test_rotate_invalid_pdf(
             ["rotate", "-o", str(tmp_path / "out.pdf"), str(not_a_pdf), "90"]
         )
 
-    # Rich wraps long lines, so compare with normalized whitespace:
-    out = " ".join(capsys.readouterr().out.split())
-    assert f"Error while rotating {not_a_pdf}" in out
+    # Rich wraps long lines, even in the middle of a path,
+    # so compare without any whitespace:
+    out = "".join(capsys.readouterr().out.split())
+    assert "".join(f"Error while rotating {not_a_pdf}".split()) in out
     assert not (tmp_path / "out.pdf").exists()

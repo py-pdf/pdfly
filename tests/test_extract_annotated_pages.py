@@ -51,8 +51,8 @@ def test_extract_annotated_pages_skips_links(
 
     captured = capsys.readouterr()
     assert exit_code == 0, captured.err
-    assert f"Extracted 1 pages with annotations to {output_pdf}" in (
-        captured.out.replace("\n", "")
+    assert (
+        f"Extracted 1 pages with annotations to {output_pdf}" in captured.out
     )
     pages = PdfReader(output_pdf).pages
     assert len(pages) == 1
