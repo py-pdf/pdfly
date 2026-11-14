@@ -6,7 +6,7 @@ from fpdf import FPDF
 
 import pdfly.check_sign
 
-from .conftest import RESOURCES_ROOT, run_cli
+from .conftest import RESOURCES_ROOT, plain, run_cli
 
 
 def test_check_sign_manipulated_content(
@@ -181,7 +181,7 @@ def test_check_sign_malformed_byte_range(
     captured = capsys.readouterr()
 
     assert exit_code == 2
-    assert "Invalid signature: Invalid ByteRange data" in captured.err
+    assert "Invalid signature: Invalid ByteRange data" in plain(captured.err)
 
 
 def test_check_sign_invalid_signature(

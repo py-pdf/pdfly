@@ -13,7 +13,7 @@ from pypdf.generic import (
 
 from pdfly.sign import is_signature
 
-from .conftest import RESOURCES_ROOT, run_cli
+from .conftest import RESOURCES_ROOT, plain, run_cli
 
 
 def test_sign_missing_certificate_key_option(
@@ -142,7 +142,7 @@ def test_sign_requires_output_or_in_place(
     captured = capsys.readouterr()
 
     assert exit_code == 2
-    assert "One of the options --output or --in-place is required" in (
+    assert "One of the options --output or --in-place is required" in plain(
         captured.err
     )
     assert list(tmp_path.iterdir()) == []
