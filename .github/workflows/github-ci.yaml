@@ -61,7 +61,7 @@ jobs:
         import re, tomllib
         deps = tomllib.load(open("pyproject.toml", "rb"))["project"]["dependencies"]
         for dep in deps:
-            if m := re.fullmatch(r"([\w.-]+)(?:\[[^\]]*\])?>=([^,;\s]+)", dep):
+            if m := re.fullmatch(r"([\w.-]+)(?:\[[^\]]*\])?>=([^,;\s]+)(?:,.*)?", dep):
                 print(f"{m[1]}=={m[2]}")
         EOF
         cat constraints.txt
