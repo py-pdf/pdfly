@@ -8,6 +8,7 @@
 ### New Features (ENH)
 - New `extract-links` command ([PR #271](https://github.com/py-pdf/pdfly/pull/271))
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
+- `extract-text` now has an option `--output-pattern` which allows either for the full output to be stored in a single file, or for each page's text to be stored in a different file whose name depends on the output pattern and the page index
 - `extract-images` now accepts an optional page range, to only extract images from specific pages - [issue #194](https://github.com/py-pdf/pdfly/issues/194)
 - ensured support for Python 3.15
 
@@ -17,6 +18,8 @@
 ### Maintenance (MAINT)
 - `check-sign` and `sign` now use endesive 3, which no longer depends on oscrypto
 
+### Testing (TST)
+- Added unit tests for `extract-text`
 
 ## Version 0.5.1, 2025-10-13
 
@@ -27,6 +30,7 @@
 ### Bug Fixes (BUG)
 - `requests` is now a dependency, to prevent a `ModuleNotFoundError` when running with `uv`
 
+### Testing (TST)
 
 ## Version 0.5.0, 2025-10-13
 
