@@ -116,6 +116,7 @@ GitHub ⭐️
    user/subcommand-cat
    user/subcommand-check-sign
    user/subcommand-compress
+   user/subcommand-decrypt
    user/subcommand-extract-annotated-pages
    user/subcommand-extract-images
    user/subcommand-extract-links
