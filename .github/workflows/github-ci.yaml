@@ -43,7 +43,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install . --group dev
     - name: Run tests
-      run: pytest -vv
+      # Coverage is only measured on the job which enforces 100% coverage.
+      # On Python 3.11, coverage.py tracing multiplies the runtime of tests
+      # which read the large strings of sample-files/018-base64-image
+      # Python 3.12+ uses sys.monitoring and is unaffected
+      shell: bash
+      run: |
+        if [[ "${{ matrix.platform }}" == "ubuntu-latest" && "${{ matrix.python-version}}" == "${{ env.PYTHON_LATEST}}" ]]; then
+          pytest -vv
+        else
+          pytest -vv --no-cov
+        fi
     - name: Require 100% test coverage
       # Checked on a single job, which reuses the coverage data of "Run tests"
       if: matrix.platform == 'ubuntu-latest' && matrix.python-version == env.PYTHON_LATEST
