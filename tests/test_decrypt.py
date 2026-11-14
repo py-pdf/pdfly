@@ -110,16 +110,16 @@ def test_decrypt_invalid_password(
 
 
 def test_decrypt_password_decrypt_failure(
-    encrypted_pdf: Path, capsys: pytest.CaptureFixture
+    encrypted_pdf: Path,
+    capsys: pytest.CaptureFixture,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def raise_error(_password: str) -> str:
+    def raise_error(_self: PdfReader, _password: str) -> str:
         raise ValueError("boom")
 
-    PdfReader.decrypt = raise_error  # type: ignore[method-assign]
-    try:
-        exit_code = run_cli(["decrypt", "-p", "secret", str(encrypted_pdf)])
-    finally:
-        del PdfReader.decrypt
+    monkeypatch.setattr(PdfReader, "decrypt", raise_error)
+
+    exit_code = run_cli(["decrypt", "-p", "secret", str(encrypted_pdf)])
 
     assert exit_code == 1
     captured = capsys.readouterr()
@@ -127,18 +127,16 @@ def test_decrypt_password_decrypt_failure(
 
 
 def test_decrypt_empty_password_decrypt_failure(
-    encrypted_pdf_with_empty_password: Path, capsys: pytest.CaptureFixture
+    encrypted_pdf_with_empty_password: Path,
+    capsys: pytest.CaptureFixture,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def raise_error(_password: str) -> str:
+    def raise_error(_self: PdfReader, _password: str) -> str:
         raise ValueError("boom")
 
-    PdfReader.decrypt = raise_error  # type: ignore[method-assign]
-    try:
-        exit_code = run_cli(
-            ["decrypt", str(encrypted_pdf_with_empty_password)]
-        )
-    finally:
-        del PdfReader.decrypt
+    monkeypatch.setattr(PdfReader, "decrypt", raise_error)
+
+    exit_code = run_cli(["decrypt", str(encrypted_pdf_with_empty_password)])
 
     assert exit_code == 1
     captured = capsys.readouterr()
