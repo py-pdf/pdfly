@@ -13,6 +13,7 @@ import pdfly.booklet
 import pdfly.cat
 import pdfly.check_sign
 import pdfly.compress
+import pdfly.decrypt
 import pdfly.extract_annotated_pages
 import pdfly.extract_images
 import pdfly.extract_links
@@ -383,6 +384,35 @@ def sign(
     ] = None,
 ) -> None:
     pdfly.sign.main(filename, output, in_place, p12, p12_password)
+
+
+@entry_point.command(name="decrypt", help=pdfly.decrypt.__doc__)  # type: ignore[misc]
+def decrypt(
+    input_file: Annotated[
+        Path | None,
+        typer.Argument(
+            dir_okay=False,
+            help="Path to the encrypted PDF file, or '-' to read from STDIN.",
+        ),
+    ] = None,
+    output_file: Annotated[
+        Path | None,
+        typer.Argument(
+            dir_okay=False,
+            help="Path where the decrypted PDF is written."
+            " If omitted, the PDF is written to standard output.",
+        ),
+    ] = None,
+    password: Annotated[
+        str | None,
+        typer.Option(
+            "-p",
+            "--password",
+            help="The password required to decrypt the PDF.",
+        ),
+    ] = None,
+) -> None:
+    pdfly.decrypt.main(input_file, output_file, password)
 
 
 @entry_point.command(name="uncompress", help=pdfly.uncompress.__doc__)  # type: ignore[misc]

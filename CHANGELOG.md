@@ -6,6 +6,7 @@
 - `2up` incorrectly handled documents with an odd number of pages - [issue #219](https://github.com/py-pdf/pdfly/issues/218)
 
 ### New Features (ENH)
+- New `decrypt` command, removing password protection from an encrypted PDF - [issue #275](https://github.com/py-pdf/pdfly/issues/275)
 - New `extract-links` command ([PR #271](https://github.com/py-pdf/pdfly/pull/271))
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
 - `extract-images` now accepts an optional page range, to only extract images from specific pages - [issue #194](https://github.com/py-pdf/pdfly/issues/194)

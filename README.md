@@ -45,6 +45,7 @@ $ pdfly --help
 │ cat                       Extract and concatenate pages from PDF files into a single PDF file. │
 │ check-sign                Verifies the signature of a signed PDF.                              │
 │ compress                  Compress a PDF.                                                      │
+│ decrypt                   Remove password protection from an encrypted PDF file.               │
 │ extract-annotated-pages   Extract only the annotated pages from a PDF.                         │
 │ extract-images            Extract images from PDF without resampling or altering.              │
 │ extract-links             Extract all links from a PDF document.                               │
