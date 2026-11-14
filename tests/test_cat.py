@@ -1,10 +1,11 @@
+from contextlib import chdir
 from pathlib import Path
 from typing import Any
 
 import pytest
 from pypdf import PdfReader
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def extract_embedded_images(pdf_filepath: Path) -> list[Any]:

@@ -10,6 +10,9 @@
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
 - ensured support for Python 3.15
 
+### Deprecations (DEP)
+- support for Python 3.10 has been dropped, as it reached its end of life on 2026-10-01: `pdfly` now requires Python 3.11+
+
 
 ## Version 0.5.1, 2025-10-13
 

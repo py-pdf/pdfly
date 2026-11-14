@@ -1,9 +1,10 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from endesive import pdf
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_sign_missing_certificate_key_option(

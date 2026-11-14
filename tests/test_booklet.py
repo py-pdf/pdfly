@@ -1,9 +1,10 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from pypdf import PdfReader
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_booklet_fewer_args(

@@ -2,7 +2,7 @@
 There are several ways to install pdfly. The most common option is to use pip.
 
 ## pip
-pdfly requires Python 3.10+ to run.
+pdfly requires Python 3.11+ to run.
 
 Typically Python comes with `pip`, a package installer. Using it you can
 install pdfly:
@@ -55,7 +55,7 @@ If it's not filled, we don't guarantee support, but it might still work.
 
 | Python                 | 3.15 | 3.14 | 3.13 | 3.12 | 3.11 | 3.10 | 2.7 |
 | ---------------------- | ---- | ---- | ---- | ---- | ---- | ---- | --- |
-| pdfly                  |  ✓   |  ✓   |  ✓   |  ✓  |  ✓   |  ✓   |  ✖  |
+| pdfly                  |  ✓   |  ✓   |  ✓   |  ✓   |  ✓   |  ✖   |  ✖  |
 
 
 ## Development Version
