@@ -4,7 +4,7 @@ import stat
 from datetime import datetime
 from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 from pypdf import PdfReader
 
 from ._utils import OutputOptions
@@ -41,6 +41,11 @@ class MetaInfo(BaseModel):
     creation_time: datetime
     modification_time: datetime
     access_time: datetime
+
+    @field_serializer("id1", "id2", when_used="json")
+    def _serialize_pdf_id(self, value: bytes | None) -> str:
+        # The PDF /ID entries are binary data, not UTF-8 strings.
+        return value.hex() if value is not None else ""
 
 
 def main(pdf: Path, output: OutputOptions) -> None:

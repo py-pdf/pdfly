@@ -37,6 +37,9 @@ def content_streams(reader: PdfReader) -> list[StreamObject]:
         )
     ],
 )
+# 018-base64-image contains >1MB binary strings inside the annotations
+# private data, which is slow to parse on the standard CI runner:
+@pytest.mark.timeout(90)
 def test_uncompress_all_sample_files(
     input_pdf_filepath: Path, tmp_path: Path, capsys: pytest.CaptureFixture
 ) -> None:
