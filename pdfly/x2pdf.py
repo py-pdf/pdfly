@@ -34,12 +34,12 @@ def main(in_filepaths: list[Path], out_filepath: Path) -> int:
     for filepath in in_filepaths:
         if filepath.name.endswith(".pdf"):
             for page in PdfReader(filepath).pages:
-                writer.insert_page(page)
+                writer.add_page(page)
             continue
         try:
             pdf_bytes = image_to_pdf(filepath)
             new_page = PdfReader(pdf_bytes).pages[0]
-            writer.insert_page(new_page)
+            writer.add_page(new_page)
         except Exception:
             console.print(
                 f"[red]Error: Could not convert '{filepath}' to a PDF."
