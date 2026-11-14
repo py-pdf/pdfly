@@ -10,7 +10,7 @@ from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_booklet_fewer_args(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["booklet", str(RESOURCES_ROOT / "box.pdf")])
@@ -20,7 +20,7 @@ def test_booklet_fewer_args(
 
 
 def test_booklet_extra_args(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -73,7 +73,7 @@ def test_booklet_page_size(tmp_path: Path) -> None:
     ],
 )
 def test_booklet_order(
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
     tmp_path: Path,
     page_count: str,
     expected: str,

@@ -47,7 +47,7 @@ def test_decrypt_to_output_file(encrypted_pdf: Path, tmp_path: Path) -> None:
 
 
 def test_decrypt_without_output_writes_to_stdout(
-    encrypted_pdf: Path, capsysbinary: pytest.CaptureFixture
+    encrypted_pdf: Path, capsysbinary: pytest.CaptureFixture[bytes]
 ) -> None:
     exit_code = run_cli(["decrypt", "-p", "secret", str(encrypted_pdf)])
 
@@ -90,7 +90,7 @@ def test_decrypt_with_empty_password(
 
 
 def test_decrypt_encrypted_requires_password(
-    encrypted_pdf: Path, capsys: pytest.CaptureFixture
+    encrypted_pdf: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code = run_cli(["decrypt", str(encrypted_pdf)])
 
@@ -100,7 +100,7 @@ def test_decrypt_encrypted_requires_password(
 
 
 def test_decrypt_invalid_password(
-    encrypted_pdf: Path, capsys: pytest.CaptureFixture
+    encrypted_pdf: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code = run_cli(["decrypt", "-p", "wrong", str(encrypted_pdf)])
 
@@ -111,7 +111,7 @@ def test_decrypt_invalid_password(
 
 def test_decrypt_password_decrypt_failure(
     encrypted_pdf: Path,
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     def raise_error(_self: PdfReader, _password: str) -> str:
@@ -128,7 +128,7 @@ def test_decrypt_password_decrypt_failure(
 
 def test_decrypt_empty_password_decrypt_failure(
     encrypted_pdf_with_empty_password: Path,
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     def raise_error(_self: PdfReader, _password: str) -> str:
@@ -144,7 +144,7 @@ def test_decrypt_empty_password_decrypt_failure(
 
 
 def test_decrypt_unencrypted_file_passthrough(
-    capsysbinary: pytest.CaptureFixture,
+    capsysbinary: pytest.CaptureFixture[bytes],
 ) -> None:
     # Unencrypted input files are passed through unchanged so that
     # filter chains do not break unexpectedly.
@@ -172,7 +172,7 @@ def test_decrypt_unencrypted_file_to_output(
 
 
 def test_decrypt_missing_input_file(
-    tmp_path: Path, capsys: pytest.CaptureFixture
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code = run_cli(["decrypt", str(tmp_path / "not-there.pdf")])
 

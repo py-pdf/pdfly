@@ -17,7 +17,7 @@ from .conftest import RESOURCES_ROOT, plain, run_cli
 
 
 def test_sign_missing_certificate_key_option(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -32,7 +32,7 @@ def test_sign_missing_certificate_key_option(
 
 
 def test_sign_already_signed_pdf(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -55,7 +55,9 @@ def test_sign_already_signed_pdf(
     assert "already signed" in captured.err
 
 
-def test_sign_pkcs12(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_sign_pkcs12(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -89,7 +91,7 @@ def test_sign_pkcs12(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
 
 def test_sign_pkcs12_in_place(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Arrange
     input8pdf = RESOURCES_ROOT / "input8.pdf"
@@ -128,7 +130,7 @@ def test_sign_pkcs12_in_place(
 
 
 def test_sign_requires_output_or_in_place(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(

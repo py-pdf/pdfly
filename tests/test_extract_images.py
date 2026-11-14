@@ -7,7 +7,7 @@ from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_extract_images_jpg_png(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         run_cli(
@@ -22,7 +22,7 @@ def test_extract_images_jpg_png(
 
 
 def test_extract_images_monochrome(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # There used to be a bug for this case: https://github.com/py-pdf/pypdf/issues/2176
     with chdir(tmp_path):
@@ -43,7 +43,7 @@ def test_extract_images_monochrome(
     ],
 )
 def test_extract_images_page_range(
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
     tmp_path: Path,
     page_range: str,
     expected: str,

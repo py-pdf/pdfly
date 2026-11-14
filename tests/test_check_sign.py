@@ -10,7 +10,7 @@ from .conftest import RESOURCES_ROOT, plain, run_cli
 
 
 def test_check_sign_manipulated_content(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Arrange
     pdf = FPDF()
@@ -48,7 +48,7 @@ def test_check_sign_manipulated_content(
 
 
 def test_check_sign_missing_signature(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -68,7 +68,7 @@ def test_check_sign_missing_signature(
 
 
 def test_check_sign_signature_not_matching_to_certificate(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Act
     with chdir(tmp_path):
@@ -90,7 +90,9 @@ def test_check_sign_signature_not_matching_to_certificate(
     assert "Certificate not ok" in captured.err
 
 
-def test_check_sign_pem(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
+def test_check_sign_pem(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     # Act
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -109,7 +111,7 @@ def test_check_sign_pem(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
 
 def test_check_sign_pdfly_signed_pdf(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # Arrange
     with chdir(tmp_path):
@@ -144,7 +146,7 @@ def test_check_sign_pdfly_signed_pdf(
     assert not captured.err
 
 
-def test_check_sign_verbose(capsys: pytest.CaptureFixture) -> None:
+def test_check_sign_verbose(capsys: pytest.CaptureFixture[str]) -> None:
     exit_code = run_cli(
         [
             "check-sign",
@@ -165,7 +167,7 @@ def test_check_sign_verbose(capsys: pytest.CaptureFixture) -> None:
 
 
 def test_check_sign_malformed_byte_range(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     pdf = tmp_path / "malformed.pdf"
     pdf.write_bytes(b"%PDF-1.7\n1 0 obj << /ByteRange [ 0 a 2 3 ] >> endobj\n")
@@ -185,7 +187,7 @@ def test_check_sign_malformed_byte_range(
 
 
 def test_check_sign_invalid_signature(
-    capsys: pytest.CaptureFixture, monkeypatch: pytest.MonkeyPatch
+    capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:
     # A signature that does not match its signed attributes, while the
     # content hash still matches, cannot be produced by editing the file

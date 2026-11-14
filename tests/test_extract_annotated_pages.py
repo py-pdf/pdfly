@@ -10,7 +10,7 @@ from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_extract_annotated_pages_input8(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     # The default output is written next to the input file,
     # so we work on a copy to keep the resources/ directory clean:
@@ -30,7 +30,7 @@ def test_extract_annotated_pages_input8(
 
 
 def test_extract_annotated_pages_skips_links(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     pdf = FPDF()
     pdf.set_font("helvetica")

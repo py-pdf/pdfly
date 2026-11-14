@@ -9,7 +9,7 @@ from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_rotate_fewer_args(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -23,7 +23,7 @@ def test_rotate_fewer_args(
 
 
 def test_rotate_extra_args(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -101,7 +101,7 @@ def test_rotate_default(tmp_path: Path) -> None:
     ],
 )
 def test_rotate_slices(
-    capsys: pytest.CaptureFixture,
+    capsys: pytest.CaptureFixture[str],
     tmp_path: Path,
     degrees: int,
     slice: str,
@@ -131,7 +131,7 @@ def test_rotate_slices(
 
 
 def test_rotate_invalid_pdf(
-    capsys: pytest.CaptureFixture, tmp_path: Path
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
 ) -> None:
     not_a_pdf = tmp_path / "not-a-pdf.pdf"
     not_a_pdf.write_text("This is not a PDF")

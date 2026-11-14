@@ -80,7 +80,7 @@ def main(
     writer = PdfWriter()
     in_fs = {}
     try:
-        for filepath, page_range in filename_page_ranges:  # type: ignore
+        for filepath, page_range in filename_page_ranges:
             if verbose:
                 print(filepath, page_range, file=sys.stderr)
             if filepath not in in_fs:

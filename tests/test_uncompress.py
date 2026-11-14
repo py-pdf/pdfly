@@ -41,7 +41,9 @@ def content_streams(reader: PdfReader) -> list[StreamObject]:
 # private data, which is slow to parse on the standard CI runner:
 @pytest.mark.timeout(90)
 def test_uncompress_all_sample_files(
-    input_pdf_filepath: Path, tmp_path: Path, capsys: pytest.CaptureFixture
+    input_pdf_filepath: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     output_pdf_filepath = tmp_path / "uncompressed_output.pdf"
 
@@ -77,7 +79,7 @@ def test_uncompress_found_sample_files() -> None:
 
 
 def test_uncompress_page_without_contents(
-    tmp_path: Path, capsys: pytest.CaptureFixture
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     input_pdf = tmp_path / "blank.pdf"
     writer = PdfWriter()

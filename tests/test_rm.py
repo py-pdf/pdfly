@@ -12,7 +12,7 @@ from .test_cat import extract_embedded_images
 
 
 def test_rm_incorrect_number_of_args(
-    capsys: CaptureFixture, tmp_path: Path
+    capsys: CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(["rm", str(RESOURCES_ROOT / "box.pdf")])
@@ -21,7 +21,7 @@ def test_rm_incorrect_number_of_args(
     assert "Missing" in captured.err
 
 
-def test_rm_subset_ok(capsys: CaptureFixture, tmp_path: Path) -> None:
+def test_rm_subset_ok(capsys: CaptureFixture[str], tmp_path: Path) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
             [
@@ -47,7 +47,7 @@ def test_rm_subset_ok(capsys: CaptureFixture, tmp_path: Path) -> None:
     ["a", "-", "1-", "1-1-1", "1:1:1:1"],
 )
 def test_rm_subset_invalid_args(
-    capsys: CaptureFixture, tmp_path: Path, page_range: str
+    capsys: CaptureFixture[str], tmp_path: Path, page_range: str
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -65,7 +65,7 @@ def test_rm_subset_invalid_args(
 
 
 def test_rm_subset_warn_on_missing_pages(
-    capsys: CaptureFixture, tmp_path: Path
+    capsys: CaptureFixture[str], tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
         exit_code = run_cli(
@@ -118,7 +118,7 @@ def test_rm_combine_files(
     pdf_file_100: Path,
     pdf_file_abc: Path,
     tmp_path: Path,
-    capsys: CaptureFixture,
+    capsys: CaptureFixture[str],
 ) -> None:
     with chdir(tmp_path):
         output_pdf_path = tmp_path / "out.pdf"

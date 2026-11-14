@@ -25,9 +25,16 @@ repos:
     -   id: ruff-format
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.19.1'
+    rev: 'v2.4.1'
     hooks:
       - id: mypy
         files: ^pdfly/.*
         additional_dependencies:
+        - "cryptography"
+        - "endesive"
+        - "fpdf2"
+        - "pillow"
         - "pydantic>=1.10.4"
+        - "pypdf[full]"
+        - "rich"
+        - "typer>=0.18.0"

@@ -52,7 +52,7 @@ def encrypted_pdf(tmp_path: Path) -> Path:
 
 
 def run_meta(
-    pdf: Path, output: str, capsys: pytest.CaptureFixture
+    pdf: Path, output: str, capsys: pytest.CaptureFixture[str]
 ) -> tuple[int | str | None, str, str]:
     exit_code = run_cli(["meta", str(pdf), "--output", output])
     captured = capsys.readouterr()
@@ -60,7 +60,7 @@ def run_meta(
 
 
 def test_meta_json_with_info(
-    pdf_with_info: Path, capsys: pytest.CaptureFixture
+    pdf_with_info: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code, out, err = run_meta(pdf_with_info, "json", capsys)
 
@@ -84,7 +84,7 @@ def test_meta_json_with_info(
 
 
 def test_meta_json_without_info(
-    pdf_without_info: Path, capsys: pytest.CaptureFixture
+    pdf_without_info: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code, out, err = run_meta(pdf_without_info, "json", capsys)
 
@@ -100,7 +100,7 @@ def test_meta_json_without_info(
 
 
 def test_meta_json_encrypted(
-    encrypted_pdf: Path, capsys: pytest.CaptureFixture
+    encrypted_pdf: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code, out, err = run_meta(encrypted_pdf, "json", capsys)
 
@@ -114,7 +114,7 @@ def test_meta_json_encrypted(
 
 
 def test_meta_text_with_info(
-    pdf_with_info: Path, capsys: pytest.CaptureFixture
+    pdf_with_info: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code, out, err = run_meta(pdf_with_info, "text", capsys)
 
@@ -138,7 +138,7 @@ def test_meta_text_with_info(
 
 
 def test_meta_text_without_info(
-    pdf_without_info: Path, capsys: pytest.CaptureFixture
+    pdf_without_info: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code, out, err = run_meta(pdf_without_info, "text", capsys)
 
@@ -151,7 +151,7 @@ def test_meta_text_without_info(
 
 
 def test_meta_text_encrypted(
-    encrypted_pdf: Path, capsys: pytest.CaptureFixture
+    encrypted_pdf: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     exit_code, out, err = run_meta(encrypted_pdf, "text", capsys)
 

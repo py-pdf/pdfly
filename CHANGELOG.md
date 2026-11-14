@@ -19,6 +19,10 @@
 - `check-sign` and `sign` now use endesive 3, which no longer depends on oscrypto
 
 
+### Developer Experience (DEV)
+- mypy now runs in strict mode
+
+
 ## Version 0.5.1, 2025-10-13
 
 ### New Features (ENH)
