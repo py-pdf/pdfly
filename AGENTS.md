@@ -14,6 +14,10 @@
         * DEV: Developer experience improvements, e.g., pre-commit or setting up CI.
         * MAINT: Quite a lot of different stuff. Performance improvements are, for sure, the most interesting changes in here. Refactorings as well.
         * STY: A style change. Something that makes code more consistent. Typically, a small change. It could also be better error messages for end users.
+    3. BODY: If the commit relates to an issue (https://github.com/py-pdf/pypdf/issues) mention it:
+        * Closes #123: If the issue was fixed by this commit
+        * "Related to #123" or "See #123" otherwise
 2. Project Language: (American) English must be used for all communication, including variable names, code comments, commit messages and documentation.
-3. Use `assert` only within tests. It is fine to use assert in the "arrange" step of a test to show which preconditions are expected before executing the code under test.
-4. Tests should have 3 sections: Arrange (setup data), Act (execute code under test), Assert (verify results). They do not need to have explicit comments separating the sections, but if the blocks get longer and more complex, it's appreciated.
+3. Code Guidelines:
+    1. Use `assert` only within tests. It is fine to use assert in the "arrange" step of a test to show which preconditions are expected before executing the code under test.
+    2. Tests should have 3 sections: Arrange (setup data), Act (execute code under test), Assert (verify results). They do not need to have explicit comments separating the sections, but if the blocks get longer and more complex, it's appreciated.
