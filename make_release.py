@@ -4,7 +4,7 @@ import json
 import subprocess
 import urllib.request
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from rich.prompt import Prompt
@@ -45,7 +45,7 @@ def main(changelog_path: str) -> None:
     new_version = get_version_interactive(new_version, changes)
     adjust_version_py(new_version)
 
-    today = datetime.now(tz=timezone.utc)
+    today = datetime.now(tz=UTC)
     header = f"## Version {new_version}, {today:%Y-%m-%d}\n"
     url = f"https://github.com/{GH_ORG}/{GH_PROJECT}/compare/{git_tag}...{new_version}"
     trailer = f"\n[Full Changelog]({url})\n\n"

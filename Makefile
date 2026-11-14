@@ -1,7 +1,8 @@
 maint:
 	pre-commit autoupdate
 	python -m pip install --upgrade .
-	python -m pip lock --group dev --group docs .
+	# Universal lock: valid on every platform and Python version pdfly supports
+	uv pip compile pyproject.toml --group dev --group docs --universal --python-version 3.11 -o pylock.toml
 	uv pip install -r pylock.toml
 	git submodule update --remote
 

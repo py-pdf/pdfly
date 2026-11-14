@@ -1,9 +1,10 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from fpdf import FPDF
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_check_sign_manipulated_content(

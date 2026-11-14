@@ -1,9 +1,10 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
-from endesive import pdf
+from endesive.pdf import PDFVerifier
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_sign_missing_certificate_key_option(
@@ -68,11 +69,14 @@ def test_sign_pkcs12(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:
 
     outpdf = tmp_path / "out.pdf"
     certificate = RESOURCES_ROOT / "signing-certificate.crt"
-    results = pdf.verify(outpdf.read_bytes(), [certificate.read_bytes()])
-    for hash_ok, signature_ok, cert_ok in results:
-        assert signature_ok
-        assert hash_ok
-        assert cert_ok
+    results = PDFVerifier(
+        outpdf.read_bytes(), [certificate.read_bytes()]
+    ).verify_all_signatures()
+    assert len(results) == 1
+    for result in results:
+        assert result.signatureok
+        assert result.hashok
+        assert result.certok
 
 
 def test_sign_pkcs12_in_place(
@@ -104,8 +108,11 @@ def test_sign_pkcs12_in_place(
     assert not captured.err
 
     certificate = RESOURCES_ROOT / "signing-certificate.crt"
-    results = pdf.verify(outpdf.read_bytes(), [certificate.read_bytes()])
-    for hash_ok, signature_ok, cert_ok in results:
-        assert signature_ok
-        assert hash_ok
-        assert cert_ok
+    results = PDFVerifier(
+        outpdf.read_bytes(), [certificate.read_bytes()]
+    ).verify_all_signatures()
+    assert len(results) == 1
+    for result in results:
+        assert result.signatureok
+        assert result.hashok
+        assert result.certok

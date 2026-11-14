@@ -1,10 +1,11 @@
 import os.path
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from pypdf import PdfReader
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_up2_fewer_args(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:

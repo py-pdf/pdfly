@@ -1,8 +1,9 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_extract_images_jpg_png(

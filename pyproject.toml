@@ -17,7 +17,7 @@ readme = "README.md"
 dynamic = ["version"]
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
-requires-python = ">=3.10.0"
+requires-python = ">=3.11"
 
 keywords = ["pdf", "cli", "tools", "compression", "metadata", "signature", "booklet"]
 
@@ -30,7 +30,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -47,7 +46,7 @@ dependencies = [
     "fpdf2>=2.8.2",
     "asn1crypto",
     "cryptography",
-    "endesive<3",  # 3.x changed pdf.verify() to return Result objects
+    "endesive>=3.0.3,<4",
     "requests>=2.32.5",  # required by endesive.signer
 ]
 
