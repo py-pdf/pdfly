@@ -125,7 +125,12 @@ def cat(
     fn_pgrgs: list[str] | None = typer.Argument(  # noqa: B008
         None, allow_dash=True, help="filenames and/or page ranges"
     ),
-    output: Path = typer.Option(..., "-o", "--output"),  # noqa
+    output: Path | None = typer.Option(  # noqa: B008
+        None,
+        "-o",
+        "--output",
+        help="Output file. If omitted, the PDF is written to standard output.",
+    ),
     password: str = typer.Option(
         None, help="Document's user or owner password."
     ),
@@ -181,7 +186,9 @@ def compress(
     pdfly.compress.main(pdf, output)
 
 
-@entry_point.command(name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__)  # type: ignore[misc]
+@entry_point.command(
+    name="extract-annotated-pages", help=pdfly.extract_annotated_pages.__doc__
+)  # type: ignore[misc]
 def extract_annotated_pages(
     input_pdf: Annotated[
         Path,

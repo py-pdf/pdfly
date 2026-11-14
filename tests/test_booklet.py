@@ -1,16 +1,17 @@
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from pypdf import PdfReader
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_booklet_fewer_args(
     capsys: pytest.CaptureFixture, tmp_path: Path
 ) -> None:
     with chdir(tmp_path):
-        exit_code = run_cli(["cat", str(RESOURCES_ROOT / "box.pdf")])
+        exit_code = run_cli(["booklet", str(RESOURCES_ROOT / "box.pdf")])
     assert exit_code == 2
     captured = capsys.readouterr()
     assert "Missing" in captured.err

@@ -1,9 +1,10 @@
 import json
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 
 
 def test_pagemeta_json(capsys: pytest.CaptureFixture, tmp_path: Path) -> None:

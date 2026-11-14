@@ -9,6 +9,13 @@
 - New `extract-links` command ([PR #271](https://github.com/py-pdf/pdfly/pull/271))
 - `pagemeta` now displays the name of a known page format that is close to the page dimensions
 - `extract-images` now accepts an optional page range, to only extract images from specific pages - [issue #194](https://github.com/py-pdf/pdfly/issues/194)
+- ensured support for Python 3.15
+
+### Deprecations (DEP)
+- support for Python 3.10 has been dropped, as it reached its end of life on 2026-10-01: `pdfly` now requires Python 3.11+
+
+### Maintenance (MAINT)
+- `check-sign` and `sign` now use endesive 3, which no longer depends on oscrypto
 
 
 ## Version 0.5.1, 2025-10-13

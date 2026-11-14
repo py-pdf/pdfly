@@ -1,12 +1,13 @@
 """Tests for the `rm` command."""
 
+from contextlib import chdir
 from pathlib import Path
 
 import pytest
 from _pytest.capture import CaptureFixture
 from pypdf import PdfReader
 
-from .conftest import RESOURCES_ROOT, chdir, run_cli
+from .conftest import RESOURCES_ROOT, run_cli
 from .test_cat import extract_embedded_images
 
 

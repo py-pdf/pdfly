@@ -36,9 +36,9 @@ def test_update_offsets(capsys: pytest.CaptureFixture) -> None:
         lines_exp = file_exp.readlines()
     with input.open(encoding="iso-8859-1") as file_act:
         lines_act = file_act.readlines()
-    assert len(lines_exp) == len(
-        lines_act
-    ), f"lines_exp=f{lines_exp}, lines_act=f{lines_act}"
+    assert len(lines_exp) == len(lines_act), (
+        f"lines_exp=f{lines_exp}, lines_act=f{lines_act}"
+    )
     for line_no, (line_exp, line_act) in enumerate(
         zip(lines_exp, lines_act), start=1
     ):
