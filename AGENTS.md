@@ -25,6 +25,7 @@
     2. Tests should have 3 sections: Arrange (setup data), Act (execute code under test), Assert (verify results). They do not need to have explicit comments separating the sections, but if the blocks get longer and more complex, it's appreciated.
     3. Prefer parametrized tests using `pytest.mark.parametrize` to cover multiple input scenarios efficiently.
 5. Project setup:
-    1. Run `pre-commit install` to set up the git hook.
-    2. Run `pytest` to execute the test suite.
-    3. Ensure all tests pass before committing changes.
+    1. Ensure the git submodule `sample-files` is initialized and updated
+    2. Run `pre-commit install` to set up the git hook.
+    3. Run `pytest` to execute the test suite.
+    4. Ensure all tests pass before committing changes.
