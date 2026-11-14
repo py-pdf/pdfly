@@ -13,6 +13,9 @@
 ### Deprecations (DEP)
 - support for Python 3.10 has been dropped, as it reached its end of life on 2026-10-01: `pdfly` now requires Python 3.11+
 
+### Maintenance (MAINT)
+- `check-sign` and `sign` now use endesive 3, which no longer depends on oscrypto
+
 
 ## Version 0.5.1, 2025-10-13
 

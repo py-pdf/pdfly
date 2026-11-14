@@ -16,10 +16,6 @@ concurrency:
 
 env:
   PYTHON_LATEST: "3.15"
-  # oscrypto 1.3.0 (latest on PyPI) can't parse two-digit OpenSSL patch
-  # versions: https://github.com/wbond/oscrypto/issues/75
-  # The fixed commit still reports 1.3.0, hence --force-reinstall.
-  OSCRYPTO_FIX: "oscrypto @ git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3"
 
 jobs:
   tests:
@@ -46,8 +42,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install . --group dev
-    - name: Install oscrypto with OpenSSL >= 3.0.10 support
-      run: pip install --force-reinstall --no-deps "${{ env.OSCRYPTO_FIX }}"
     - name: Run tests
       run: pytest -vv
 
@@ -79,8 +73,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install . --group dev -c constraints.txt
-    - name: Install oscrypto with OpenSSL >= 3.0.10 support
-      run: pip install --force-reinstall --no-deps "${{ env.OSCRYPTO_FIX }}"
     - name: Run tests
       run: pytest -vv
 
