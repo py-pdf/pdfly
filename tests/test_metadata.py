@@ -93,8 +93,8 @@ def test_meta_json_without_info(
     meta = json.loads(out)
     assert meta["title"] is None
     assert meta["author"] is None
-    assert meta["id1"] is ""
-    assert meta["id2"] is ""
+    assert meta["id1"] == ""
+    assert meta["id2"] == ""
     assert meta["images"] == []
     assert meta["pages"] == 1
 

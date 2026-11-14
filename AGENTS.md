@@ -18,6 +18,13 @@
         * Closes #123: If the issue was fixed by this commit
         * "Related to #123" or "See #123" otherwise
 2. Project Language: (American) English must be used for all communication, including variable names, code comments, commit messages and documentation.
-3. Code Guidelines:
-    1. Use `assert` only within tests. It is fine to use assert in the "arrange" step of a test to show which preconditions are expected before executing the code under test.
+3. Code Style Guidelines:
+    1. Use `assert` only within tests.
+4. Test Style Guidelines:
+    1. It is fine to use assert in the "arrange" step of a test to show which preconditions are expected before executing the code under test.
     2. Tests should have 3 sections: Arrange (setup data), Act (execute code under test), Assert (verify results). They do not need to have explicit comments separating the sections, but if the blocks get longer and more complex, it's appreciated.
+    3. Prefer parametrized tests using `pytest.mark.parametrize` to cover multiple input scenarios efficiently.
+5. Project setup:
+    1. Run `pre-commit install` to set up the git hook.
+    2. Run `pytest` to execute the test suite.
+    3. Ensure all tests pass before committing changes.
