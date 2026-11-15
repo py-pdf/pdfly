@@ -3,5 +3,18 @@
   "extends": ["config:best-practices"],
   "labels": ["dependencies"],
   "osvVulnerabilityAlerts": true,
-  "vulnerabilityAlerts": {"enabled": true}
+  "vulnerabilityAlerts": {"enabled": true},
+  "packageRules": [
+    {
+      "description": "The Python in the tests-min-versions job must stay at the minimum of requires-python. It is bumped manually together with requires-python.",
+      "matchManagers": ["github-actions"],
+      "matchDepNames": ["python"],
+      "enabled": false
+    },
+    {
+      "description": "Only raise the upper bound of the build backend, so that older uv_build versions stay allowed.",
+      "matchPackageNames": ["uv_build"],
+      "rangeStrategy": "widen"
+    }
+  ]
 }
