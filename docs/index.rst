@@ -136,6 +136,7 @@ GitHub ⭐️
 
    dev/intro
    dev/testing
+   dev/release
 
 .. toctree::
    :caption: About pdfly

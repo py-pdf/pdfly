@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["uv_build>=0.12.19,<0.13"]
+build-backend = "uv_build"
 
 [project]
 name = "pdfly"
@@ -14,7 +14,7 @@ maintainers = [
 ]
 description = "A pure-python CLI application to manipulate PDF files"
 readme = "README.md"
-dynamic = ["version"]
+version = "0.6.0"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
@@ -151,6 +151,9 @@ max-line-length = 120
 
 [tool.ruff.lint.mccabe]
 max-complexity = 20  # Recommended: 10
+
+[tool.uv.build-backend]
+module-root = ""
 
 [tool.ruff.lint.per-file-ignores]
 "make_release.py" = ["T201", "S603", "S607"]

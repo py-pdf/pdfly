@@ -139,6 +139,5 @@ dmypy.json
 docs/meta/CHANGELOG.md
 docs/meta/CONTRIBUTORS.md
 
-# 'make release' creates those files:
+# 'make prepare-release' creates this file:
 RELEASE_COMMIT_MSG.md
-RELEASE_TAG_MSG.md
