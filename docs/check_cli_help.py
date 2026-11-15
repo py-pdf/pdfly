@@ -4,7 +4,8 @@ Check that the `pdfly ... --help` output shown in the docs is up to date.
 Every code block line of the form `$ pdfly ... --help` in README.md,
 docs/index.rst and docs/user/*.md must be followed by the exact output of
 that command. The terminal width of each block is taken from its widest
-line, so that wide and narrow blocks can coexist.
+line, so that wide and narrow blocks can coexist. A `pdfly ... --help` line
+without the `$ ` prompt counts as outdated.
 
 Usage:
     uv run --frozen python docs/check_cli_help.py          # report
@@ -27,7 +28,11 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_WIDTH = 80
-COMMAND_PATTERN = re.compile(r"^(?P<indent>\s*)\$ pdfly(?P<args>(?: .*)?)$")
+# The "$ " prompt is optional here, so that blocks which lack it are reported
+# (and fixed) instead of being silently skipped
+COMMAND_PATTERN = re.compile(
+    r"^(?P<indent>\s*)(?:\$ )?pdfly(?P<args>(?: .*)?)$"
+)
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
 
 # Runs in a single subprocess, as importing pdfly takes about a second.
@@ -56,7 +61,8 @@ class HelpBlock:
     path: Path
     args: list[str]
     indent: str
-    start: int  # index of the first line after the command
+    command: str  # the command line, as it should be written
+    start: int  # index of the command line
     end: int  # index after the last non-blank output line
     leading_blank: bool  # whether a blank line follows the command
     width: int
@@ -100,7 +106,8 @@ def find_help_blocks(path: Path, lines: list[str]) -> list[HelpBlock]:
                 path=path,
                 args=args,
                 indent=indent,
-                start=i + 1,
+                command=f"{indent}$ pdfly{match['args'].rstrip()}",
+                start=i,
                 end=end,
                 leading_blank=leading_blank,
                 width=width,
@@ -173,7 +180,10 @@ def render_help(
 def expected_lines(block: HelpBlock, output: list[str]) -> list[str]:
     if block.leading_blank:
         output = ["", *output]
-    return [block.indent + line if line else "" for line in output]
+    return [
+        block.command,
+        *(block.indent + line if line else "" for line in output),
+    ]
 
 
 def main() -> int:
@@ -213,7 +223,7 @@ def main() -> int:
             diff = difflib.unified_diff(
                 actual,
                 expected,
-                fromfile=f"{path.relative_to(REPO_ROOT)}:{block.start}",
+                fromfile=f"{path.relative_to(REPO_ROOT)}:{block.start + 1}",
                 tofile=f"pdfly {shlex.join(block.args)}",
                 lineterm="",
             )
