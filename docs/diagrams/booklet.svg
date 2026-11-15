@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Source of booklet.png, which is shown in the docs.
+  After editing, export the PNG from the repository root with:
+  rsvg-convert -z 2 -o docs/diagrams/booklet.png docs/diagrams/booklet.svg
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="336" viewBox="0 0 600 336" role="img" aria-labelledby="title desc">
+  <title id="title">pdfly booklet</title>
+  <desc id="desc">A PDF with the pages 1 to 8 becomes 4 pages with 2 pages side by side: 8 and 1, 2 and 7, 6 and 3, 4 and 5. Printed double-sided on 2 sheets which are folded in the middle, they form a booklet with the pages 1 to 8.</desc>
+  <style>
+    .background { fill: #ffffff; }
+    .page { fill: #ffffff; stroke: #333333; stroke-width: 1.5; }
+    .page-a { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 1.5; }
+    .page-b { fill: #ffedd5; stroke: #c2410c; stroke-width: 1.5; }
+    .blank { fill: #f3f3f3; stroke: #999999; stroke-width: 1.5; stroke-dasharray: 4 3; }
+    .skipped { opacity: 0.35; }
+    .fold { stroke: #999999; stroke-width: 1; stroke-dasharray: 3 3; }
+    .cross { stroke: #c62828; stroke-width: 3; stroke-linecap: round; }
+    .number { font: bold 22px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #222222; text-anchor: middle; }
+    .blank-label { font: 9px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #888888; text-anchor: middle; }
+    .file { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #444444; text-anchor: middle; }
+    .note { font: 11px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #666666; text-anchor: middle; }
+    .command-box { fill: #f4f4f4; stroke: #dddddd; }
+    .command { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #222222; text-anchor: middle; }
+    .arrow { stroke: #555555; stroke-width: 2; fill: none; }
+    .arrow-head { fill: #555555; }
+    .caption { font: 12px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #444444; text-anchor: middle; }
+  </style>
+  <rect class="background" width="600" height="336"/>
+
+  <!-- Input -->
+  <text class="file" x="300" y="22">input.pdf</text>
+  <g>
+    <rect class="page" x="82" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="104" y="72">1</text>
+  </g>
+  <g>
+    <rect class="page" x="138" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="160" y="72">2</text>
+  </g>
+  <g>
+    <rect class="page" x="194" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="216" y="72">3</text>
+  </g>
+  <g>
+    <rect class="page" x="250" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="272" y="72">4</text>
+  </g>
+  <g>
+    <rect class="page" x="306" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="328" y="72">5</text>
+  </g>
+  <g>
+    <rect class="page" x="362" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="384" y="72">6</text>
+  </g>
+  <g>
+    <rect class="page" x="418" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="440" y="72">7</text>
+  </g>
+  <g>
+    <rect class="page" x="474" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="496" y="72">8</text>
+  </g>
+
+  <!-- Command -->
+  <path class="arrow" d="M 300 102 V 148"/>
+  <path class="arrow-head" d="M 294 144 L 306 144 L 300 154 Z"/>
+  <rect class="command-box" x="153.7" y="114" width="292.6" height="24" rx="4"/>
+  <text class="command" x="300" y="130.5">pdfly booklet input.pdf output.pdf</text>
+
+  <!-- Output -->
+  <text class="file" x="300" y="182">output.pdf</text>
+  <g>
+    <g>
+      <rect class="page" x="85" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="107" y="232">8</text>
+    </g>
+    <g>
+      <rect class="page" x="129" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="151" y="232">1</text>
+    </g>
+    <line class="fold" x1="129" y1="190" x2="129" y2="258"/>
+  </g>
+  <g>
+    <g>
+      <rect class="page" x="199" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="221" y="232">2</text>
+    </g>
+    <g>
+      <rect class="page" x="243" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="265" y="232">7</text>
+    </g>
+    <line class="fold" x1="243" y1="190" x2="243" y2="258"/>
+  </g>
+  <g>
+    <g>
+      <rect class="page" x="313" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="335" y="232">6</text>
+    </g>
+    <g>
+      <rect class="page" x="357" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="379" y="232">3</text>
+    </g>
+    <line class="fold" x1="357" y1="190" x2="357" y2="258"/>
+  </g>
+  <g>
+    <g>
+      <rect class="page" x="427" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="449" y="232">4</text>
+    </g>
+    <g>
+      <rect class="page" x="471" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="493" y="232">5</text>
+    </g>
+    <line class="fold" x1="471" y1="190" x2="471" y2="258"/>
+  </g>
+  <text class="note" x="129" y="272">sheet 1, front</text>
+  <text class="note" x="243" y="272">sheet 1, back</text>
+  <text class="note" x="357" y="272">sheet 2, front</text>
+  <text class="note" x="471" y="272">sheet 2, back</text>
+  <text class="caption" x="300" y="302">Print double-sided, stack the sheets and fold them in the middle:</text>
+  <text class="caption" x="300" y="320">the pages of the booklet read 1 to 8.</text>
+</svg>

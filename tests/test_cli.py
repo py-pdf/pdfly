@@ -23,9 +23,9 @@ def test_pypdf_cli_can_be_invoked_as_a_module() -> None:
     [
         (
             "2-up",
-            "Put each pair of input pages side by side on one output page.",
+            "Put each pair of pages side by side on one page.",
         ),
-        ("uncompress", "Uncompress the content streams of a PDF."),
+        ("uncompress", "Uncompress the page content streams of a PDF."),
     ],
 )
 def test_command_help_description(

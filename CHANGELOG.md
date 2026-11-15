@@ -2,8 +2,32 @@
 
 ## Unreleased
 
+### Developer Experience (DEV)
+- Add CLI regression tests for the 2-up and uncompress help text (#305)
+
+## Version 0.7.0, 2026-11-15
+
+### New Features (ENH)
+- Show the permissions of encrypted PDFs in meta (#310, #311)
+- Add --output-dir option to extract-images (#300)
+
 ### Bug Fixes (BUG)
-- Correct the command descriptions and example in 2-up and uncompress help (#289)
+- Keep the order of the input pages in x2pdf (#307)
+
+### Documentation (DOC)
+- Check the help of all commands in the docs (#309)
+- Add diagrams for 2-up, booklet, cat, rm and rotate (#308)
+- Fix outdated CLI help in the docs and the Read the Docs build (#306)
+
+### Developer Experience (DEV)
+- Keep minimum Python in CI and widen uv_build range in Renovate (#303)
+- Rework release process and switch build backend to uv_build (#301)
+
+### Maintenance (MAINT)
+- Update softprops/action-gh-release digest to 8a0cd65 (#286)
+- Update dependency uv_build to >=0.13.8,<0.14 (#302)
+
+[Full Changelog](https://github.com/py-pdf/pdfly/compare/0.6.0...0.7.0)
 
 ## Version 0.6.0, 2026-11-14
 

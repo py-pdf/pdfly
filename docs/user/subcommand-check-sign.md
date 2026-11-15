@@ -5,23 +5,25 @@ Validate that a PDF document has a digital signature matching a given certificat
 ## Usage
 
 ```
- Usage: pdfly check-sign [OPTIONS] FILENAME
+$ pdfly check-sign --help
+ Usage: pdfly check-sign [OPTIONS] {filename}
 
  Verifies the signature of a signed PDF.
 
  Examples
- pdfly verify input.pdf --pem certs.pem
+ pdfly check-sign input.pdf --pem certs.pem
 
      Verifies the input.pdf with a PEM certificate bundle.
 
-╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    filename      FILE  [required]                                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *  --pem                        FILE  PEM certificate file [required]                                                            │
-│    --verbose    --no-verbose          Show signature verification details. [default: no-verbose]                                 │
-│    --help                             Show this message and exit.                                                                │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    filename      <file>  [required]                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ *  --pem                        <file>  PEM certificate file [required]      │
+│    --verbose    --no-verbose    <bool>  Show signature verification details. │
+│                                         [default: no-verbose]                │
+│    --help                       <bool>  Show this message and exit.          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Examples
@@ -31,5 +33,5 @@ Validate that a PDF document has a digital signature matching a given certificat
 Verifies the input.pdf with a PEM certificate bundle.
 
 ```
-pdfly verify input.pdf --pem certs.pem
+pdfly check-sign input.pdf --pem certs.pem
 ```

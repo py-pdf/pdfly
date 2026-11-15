@@ -2,11 +2,13 @@
 
 Remove pages from PDF files.
 
+![Diagram: pdfly rm -o output.pdf input.pdf 1:3 removes the 2nd and 3rd page of a PDF with the pages 1 to 5. The output has the pages 1, 4 and 5.](../diagrams/rm.png)
+
 ## Usage
 
 ```
 $ pdfly rm --help
-Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
+ Usage: pdfly rm [OPTIONS] {filename} {fn_pgrgs}...
 
  Remove pages from PDF files.
 
@@ -40,6 +42,10 @@ Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
 
          Remove pages 2 to 4 from document.pdf, producing output.pdf.
 
+     pdfly rm document.pdf -- -1
+
+         Removes the last page from document.pdf, modifying the original file.
+
      pdfly rm document.pdf :-1
 
          Removes all pages except the last one from document.pdf, modifying the original file.
@@ -50,13 +56,13 @@ Usage: pdfly rm [OPTIONS] FILENAME FN_PGRGS...
          producing a single-page report.pdf.
 
 ╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    filename      FILE         [default: None] [required]                                              │
-│ *    fn_pgrgs      FN_PGRGS...  filenames and/or page ranges [default: None] [required]                 │
+│ *    filename         <file>       [required]                                                           │
+│ *    fn_pgrgs...      <list[str]>  filenames and/or page ranges [required]                              │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *  --output   -o                  PATH  [default: None] [required]                                      │
-│    --verbose      --no-verbose          show page ranges as they are being read [default: no-verbose]   │
-│    --help                               Show this message and exit.                                     │
+│ *  --output   -o                  <path>  [required]                                                    │
+│    --verbose      --no-verbose    <bool>  show page ranges as they are being read [default: no-verbose] │
+│    --help                         <bool>  Show this message and exit.                                   │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 

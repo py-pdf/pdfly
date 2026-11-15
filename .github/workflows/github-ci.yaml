@@ -159,6 +159,11 @@ jobs:
       - name: Build docs, treating warnings as errors
         working-directory: docs
         run: sphinx-build -W -b html . _build/html
+      - name: Check that the documented CLI help is up to date
+        # Uses the typer and rich versions of uv.lock, like pre-commit does
+        run: |
+          python -m pip install uv
+          uv run --frozen --isolated --no-dev python docs/check_cli_help.py
 
   # Single stable check to mark as "required" in the branch protection rules,
   # so the matrix can change without touching the repository settings.

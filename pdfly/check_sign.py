@@ -2,7 +2,7 @@
 Verifies the signature of a signed PDF.
 
 Examples
-    pdfly verify input.pdf --pem certs.pem
+    pdfly check-sign input.pdf --pem certs.pem
 
         Verifies the input.pdf with a PEM certificate bundle.
 

@@ -2,11 +2,13 @@
 
 Reorder and two-up PDF pages for booklet printing.
 
+![Diagram: a PDF with the pages 1 to 8 becomes 4 pages with 2 pages side by side each: 8 and 1, 2 and 7, 6 and 3, 4 and 5. Printed double-sided on 2 sheets and folded in the middle, they form a booklet with the pages 1 to 8.](../diagrams/booklet.png)
+
 ## Usage
 
 ```
 $ pdfly booklet --help
- Usage: pdfly booklet [OPTIONS] FILENAME OUTPUT
+ Usage: pdfly booklet [OPTIONS] {filename} {output}
 
  Reorder and two-up PDF pages for booklet printing.
 
@@ -21,16 +23,15 @@ $ pdfly booklet --help
      pdfly booklet input.pdf output.pdf
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│ *    filename      FILE  [default: None] [required]                          │
-│ *    output        FILE  [default: None] [required]                          │
+│ *    filename      <file>  [required]                                        │
+│ *    output        <file>  [required]                                        │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --blank-page-file  -b      FILE  page added if input is odd number of pages  │
-│                                  [default: None]                             │
-│ --centerfold-file  -c      FILE  double-page added if input is missing >= 2  │
-│                                  pages                                       │
-│                                  [default: None]                             │
-│ --help                           Show this message and exit.                 │
+│ --blank-page-file  -b      <file>  page added if input is odd number of      │
+│                                    pages                                     │
+│ --centerfold-file  -c      <file>  double-page added if input is missing >=  │
+│                                    2 pages                                   │
+│ --help                     <bool>  Show this message and exit.               │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
 ```

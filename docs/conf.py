@@ -110,6 +110,12 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_logo = "pdfly-logo.png"
 
+# -- Options for LaTeX output ------------------------------------------------
+
+# pdflatex cannot render the box-drawing characters of the `--help` output.
+# Read the Docs fails the whole build if the PDF cannot be built.
+latex_engine = "xelatex"
+
 # -- Options for Napoleon  -----------------------------------------------------
 
 napoleon_google_docstring = True

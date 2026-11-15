@@ -7,6 +7,9 @@ Here should only be end-to-end tests.
 from pathlib import Path
 
 import pytest
+from fpdf import FPDF
+from PIL import Image
+from pypdf import PdfReader
 
 from .conftest import run_cli
 
@@ -94,3 +97,73 @@ def test_x2pdf_fail_to_convert(
     captured = capsys.readouterr()
     assert exit_code == 1, captured
     assert "Error: Could not convert 'README.md' to a PDF" in captured.out
+
+
+def create_input_file(tmp_path: Path, name: str, widths: list[int]) -> Path:
+    """
+    Create an image (one width) or a PDF (one page per width).
+
+    Each page gets a unique width, which identifies it in the output:
+    x2pdf converts an image with a width of N pixels to a page with a width
+    of N points.
+    """
+    if name.lower().endswith(".pdf"):
+        pdf = FPDF(unit="pt")
+        for width in widths:
+            pdf.add_page(format=(width, 50))
+        filepath = tmp_path / name
+        pdf.output(str(filepath))
+        return filepath
+    (width,) = widths
+    filepath = tmp_path / name
+    Image.new("RGB", (width, 50), "white").save(filepath)
+    return filepath
+
+
+@pytest.mark.parametrize(
+    ("inputs", "expected_widths"),
+    [
+        pytest.param(
+            [("1.jpg", [100]), ("2.jpg", [200]), ("3.jpg", [300])],
+            [100, 200, 300],
+            id="images",
+        ),
+        pytest.param(
+            [("doc.pdf", [400, 500, 600])],
+            [400, 500, 600],
+            id="pages-of-one-pdf",
+        ),
+        pytest.param(
+            [("1.jpg", [100]), ("doc.pdf", [400, 500]), ("2.png", [200])],
+            [100, 400, 500, 200],
+            id="pdf-between-images",
+        ),
+        pytest.param(
+            [("1.jpg", [100]), ("DOC.PDF", [400, 500])],
+            [100, 400, 500],
+            id="uppercase-pdf-extension",
+        ),
+    ],
+)
+def test_x2pdf_keeps_the_order_of_the_input_pages(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+    inputs: list[tuple[str, list[int]]],
+    expected_widths: list[int],
+) -> None:
+    # Arrange
+    filepaths = [
+        create_input_file(tmp_path, name, widths) for name, widths in inputs
+    ]
+    output = tmp_path / "out.pdf"
+
+    # Act
+    exit_code = run_cli(
+        ["x2pdf", *map(str, filepaths), "--output", str(output)]
+    )
+
+    # Assert
+    captured = capsys.readouterr()
+    assert exit_code == 0, captured
+    widths = [round(page.mediabox.width) for page in PdfReader(output).pages]
+    assert widths == expected_widths

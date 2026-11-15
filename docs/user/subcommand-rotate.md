@@ -1,11 +1,14 @@
 # rotate
 
+Rotate pages of a PDF.
+
+![Diagram: pdfly rotate -o output.pdf input.pdf 90 1 turns the 2nd page of a PDF with the pages 1 to 3 by 90 degrees clockwise. Pages 1 and 3 stay unchanged.](../diagrams/rotate.png)
+
 ## Usage
 
 ```
-pdfly rotate --help
-
- Usage: pdfly rotate [OPTIONS] FILENAME DEGREES [PGRGS]
+$ pdfly rotate --help
+ Usage: pdfly rotate [OPTIONS] {filename} {degrees} [pgrgs]
 
  Rotate specified pages by the specified amount
 
@@ -43,15 +46,15 @@ pdfly rotate --help
              1:10:2    1 3 5 7 9                2::-1     2 1 0.
              ::-1      all pages in reverse order.
 
-╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    filename      FILE     [required]                                                                                                                                                     │
-│ *    degrees       INTEGER  degrees to rotate [required]                                                                                                                                   │
-│      pgrgs         [PGRGS]  page range [default: :]                                                                                                                                        │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *  --output  -o      PATH  [required]                                                                                                                                                      │
-│    --help                  Show this message and exit.                                                                                                                                     │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    filename      <file>  [required]                                        │
+│ *    degrees       <int>   degrees to rotate [required]                      │
+│      pgrgs         <str>   page range [default: :]                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ *  --output  -o      <path>  [required]                                      │
+│    --help            <bool>  Show this message and exit.                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Examples

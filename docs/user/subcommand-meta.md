@@ -5,19 +5,18 @@ Get metadata of a PDF file.
 ## Usage
 
 ```
-pdfly meta --help
-
- Usage: pdfly meta [OPTIONS] PDF
+$ pdfly meta --help
+ Usage: pdfly meta [OPTIONS] {pdf}
 
  Show metadata of a PDF file
 
-╭─ Arguments ───────────────────────────────────────────────────────────────────╮
-│ *    pdf      FILE  [default: None] [required]                                │
-╰───────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────╮
-│ --output  -o      [json|text]  output format [default: text]                  │
-│ --help                         Show this message and exit.                    │
-╰───────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    pdf      <file>  [required]                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --output  -o      <json|text>  output format [default: text]                 │
+│ --help            <bool>       Show this message and exit.                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Example
@@ -44,7 +43,8 @@ $pdfly meta Allianz-Versicherungsunterlagen.pdf
 │           Producer │ itext-paulo-155 (itextpdf.sf.net-lowagie.com)            │
 │             Author │                                                          │
 │              Pages │ 34                                                       │
-│          Encrypted │ None                                                     │
+│          Encrypted │ no                                                       │
+│        Permissions │ all (not encrypted)                                      │
 │   PDF File Version │ %PDF-1.6                                                 │
 │        Page Layout │                                                          │
 │          Page Mode │                                                          │
@@ -65,4 +65,53 @@ $pdfly meta Allianz-Versicherungsunterlagen.pdf
 └────────────────────┴──────────────────────────────────────────────────────────┘
 Use the 'pagemeta' subcommand to get details about a single page
 
+```
+
+### A PDF with restricted permissions
+
+The permissions of an encrypted PDF can be shown without its password.
+This PDF can be printed, edited and copied from, but its pages must not be
+inserted, deleted or rotated:
+
+```
+$ pdfly meta libreoffice-writer-password.pdf
+...
+                 PDF Data
+┏━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┓
+┃        Attribute ┃ Value               ┃
+┡━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━┩
+│            Pages │ unknown             │
+│        Encrypted │ yes                 │
+│      Permissions │ all except assemble │
+│ PDF File Version │ %PDF-1.5            │
+│      Page Layout │                     │
+│        Page Mode │                     │
+│           PDF ID │ ID1=None ID2=None   │
+│      Attachments │ unknown             │
+│           Images │ 0 images (0 bytes)  │
+└──────────────────┴─────────────────────┘
+           Encryption information
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃                        Attribute ┃ Value ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━┩
+│ Security Handler Revision Number │ 3     │
+│                          V value │ 2     │
+└──────────────────────────────────┴───────┘
+Use the 'pagemeta' subcommand to get details about a single page
+```
+
+With `--output json`, every permission is listed as `true` or `false`:
+
+```
+$ pdfly meta libreoffice-writer-password.pdf --output json | jq .encryption.permissions
+{
+  "print": true,
+  "modify": true,
+  "copy": true,
+  "annotate": true,
+  "fill-forms": true,
+  "copy-for-accessibility": true,
+  "assemble": false,
+  "print-high-quality": true
+}
 ```

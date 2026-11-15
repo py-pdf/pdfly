@@ -3,67 +3,67 @@
 The cat command can split / extract pages from a PDF. It can also
 join/merge/combine multiple PDF documents into a single one.
 
+![Diagram: pdfly cat -o output.pdf a.pdf b.pdf 1: puts the pages A1 and A2 of a.pdf and the pages B2 and B3 of b.pdf one after the other. The page range 1: skips the first page of b.pdf.](../diagrams/cat.png)
 
 ## Usage
 
 ```
-pdfly cat --help
+$ pdfly cat --help
+ Usage: pdfly cat [OPTIONS] {filename} [fn_pgrgs]...
 
- Usage: pdfly cat [OPTIONS] FILENAME FN_PGRGS...
+ Concatenate pages from PDF files into a single PDF file.
 
- Extract and concatenate pages from PDF files into a single PDF file.
- Page ranges refer to the previously-named file. A file not followed by a page
- range means all the pages of the file.
+ Page ranges refer to the previously-named file.
+ A file not followed by a page range means all the pages of the file.
+
  PAGE RANGES are like Python slices.
- Remember, page indices start with zero.
- When using page ranges that start with a negative value a
- two-hyphen symbol -- must be used to separate them from
- the command line options.
- Page range expression examples:
 
-    :     all pages.
-    -1    last page.
-    22    just the  23rd page.
-    :-1   all but the last page.
-    0:3   the first   three pages.
-    -2    second-to-last page.
-    :3    the first      three pages.
-    -2:   last two pages.
-    5:    from the sixth page onward.
-    -3:-1 third & second to last.
+         Remember, page indices start with zero.
 
- The third, "stride" or "step" number is also recognized.
+         When using page ranges that start with a negative value a
+         two-hyphen symbol -- must be used to separate them from
+         the command line options.
 
-    ::2       0 2 4 ... to the end.
-    3:0:-1    3 2 1 but not 0.
-    1:10:2    1 3 5 7 9
-    2::-1     2 1 0.
-    ::-1      all  pages in reverse order.
+         Page range expression examples:
 
+             :     all pages.                   -1    last page.
+             22    just the 23rd page.          :-1   all but the last page.
+             0:3   the first three pages.       -2    second-to-last page.
+             :3    the first three pages.       -2:   last two pages.
+             5:    from the sixth page onward.  -3:-1 third & second to last.
+
+         The third, "stride" or "step" number is also recognized.
+
+             ::2       0 2 4 ... to the end.    3:0:-1    3 2 1 but not 0.
+             1:10:2    1 3 5 7 9                2::-1     2 1 0.
+             ::-1      all pages in reverse order.
 
  Examples
-    pdfly cat -o output.pdf head.pdf -- content.pdf :6 7: tail.pdf -1
-        Concatenate all of head.pdf, all but page seven of content.pdf,
-        and the last page of tail.pdf, producing output.pdf.
+     pdfly cat -o output.pdf head.pdf -- content.pdf :6 7: tail.pdf -1
 
-    pdfly cat chapter*.pdf >book.pdf
-        You can specify the output file by redirection.
+         Concatenate all of head.pdf, all but page seven of content.pdf,
+         and the last page of tail.pdf, producing output.pdf.
 
-    pdfly cat chapter?.pdf chapter10.pdf >book.pdf
-        In case you don't want chapter 10 before chapter 2.
+     pdfly cat chapter*.pdf >book.pdf
+
+         You can specify the output file by redirection.
+
+     pdfly cat chapter?.pdf chapter10.pdf >book.pdf
+
+         In case you don't want chapter 10 before chapter 2.
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│ *    filename      PATH         [default: None] [required]                   │
-│ *    fn_pgrgs      FN_PGRGS...  filenames and/or page ranges [default: None] │
-│                                 [required]                                   │
+│ *    filename         <file>       [required]                                │
+│      fn_pgrgs...      <list[str]>  filenames and/or page ranges              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --output   -o                  PATH  Output file. If omitted, the PDF     │
-│                                         is written to standard output.       │
-│    --verbose      --no-verbose          show page ranges as they are being   │
+│ --output    -o                  <path>  Output file. If omitted, the PDF is  │
+│                                         written to standard output.          │
+│ --password                      <str>   Document's user or owner password.   │
+│ --verbose       --no-verbose    <bool>  show page ranges as they are being   │
 │                                         read                                 │
 │                                         [default: no-verbose]                │
-│    --help                               Show this message and exit.          │
+│ --help                          <bool>  Show this message and exit.          │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
