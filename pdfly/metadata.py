@@ -6,13 +6,56 @@ from pathlib import Path
 
 from pydantic import BaseModel, field_serializer
 from pypdf import PdfReader
+from pypdf.constants import UserAccessPermissions
 
 from ._utils import OutputOptions
+
+# The permissions of the standard security handler: name, flag of the /P
+# entry and the minimum revision which defines the flag.
+PERMISSIONS = (
+    ("print", UserAccessPermissions.PRINT, 2),
+    ("modify", UserAccessPermissions.MODIFY, 2),
+    ("copy", UserAccessPermissions.EXTRACT, 2),
+    ("annotate", UserAccessPermissions.ADD_OR_MODIFY, 2),
+    ("fill-forms", UserAccessPermissions.FILL_FORM_FIELDS, 3),
+    (
+        "copy-for-accessibility",
+        UserAccessPermissions.EXTRACT_TEXT_AND_GRAPHICS,
+        3,
+    ),
+    ("assemble", UserAccessPermissions.ASSEMBLE_DOC, 3),
+    ("print-high-quality", UserAccessPermissions.PRINT_TO_REPRESENTATION, 3),
+)
+
+
+def decode_permissions(p_value: int, revision: int) -> dict[str, bool]:
+    """Return which permissions the /P entry of the /Encrypt dict grants."""
+    return {
+        name: bool(p_value & flag)
+        for name, flag, min_revision in PERMISSIONS
+        if revision >= min_revision
+    }
+
+
+def format_permissions(encryption: "EncryptionData | None") -> str:
+    """Summarize the permissions on one line, naming the shorter list."""
+    if encryption is None:
+        return "all (not encrypted)"
+    allowed = [name for name, ok in encryption.permissions.items() if ok]
+    denied = [name for name, ok in encryption.permissions.items() if not ok]
+    if not denied:
+        return "all"
+    if not allowed:
+        return "none"
+    if len(denied) <= len(allowed):
+        return f"all except {', '.join(denied)}"
+    return f"only {', '.join(allowed)}"
 
 
 class EncryptionData(BaseModel):
     revision: int
     v_value: int
+    permissions: dict[str, bool]
 
 
 class MetaInfo(BaseModel):
@@ -57,6 +100,11 @@ def main(pdf: Path, output: OutputOptions) -> None:
                 EncryptionData(
                     v_value=reader._encryption.V,
                     revision=reader._encryption.R,
+                    # The /P entry is not encrypted, so it can be read
+                    # without the password
+                    permissions=decode_permissions(
+                        reader._encryption.P, reader._encryption.R
+                    ),
                 )
                 if reader._encryption
                 else None
@@ -130,7 +178,8 @@ def main(pdf: Path, output: OutputOptions) -> None:
         if meta.keywords:
             table.add_row("Keywords", meta.keywords)
         table.add_row("Pages", f"{meta.pages:,}" if meta.pages else "unknown")
-        table.add_row("Encrypted", f"{meta.encryption}")
+        table.add_row("Encrypted", "yes" if meta.encryption else "no")
+        table.add_row("Permissions", format_permissions(meta.encryption))
         table.add_row("PDF File Version", meta.pdf_file_version)
         table.add_row("Page Layout", meta.page_layout)
         table.add_row("Page Mode", meta.page_mode)
