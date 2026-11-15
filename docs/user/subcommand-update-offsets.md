@@ -6,7 +6,7 @@ Updates offsets and lengths in a simple PDF file.
 
 ```
 $ pdfly update-offsets --help
- Usage: pdfly update-offsets [OPTIONS] FILE_IN FILE_OUT
+ Usage: pdfly update-offsets [OPTIONS] {file_in}
 
  Updates offsets and lengths in a simple PDF file.
 
@@ -34,16 +34,16 @@ $ pdfly update-offsets --help
  issue-297.out.pdf
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│ *    file_in       FILE  [default: None] [required]                          │
-│ *    file_out      PATH  [default: None] [required]                          │
+│ *    file_in      <file>  [required]                                         │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --encoding                    TEXT  Encoding used to read and write the      │
-│                                     files, e.g. UTF-8.                       │
-│                                     [default: ISO-8859-1]                    │
-│ --verbose     --no-verbose          Show progress while processing.          │
-│                                     [default: no-verbose]                    │
-│ --help                              Show this message and exit.              │
+│ --output    -o                  <path>                                       │
+│ --encoding                      <str>   Encoding used to read and write the  │
+│                                         files, e.g. UTF-8.                   │
+│                                         [default: ISO-8859-1]                │
+│ --verbose       --no-verbose    <bool>  Show progress while processing.      │
+│                                         [default: no-verbose]                │
+│ --help                          <bool>  Show this message and exit.          │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
 ```

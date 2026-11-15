@@ -8,16 +8,16 @@ Compress a PDF using lossless FlateDecode compression.
 
 ```
 $ pdfly compress --help
- Usage: pdfly compress [OPTIONS] PDF OUTPUT
+ Usage: pdfly compress [OPTIONS] {pdf} {output}
 
  Compress a PDF.
 
 ╭─ Arguments ───────────────────────────────────────────╮
-│ *    pdf         FILE  [default: None] [required]     │
-│ *    output      PATH  [default: None] [required]     │
+│ *    pdf         <file>  [required]                   │
+│ *    output      <path>  [required]                   │
 ╰───────────────────────────────────────────────────────╯
 ╭─ Options ─────────────────────────────────────────────╮
-│ --help          Show this message and exit.           │
+│ --help        <bool>  Show this message and exit.     │
 ╰───────────────────────────────────────────────────────╯
 ```
 ## Examples

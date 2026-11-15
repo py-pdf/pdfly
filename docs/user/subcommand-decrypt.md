@@ -10,7 +10,7 @@ the PDF is written to standard output, so the command can be used in pipes.
 ```
 $ pdfly decrypt --help
 
- Usage: pdfly decrypt [OPTIONS] [INPUT_FILE] [OUTPUT_FILE]
+ Usage: pdfly decrypt [OPTIONS] [input_file] [output_file]
 
  Remove password protection from an encrypted PDF file.
 

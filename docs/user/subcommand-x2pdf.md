@@ -13,16 +13,16 @@ Currently supported for "x":
 ```
 $ pdfly x2pdf --help
 
- Usage: pdfly x2pdf [OPTIONS] X...
+ Usage: pdfly x2pdf [OPTIONS] {x}...
 
  Convert one or more files to PDF. Each file is a page.
 
 ╭─ Arguments ─────────────────────────────────────────────────────────────────╮
-│ *    x      X...  [default: None] [required]                                │
+│ *    x...      <list[Path]>  [required]                                     │
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ───────────────────────────────────────────────────────────────────╮
-│ *  --output  -o      PATH  [default: None] [required]                       │
-│    --help                  Show this message and exit.                      │
+│ *  --output  -o      <path>  [required]                                     │
+│    --help            <bool>  Show this message and exit.                    │
 ╰─────────────────────────────────────────────────────────────────────────────╯
 ```
 

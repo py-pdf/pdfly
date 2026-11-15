@@ -5,16 +5,15 @@ Extract text from a PDF file.
 
 ```
 $ pdfly extract-text --help
- Usage: pdfly extract-text [OPTIONS] PDF
+ Usage: pdfly extract-text [OPTIONS] {pdf}
 
  Extract text from a PDF file.
 
-
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│ *    pdf      FILE  [default: None] [required]                               │
+│ *    pdf      <file>  [required]                                             │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                  │
+│ --help        <bool>  Show this message and exit.                            │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
 ```

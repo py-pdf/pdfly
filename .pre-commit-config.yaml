@@ -38,3 +38,13 @@ repos:
         - "pypdf[full]"
         - "rich"
         - "typer>=0.18.0"
+-   repo: local
+    hooks:
+      # Uses the typer and rich versions of uv.lock, like CI does, as their
+      # versions change the rendered help
+      - id: check-cli-help
+        name: check documented CLI help
+        entry: uv run --frozen --isolated --no-dev python docs/check_cli_help.py --fix
+        language: system
+        pass_filenames: false
+        files: ^(pdfly/.*\.py|README\.md|docs/index\.rst|docs/user/.*\.md|docs/check_cli_help\.py|uv\.lock)$
