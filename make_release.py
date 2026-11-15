@@ -1,4 +1,10 @@
-"""Internal tool to update the CHANGELOG."""
+"""
+Internal tool to prepare a release.
+
+It bumps the version, updates the CHANGELOG and writes the commit message.
+Everything after merging the REL commit to main (git tag, GitHub release,
+PyPI upload via trusted publishing) is done by the GitHub Actions workflows.
+"""
 
 import json
 import subprocess
@@ -11,7 +17,6 @@ from rich.prompt import Prompt
 
 GH_ORG = "py-pdf"
 GH_PROJECT = "pdfly"
-VERSION_FILE_PATH = "pdfly/_version.py"
 CHANGELOG_FILE_PATH = "CHANGELOG.md"
 
 
@@ -43,7 +48,7 @@ def main(changelog_path: str) -> None:
 
     new_version = version_bump(git_tag)
     new_version = get_version_interactive(new_version, changes)
-    adjust_version_py(new_version)
+    set_project_version(new_version)
 
     today = datetime.now(tz=UTC)
     header = f"## Version {new_version}, {today:%Y-%m-%d}\n"
@@ -52,7 +57,6 @@ def main(changelog_path: str) -> None:
     new_entry = header + changes + trailer
     print(new_entry)
     write_commit_msg_file(new_version, changes_with_author + trailer)
-    write_release_msg_file(new_version, changes_with_author + trailer, today)
 
     # Make the script idempotent by checking if the new entry is already in the changelog
     if new_entry in changelog:
@@ -67,24 +71,37 @@ def main(changelog_path: str) -> None:
 def print_instructions(new_version: str) -> None:
     """Print release instructions."""
     print("=" * 80)
-    print(f"☑  {VERSION_FILE_PATH} was adjusted to '{new_version}'")
+    print(
+        f"☑  The version in pyproject.toml and uv.lock is now '{new_version}'"
+    )
     print(f"☑  {CHANGELOG_FILE_PATH} was adjusted")
     print()
     print("Now run:")
+    print(f"  git switch -c release-{new_version}")
+    print(f"  git add pyproject.toml uv.lock {CHANGELOG_FILE_PATH}")
     print("  git commit -eF RELEASE_COMMIT_MSG.md")
-    print(f"  git tag -s {new_version} -eF RELEASE_TAG_MSG.md")
-    print("  git push")
-    print("  git push --tags")
+    print(f"  git push -u origin release-{new_version}")
+    print()
+    print("Then open a PR:")
+    print(f"  * Title: 'REL: {new_version}'")
+    print(
+        "  * Description: the body of RELEASE_COMMIT_MSG.md (without the first line)"
+    )
+    print(
+        "  * Squash-merge it, keeping that title and description as commit message."
+    )
+    print()
+    print("GitHub Actions then create the git tag and the GitHub release, and")
+    print("publish to PyPI. See docs/dev/release.md.")
 
 
-def adjust_version_py(version: str) -> None:
-    """Adjust the __version__ string."""
-    with open(VERSION_FILE_PATH, "w") as fp:
-        fp.write(f'__version__ = "{version}"\n')
+def set_project_version(version: str) -> None:
+    """Set the version in pyproject.toml and uv.lock."""
+    subprocess.run(["uv", "version", "--no-sync", version], check=True)
 
 
 def get_version_interactive(new_version: str, changes: str) -> str:
-    """Get the new __version__ interactively."""
+    """Get the new version interactively."""
     print("The changes are:")
     print(changes)
     orig = new_version
@@ -112,28 +129,15 @@ def write_commit_msg_file(new_version: str, commit_changes: str) -> None:
     """
     Write a file that can be used as a commit message.
 
+    The workflow "Create git tag" uses the message of the squashed REL commit
+    on main as tag message, so the PR description should be the body of this.
+
     Like this:
 
-        git commit -eF RELEASE_COMMIT_MSG.md && git push
+        git commit -eF RELEASE_COMMIT_MSG.md
     """
     with open("RELEASE_COMMIT_MSG.md", "w") as fp:
         fp.write(f"REL: {new_version}\n\n")
-        fp.write("## What's new\n")
-        fp.write(commit_changes)
-
-
-def write_release_msg_file(
-    new_version: str, commit_changes: str, today: datetime
-) -> None:
-    """
-    Write a file that can be used as a git tag message.
-
-    Like this:
-
-        git tag -eF RELEASE_TAG_MSG.md && git push
-    """
-    with open("RELEASE_TAG_MSG.md", "w") as fp:
-        fp.write(f"Version {new_version}, {today:%Y-%m-%d}\n\n")
         fp.write("## What's new\n")
         fp.write(commit_changes)
 
