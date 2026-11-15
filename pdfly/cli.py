@@ -228,8 +228,18 @@ def extract_images(
         str,
         typer.Argument(help="page range of the pages to extract images from"),
     ] = ":",
+    output_dir: Annotated[
+        Path | None,
+        typer.Option(
+            "--output-dir",
+            help="Directory where extracted images are written.",
+            dir_okay=True,
+            file_okay=False,
+            resolve_path=True,
+        ),
+    ] = None,
 ) -> None:
-    pdfly.extract_images.main(pdf, pgrgs)
+    pdfly.extract_images.main(pdf, pgrgs, output_dir)
 
 
 @entry_point.command(name="extract-links", help=pdfly.extract_links.__doc__)

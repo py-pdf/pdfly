@@ -8,6 +8,9 @@ Example:
     pdfly extract-images input.pdf
         Extract the images from all pages
 
+    pdfly extract-images input.pdf --output-dir images
+        Extract the images into the images directory
+
     pdfly extract-images input.pdf 2
         Extract the images from the third page only
 
@@ -28,21 +31,30 @@ from pathlib import Path
 from pypdf import PageRange, PdfReader
 
 
-def main(pdf: Path, page_range: str = ":") -> None:
+def main(
+    pdf: Path, page_range: str = ":", output_dir: Path | None = None
+) -> None:
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
     reader = PdfReader(str(pdf))
     page_indices = range(*PageRange(page_range).indices(len(reader.pages)))
-    extracted_images = []
+    extracted_images: list[str] = []
     for page_index in page_indices:
         page0 = reader.pages[page_index]
         for image_file_object in page0.images:
-            path = f"{page_index:04d}-{image_file_object.name}"
+            file_name = f"{page_index:04d}-{image_file_object.name}"
+            path = (
+                Path(file_name)
+                if output_dir is None
+                else output_dir / file_name
+            )
             with open(path, "wb") as fp:
                 fp.write(image_file_object.data)
-            extracted_images.append(path)
+            extracted_images.append(str(path))
 
     if len(extracted_images) == 0:
         print("No image found.")
     else:
         print(f"Extracted {len(extracted_images)} images:")
-        for path in extracted_images:
-            print(f"- {path}")
+        for extracted_path in extracted_images:
+            print(f"- {extracted_path}")

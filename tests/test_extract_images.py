@@ -32,6 +32,25 @@ def test_extract_images_monochrome(
     assert "Extracted 1 images" in captured.out
 
 
+def test_extract_images_custom_output_dir(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    output_dir = tmp_path / "new" / "images"
+    run_cli(
+        [
+            "extract-images",
+            str(RESOURCES_ROOT / "box.pdf"),
+            "--output-dir",
+            str(output_dir),
+        ]
+    )
+    captured = capsys.readouterr()
+    assert not captured.err
+    assert output_dir.is_dir()
+    assert "- " + str(output_dir) in captured.out
+    assert len(list(output_dir.iterdir())) == 1
+
+
 @pytest.mark.parametrize(
     ("page_range", "expected"),
     [
