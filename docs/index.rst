@@ -1,30 +1,32 @@
 Welcome to pdfly
 ================
 
-.. image:: https://img.shields.io/pypi/v/pdfly.svg
-   :target: https://pypi.org/pypi/pdfly#history
-.. image:: https://img.shields.io/pypi/pyversions/pdfly.svg
-   :target: https://pypi.org/project/pdfly/
-.. image:: https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg
-   :target: https://opensource.org/license/bsd-3-clause
-.. image:: https://app.readthedocs.org/projects/pdfly/badge/?version=latest
-   :target: https://pdfly.readthedocs.io/en/latest/
+.. only:: html
 
-.. image:: https://github.com/py-pdf/pdfly/workflows/CI/badge.svg
-   :target: https://github.com/py-pdf/pdfly/actions?query=branch%3Amain
-.. image:: https://img.shields.io/github/last-commit/py-pdf/pdfly
-   :target: https://github.com/py-pdf/pdfly/commits/main/
-.. image:: https://img.shields.io/github/issues-closed/py-pdf/pdfly
-   :target: https://github.com/py-pdf/pdfly/issues
-.. image:: https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly
-   :target: https://github.com/py-pdf/pdfly/pulls
+   .. image:: https://img.shields.io/pypi/v/pdfly.svg
+      :target: https://pypi.org/pypi/pdfly#history
+   .. image:: https://img.shields.io/pypi/pyversions/pdfly.svg
+      :target: https://pypi.org/project/pdfly/
+   .. image:: https://img.shields.io/badge/License-BSD%203%20Clause-blue.svg
+      :target: https://opensource.org/license/bsd-3-clause
+   .. image:: https://app.readthedocs.org/projects/pdfly/badge/?version=latest
+      :target: https://pdfly.readthedocs.io/en/latest/
 
-.. image:: https://img.shields.io/badge/linters-ruff,mypy-green.svg
-   :target: https://github.com/py-pdf/pdfly/actions
-.. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat
-   :target: https://makeapullrequest.com
-.. image:: https://img.shields.io/badge/first--timers--only-friendly-blue.svg
-   :target: https://www.firsttimersonly.com/
+   .. image:: https://github.com/py-pdf/pdfly/workflows/CI/badge.svg
+      :target: https://github.com/py-pdf/pdfly/actions?query=branch%3Amain
+   .. image:: https://img.shields.io/github/last-commit/py-pdf/pdfly
+      :target: https://github.com/py-pdf/pdfly/commits/main/
+   .. image:: https://img.shields.io/github/issues-closed/py-pdf/pdfly
+      :target: https://github.com/py-pdf/pdfly/issues
+   .. image:: https://img.shields.io/github/issues-pr-closed/py-pdf/pdfly
+      :target: https://github.com/py-pdf/pdfly/pulls
+
+   .. image:: https://img.shields.io/badge/linters-ruff,mypy-green.svg
+      :target: https://github.com/py-pdf/pdfly/actions
+   .. image:: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat
+      :target: https://makeapullrequest.com
+   .. image:: https://img.shields.io/badge/first--timers--only-friendly-blue.svg
+      :target: https://www.firsttimersonly.com/
 
 pdfly (say: PDF-li) is a pure-python cli application for manipulating PDF files.
 
@@ -112,8 +114,10 @@ You can see the help of every subcommand by typing ``--help``:
 GitHub ⭐️
 -----------
 
-.. image:: https://api.star-history.com/svg?repos=py-pdf/pdfly&type=date&legend=top-left
-   :target: https://www.star-history.com/#py-pdf/pdfly&type=date&legend=top-left
+.. only:: html
+
+   .. image:: https://api.star-history.com/svg?repos=py-pdf/pdfly&type=date&legend=top-left
+      :target: https://www.star-history.com/#py-pdf/pdfly&type=date&legend=top-left
 
 .. note:: ``pdfly`` has nothing to do with ``pdfly.net`` or ``gopdfly.com``
 
