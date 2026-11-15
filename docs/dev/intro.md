@@ -86,9 +86,6 @@ finished within the PR and have a test for that feature.
 
 ## Releases
 
-To perform a new release, there is the checklist to follow:
-
-1. update `__version__` in `pdfly/_version.py` & `CHANGELOG.md` in order to specify the release date for the new version
-2. perform a `REL`-prefixed commit, _e.g;_ `REL: X.Y.0"`, then make & merge a PR for it.
-   The Github Actions pipeline should create a new `git` tag, and then publish a new version on Pypi: <https://pypi.org/project/pdfly/#history>
-3. edit the [GitHub release note](https://github.com/py-pdf/pdfly/releases), using the `CHANGELOG.md` content for the description
+Releases are automated via GitHub Actions and PyPI trusted publishing.
+See [Releases](release.md) for the process and for what to do if GitHub is not
+available.

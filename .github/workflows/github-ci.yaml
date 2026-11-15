@@ -130,8 +130,8 @@ jobs:
           python-version: ${{ env.PYTHON_LATEST }}
       - name: Build package
         run: |
-          python -m pip install build check-wheel-contents
-          python -m build
+          python -m pip install uv check-wheel-contents
+          uv build
           ls -l dist
           check-wheel-contents dist/*.whl
       - name: Test installing package
