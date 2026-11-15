@@ -14,7 +14,7 @@ maintainers = [
 ]
 description = "A pure-python CLI application to manipulate PDF files"
 readme = "README.md"
-version = "0.6.0"
+version = "0.7.0"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
