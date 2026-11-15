@@ -5,19 +5,18 @@ Get metadata of a PDF file.
 ## Usage
 
 ```
-pdfly meta --help
-
- Usage: pdfly meta [OPTIONS] PDF
+$ pdfly meta --help
+ Usage: pdfly meta [OPTIONS] {pdf}
 
  Show metadata of a PDF file
 
-╭─ Arguments ───────────────────────────────────────────────────────────────────╮
-│ *    pdf      FILE  [default: None] [required]                                │
-╰───────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────╮
-│ --output  -o      [json|text]  output format [default: text]                  │
-│ --help                         Show this message and exit.                    │
-╰───────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    pdf      <file>  [required]                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --output  -o      <json|text>  output format [default: text]                 │
+│ --help            <bool>       Show this message and exit.                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Example
