@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Source of 2-up.png, which is shown in the docs.
+  After editing, export the PNG from the repository root with:
+  rsvg-convert -z 2 -o docs/diagrams/2-up.png docs/diagrams/2-up.svg
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="270" viewBox="0 0 600 270" role="img" aria-labelledby="title desc">
+  <title id="title">pdfly 2-up</title>
+  <desc id="desc">A PDF with the pages 1 to 5 becomes a PDF with 3 pages: pages 1 and 2 side by side, pages 3 and 4 side by side, and page 5 next to a blank half.</desc>
+  <style>
+    .background { fill: #ffffff; }
+    .page { fill: #ffffff; stroke: #333333; stroke-width: 1.5; }
+    .page-a { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 1.5; }
+    .page-b { fill: #ffedd5; stroke: #c2410c; stroke-width: 1.5; }
+    .blank { fill: #f3f3f3; stroke: #999999; stroke-width: 1.5; stroke-dasharray: 4 3; }
+    .skipped { opacity: 0.35; }
+    .fold { stroke: #999999; stroke-width: 1; stroke-dasharray: 3 3; }
+    .cross { stroke: #c62828; stroke-width: 3; stroke-linecap: round; }
+    .number { font: bold 22px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #222222; text-anchor: middle; }
+    .blank-label { font: 9px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #888888; text-anchor: middle; }
+    .file { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #444444; text-anchor: middle; }
+    .note { font: 11px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #666666; text-anchor: middle; }
+    .command-box { fill: #f4f4f4; stroke: #dddddd; }
+    .command { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #222222; text-anchor: middle; }
+    .arrow { stroke: #555555; stroke-width: 2; fill: none; }
+    .arrow-head { fill: #555555; }
+    .caption { font: 12px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #444444; text-anchor: middle; }
+  </style>
+  <rect class="background" width="600" height="270"/>
+
+  <!-- Input -->
+  <text class="file" x="300" y="22">input.pdf</text>
+  <g>
+    <rect class="page" x="166" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="188" y="72">1</text>
+  </g>
+  <g>
+    <rect class="page" x="222" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="244" y="72">2</text>
+  </g>
+  <g>
+    <rect class="page" x="278" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="300" y="72">3</text>
+  </g>
+  <g>
+    <rect class="page" x="334" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="356" y="72">4</text>
+  </g>
+  <g>
+    <rect class="page" x="390" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="412" y="72">5</text>
+  </g>
+
+  <!-- Command -->
+  <path class="arrow" d="M 300 102 V 148"/>
+  <path class="arrow-head" d="M 294 144 L 306 144 L 300 154 Z"/>
+  <rect class="command-box" x="165.55" y="114" width="268.9" height="24" rx="4"/>
+  <text class="command" x="300" y="130.5">pdfly 2-up input.pdf output.pdf</text>
+
+  <!-- Output -->
+  <text class="file" x="300" y="182">output.pdf</text>
+  <g>
+    <g>
+      <rect class="page" x="144" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="166" y="232">1</text>
+    </g>
+    <g>
+      <rect class="page" x="188" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="210" y="232">2</text>
+    </g>
+    <line class="fold" x1="188" y1="190" x2="188" y2="258"/>
+  </g>
+  <g>
+    <g>
+      <rect class="page" x="256" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="278" y="232">3</text>
+    </g>
+    <g>
+      <rect class="page" x="300" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="322" y="232">4</text>
+    </g>
+    <line class="fold" x1="300" y1="190" x2="300" y2="258"/>
+  </g>
+  <g>
+    <g>
+      <rect class="page" x="368" y="194" width="44" height="60" rx="2"/>
+      <text class="number" x="390" y="232">5</text>
+    </g>
+    <g>
+      <rect class="blank" x="412" y="194" width="44" height="60" rx="2"/>
+      <text class="blank-label" x="434" y="227">blank</text>
+    </g>
+    <line class="fold" x1="412" y1="190" x2="412" y2="258"/>
+  </g>
+</svg>

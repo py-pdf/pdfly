@@ -2,6 +2,8 @@
 
 Remove pages from PDF files.
 
+![Diagram: pdfly rm -o output.pdf input.pdf 1:3 removes the 2nd and 3rd page of a PDF with the pages 1 to 5. The output has the pages 1, 4 and 5.](../diagrams/rm.png)
+
 ## Usage
 
 ```

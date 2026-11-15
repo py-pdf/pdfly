@@ -2,6 +2,8 @@
 
 Put each pair of pages side by side on one page.
 
+![Diagram: a PDF with the pages 1 to 5 becomes a PDF with 3 pages: pages 1 and 2 side by side, pages 3 and 4 side by side, and page 5 next to a blank half.](../diagrams/2-up.png)
+
 ## Usage
 
 ```

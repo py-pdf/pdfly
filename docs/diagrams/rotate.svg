@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Source of rotate.png, which is shown in the docs.
+  After editing, export the PNG from the repository root with:
+  rsvg-convert -z 2 -o docs/diagrams/rotate.png docs/diagrams/rotate.svg
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="306" viewBox="0 0 600 306" role="img" aria-labelledby="title desc">
+  <title id="title">pdfly rotate</title>
+  <desc id="desc">A PDF with the pages 1 to 3. The page range 1 selects the 2nd page, which is turned by 90 degrees clockwise. Pages 1 and 3 stay unchanged.</desc>
+  <style>
+    .background { fill: #ffffff; }
+    .page { fill: #ffffff; stroke: #333333; stroke-width: 1.5; }
+    .page-a { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 1.5; }
+    .page-b { fill: #ffedd5; stroke: #c2410c; stroke-width: 1.5; }
+    .blank { fill: #f3f3f3; stroke: #999999; stroke-width: 1.5; stroke-dasharray: 4 3; }
+    .skipped { opacity: 0.35; }
+    .fold { stroke: #999999; stroke-width: 1; stroke-dasharray: 3 3; }
+    .cross { stroke: #c62828; stroke-width: 3; stroke-linecap: round; }
+    .number { font: bold 22px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #222222; text-anchor: middle; }
+    .blank-label { font: 9px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #888888; text-anchor: middle; }
+    .file { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #444444; text-anchor: middle; }
+    .note { font: 11px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #666666; text-anchor: middle; }
+    .command-box { fill: #f4f4f4; stroke: #dddddd; }
+    .command { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #222222; text-anchor: middle; }
+    .arrow { stroke: #555555; stroke-width: 2; fill: none; }
+    .arrow-head { fill: #555555; }
+    .caption { font: 12px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #444444; text-anchor: middle; }
+  </style>
+  <rect class="background" width="600" height="306"/>
+
+  <!-- Input -->
+  <text class="file" x="300" y="22">input.pdf</text>
+  <g>
+    <rect class="page" x="222" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="244" y="72">1</text>
+  </g>
+  <g>
+    <rect class="page" x="278" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="300" y="72">2</text>
+  </g>
+  <g>
+    <rect class="page" x="334" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="356" y="72">3</text>
+  </g>
+  <text class="note" x="300" y="112">1 = the 2nd page</text>
+
+  <!-- Command -->
+  <path class="arrow" d="M 300 118 V 164"/>
+  <path class="arrow-head" d="M 294 160 L 306 160 L 300 170 Z"/>
+  <rect class="command-box" x="126.05" y="130" width="347.9" height="24" rx="4"/>
+  <text class="command" x="300" y="146.5">pdfly rotate -o output.pdf input.pdf 90 1</text>
+
+  <!-- Output -->
+  <text class="file" x="300" y="198">output.pdf</text>
+  <g>
+    <rect class="page" x="214" y="210" width="44" height="60" rx="2"/>
+    <text class="number" x="236" y="248">1</text>
+  </g>
+  <g>
+    <rect class="page" x="270" y="218" width="60" height="44" rx="2"/>
+    <text class="number" x="300" y="248" transform="rotate(90 300 240)">2</text>
+  </g>
+  <g>
+    <rect class="page" x="342" y="210" width="44" height="60" rx="2"/>
+    <text class="number" x="364" y="248">3</text>
+  </g>
+  <text class="note" x="300" y="290">turned by 90° clockwise</text>
+</svg>

@@ -19,6 +19,25 @@ To preview the HTML documentation, you can run this command:
 sphinx-autobuild docs docs/_build/html
 ```
 
+### Diagrams
+
+The diagrams in `docs/diagrams/` explain what a command does. Each one has an
+SVG source, which you can edit in [Inkscape](https://inkscape.org/) or a text
+editor, and a PNG, which the documentation shows. The PDF version of the
+documentation cannot show SVG files.
+
+After editing an SVG file, export the PNG at twice its size, e.g.:
+```
+rsvg-convert -z 2 -o docs/diagrams/2-up.png docs/diagrams/2-up.svg
+```
+
+`rsvg-convert` is part of librsvg (`apt install librsvg2-bin` or
+`brew install librsvg`). Show the PNG in the Markdown file of the command with a
+description of the diagram as alternative text:
+```
+![Diagram: what the command does](../diagrams/2-up.png)
+```
+
 ## Tools: git and pre-commit
 
 Git is a command line application for version control. If you don't know it,
