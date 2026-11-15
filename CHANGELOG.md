@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+### Developer Experience (DEV)
+- Add CLI regression tests for the 2-up and uncompress help text (#305)
+
 ## Version 0.7.0, 2026-11-15
 
 ### New Features (ENH)
