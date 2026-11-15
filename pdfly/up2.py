@@ -1,9 +1,15 @@
 """
-Create a booklet-style PDF from a single input.
+Put each pair of pages side by side on one page.
 
-Pairs of two pages will be put on one page (left and right)
+Pages 1 and 2 become the left and right half of the first output page,
+pages 3 and 4 the left and right half of the second one, and so on.
+If the number of pages is odd, the right half of the last output page
+stays blank. The page order is not changed; use `pdfly booklet` to
+reorder the pages for booklet printing.
 
-usage: python 2-up.py input_file output_file
+Example:
+    pdfly 2-up input.pdf output.pdf
+
 """
 
 from pathlib import Path

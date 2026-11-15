@@ -1,4 +1,13 @@
-"""Module for uncompressing PDF content streams."""
+"""
+Uncompress the page content streams of a PDF.
+
+This makes the drawing operators of every page human-readable, e.g. for
+debugging. Fonts, images and other streams are not uncompressed.
+
+Example:
+    pdfly uncompress input.pdf output.pdf
+
+"""
 
 from pathlib import Path
 
