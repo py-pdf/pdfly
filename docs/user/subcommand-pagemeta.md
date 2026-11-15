@@ -6,18 +6,17 @@ Give details about a PDF's single page.
 
 ```
 $ pdfly pagemeta --help
- Usage: pdfly pagemeta [OPTIONS] PDF PAGE_INDEX
+ Usage: pdfly pagemeta [OPTIONS] {pdf} {page_index}
 
  Give details about a single page.
 
-
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│ *    pdf             FILE     [default: None] [required]                     │
-│ *    page_index      INTEGER  [default: None] [required]                     │
+│ *    pdf             <file>  [required]                                      │
+│ *    page_index      <int>   [required]                                      │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --output  -o      [json|text]  output format [default: text]                 │
-│ --help                         Show this message and exit.                   │
+│ --output  -o      <json|text>  output format [default: text]                 │
+│ --help            <bool>       Show this message and exit.                   │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 

@@ -5,16 +5,16 @@ Extract all links from a PDF document.
 ```
 $ pdfly extract-links --help
 
- Usage: pdfly extract-links [OPTIONS] PDF
+ Usage: pdfly extract-links [OPTIONS] {pdf}
 
  Extract all links from a PDF document.
 
 ╭─ Arguments ───────────────────────────────────────────────────╮
-│ *    pdf      FILE  [required]                                │
+│ *    pdf      <file>  [required]                              │
 ╰───────────────────────────────────────────────────────────────╯
 ╭─ Options ─────────────────────────────────────────────────────╮
-│ --format  -f      [json|text]  Output format [default: text]  │
-│ --help                         Show this message and exit.    │
+│ --format  -f      <json|text>  Output format [default: text]  │
+│ --help            <bool>       Show this message and exit.    │
 ╰───────────────────────────────────────────────────────────────╯
 ```
 

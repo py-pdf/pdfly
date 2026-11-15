@@ -1,24 +1,34 @@
 # uncompress
 
-Module for uncompressing PDF content streams.
+Uncompress the page content streams of a PDF.
+
 ## Usage
 
 ```
-$ pdfly ucompress --help
- Module for uncompressing PDF content streams.
+$ pdfly uncompress --help
+ Usage: pdfly uncompress [OPTIONS] {pdf} {output}
 
- ╭─ Arguments ───────────────────────────────────────────╮
- │ *    pdf         FILE  [default: None] [required]     │
- │ *    output      PATH  [default: None] [required]     │
- ╰───────────────────────────────────────────────────────╯
- ╭─ Options ─────────────────────────────────────────────╮
- │ --help          Show this message and exit.           │
- ╰───────────────────────────────────────────────────────╯
+ Uncompress the page content streams of a PDF.
+
+ This makes the drawing operators of every page human-readable, e.g. for
+ debugging. Fonts, images and other streams are not uncompressed.
+
+ Example:
+     pdfly uncompress input.pdf output.pdf
+
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    pdf         <file>  [required]                                          │
+│ *    output      <path>  [required]                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help        <bool>  Show this message and exit.                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Examples
 
-Uncompress `document_compressed.pdf` and output `document.pdf`.
+Uncompress the page content streams of `document_compressed.pdf` and write the
+output to `document.pdf`:
 
 ```
 pdfly uncompress document_compressed.pdf document.pdf
