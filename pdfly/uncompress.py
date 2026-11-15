@@ -1,4 +1,4 @@
-"""Module for uncompressing PDF content streams."""
+"""Uncompress the content streams of a PDF."""
 
 from pathlib import Path
 

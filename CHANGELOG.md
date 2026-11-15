@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bug Fixes (BUG)
+- Correct the command descriptions and example in 2-up and uncompress help (#289)
+
 ## Version 0.6.0, 2026-11-14
 
 ### Deprecations (DEP)

@@ -1,9 +1,9 @@
 """
-Create a booklet-style PDF from a single input.
+Put each pair of input pages side by side on one output page.
 
-Pairs of two pages will be put on one page (left and right)
+Example:
+    pdfly 2-up input.pdf output.pdf
 
-usage: python 2-up.py input_file output_file
 """
 
 from pathlib import Path
