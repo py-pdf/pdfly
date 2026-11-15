@@ -1,5 +1,9 @@
 # rotate
 
+Rotate pages of a PDF.
+
+![Diagram: pdfly rotate -o output.pdf input.pdf 90 1 turns the 2nd page of a PDF with the pages 1 to 3 by 90 degrees clockwise. Pages 1 and 3 stay unchanged.](../diagrams/rotate.png)
+
 ## Usage
 
 ```

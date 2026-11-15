@@ -3,6 +3,7 @@
 The cat command can split / extract pages from a PDF. It can also
 join/merge/combine multiple PDF documents into a single one.
 
+![Diagram: pdfly cat -o output.pdf a.pdf b.pdf 1: puts the pages A1 and A2 of a.pdf and the pages B2 and B3 of b.pdf one after the other. The page range 1: skips the first page of b.pdf.](../diagrams/cat.png)
 
 ## Usage
 

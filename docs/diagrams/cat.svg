@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Source of cat.png, which is shown in the docs.
+  After editing, export the PNG from the repository root with:
+  rsvg-convert -z 2 -o docs/diagrams/cat.png docs/diagrams/cat.svg
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="286" viewBox="0 0 600 286" role="img" aria-labelledby="title desc">
+  <title id="title">pdfly cat</title>
+  <desc id="desc">a.pdf has the pages A1 and A2, b.pdf has the pages B1, B2 and B3. The page range 1: selects b.pdf from its second page on. The output has the pages A1, A2, B2 and B3, one after the other.</desc>
+  <style>
+    .background { fill: #ffffff; }
+    .page { fill: #ffffff; stroke: #333333; stroke-width: 1.5; }
+    .page-a { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 1.5; }
+    .page-b { fill: #ffedd5; stroke: #c2410c; stroke-width: 1.5; }
+    .blank { fill: #f3f3f3; stroke: #999999; stroke-width: 1.5; stroke-dasharray: 4 3; }
+    .skipped { opacity: 0.35; }
+    .fold { stroke: #999999; stroke-width: 1; stroke-dasharray: 3 3; }
+    .cross { stroke: #c62828; stroke-width: 3; stroke-linecap: round; }
+    .number { font: bold 22px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #222222; text-anchor: middle; }
+    .blank-label { font: 9px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #888888; text-anchor: middle; }
+    .file { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #444444; text-anchor: middle; }
+    .note { font: 11px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #666666; text-anchor: middle; }
+    .command-box { fill: #f4f4f4; stroke: #dddddd; }
+    .command { font: 13px "DejaVu Sans Mono", Menlo, Consolas, monospace; fill: #222222; text-anchor: middle; }
+    .arrow { stroke: #555555; stroke-width: 2; fill: none; }
+    .arrow-head { fill: #555555; }
+    .caption { font: 12px "DejaVu Sans", Helvetica, Arial, sans-serif; fill: #444444; text-anchor: middle; }
+  </style>
+  <rect class="background" width="600" height="286"/>
+
+  <!-- Input -->
+  <text class="file" x="192" y="22">a.pdf</text>
+  <text class="file" x="380" y="22">b.pdf</text>
+  <g>
+    <rect class="page-a" x="142" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="164" y="72">A1</text>
+  </g>
+  <g>
+    <rect class="page-a" x="198" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="220" y="72">A2</text>
+  </g>
+  <g class="skipped">
+    <rect class="page-b" x="302" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="324" y="72">B1</text>
+  </g>
+  <g>
+    <rect class="page-b" x="358" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="380" y="72">B2</text>
+  </g>
+  <g>
+    <rect class="page-b" x="414" y="34" width="44" height="60" rx="2"/>
+    <text class="number" x="436" y="72">B3</text>
+  </g>
+  <text class="note" x="380" y="112">1: = from the 2nd page on</text>
+
+  <!-- Command -->
+  <path class="arrow" d="M 300 118 V 164"/>
+  <path class="arrow-head" d="M 294 160 L 306 160 L 300 170 Z"/>
+  <rect class="command-box" x="137.9" y="130" width="324.2" height="24" rx="4"/>
+  <text class="command" x="300" y="146.5">pdfly cat -o output.pdf a.pdf b.pdf 1:</text>
+
+  <!-- Output -->
+  <text class="file" x="300" y="198">output.pdf</text>
+  <g>
+    <rect class="page-a" x="194" y="210" width="44" height="60" rx="2"/>
+    <text class="number" x="216" y="248">A1</text>
+  </g>
+  <g>
+    <rect class="page-a" x="250" y="210" width="44" height="60" rx="2"/>
+    <text class="number" x="272" y="248">A2</text>
+  </g>
+  <g>
+    <rect class="page-b" x="306" y="210" width="44" height="60" rx="2"/>
+    <text class="number" x="328" y="248">B2</text>
+  </g>
+  <g>
+    <rect class="page-b" x="362" y="210" width="44" height="60" rx="2"/>
+    <text class="number" x="384" y="248">B3</text>
+  </g>
+</svg>
