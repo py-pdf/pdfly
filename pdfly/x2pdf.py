@@ -4,7 +4,7 @@ from io import BytesIO
 from pathlib import Path
 
 from fpdf import FPDF
-from PIL import Image
+from PIL import ExifTags, Image, ImageOps
 from pypdf import PdfReader, PdfWriter
 from rich.console import Console
 
@@ -19,11 +19,14 @@ def px_to_mm(px: float) -> float:
 
 def image_to_pdf(filepath: Path) -> BytesIO:
     with Image.open(filepath) as cover:
-        w, h = cover.size
+        # Phone photos store their rotation in the EXIF Orientation tag
+        rotated = cover.getexif().get(ExifTags.Base.Orientation, 1) != 1
+        image = ImageOps.exif_transpose(cover) if rotated else None
+        w, h = (image or cover).size
     width, height = px_to_mm(w), px_to_mm(h)
     pdf = FPDF(unit="mm")
     pdf.add_page(format=(width, height))
-    pdf.image(filepath, x=0, y=0)
+    pdf.image(image or filepath, x=0, y=0)
     return BytesIO(pdf.output())
 
 
