@@ -167,3 +167,34 @@ def test_x2pdf_keeps_the_order_of_the_input_pages(
     assert exit_code == 0, captured
     widths = [round(page.mediabox.width) for page in PdfReader(output).pages]
     assert widths == expected_widths
+
+
+@pytest.mark.parametrize(
+    ("orientation", "expected_size"),
+    [
+        pytest.param(1, (400, 300), id="no-rotation"),
+        pytest.param(6, (300, 400), id="rotate-90"),
+        pytest.param(3, (400, 300), id="rotate-180"),
+    ],
+)
+def test_x2pdf_applies_exif_orientation(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+    orientation: int,
+    expected_size: tuple[int, int],
+) -> None:
+    # Arrange
+    photo = tmp_path / "photo.jpg"
+    exif = Image.Exif()
+    exif[0x0112] = orientation
+    Image.new("RGB", (400, 300), "white").save(photo, exif=exif)
+    output = tmp_path / "out.pdf"
+
+    # Act
+    exit_code = run_cli(["x2pdf", str(photo), "--output", str(output)])
+
+    # Assert
+    captured = capsys.readouterr()
+    assert exit_code == 0, captured
+    mediabox = PdfReader(output).pages[0].mediabox
+    assert (round(mediabox.width), round(mediabox.height)) == expected_size
