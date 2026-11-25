@@ -77,10 +77,15 @@ def main(
     # so the PDF is first written to a buffer, then copied to stdout.
     output_fh = open(output, "wb") if output else BytesIO()
 
+    if inverted_page_selection:
+        # All ranges after one file argument are removed from a single copy of it.
+        groups = file_argument_groups([str(filename), *(fn_pgrgs or [])])
+        removed: set[int] = set()
+
     writer = PdfWriter()
     in_fs = {}
     try:
-        for filepath, page_range in filename_page_ranges:
+        for i, (filepath, page_range) in enumerate(filename_page_ranges):
             if verbose:
                 print(filepath, page_range, file=sys.stderr)
             if filepath not in in_fs:
@@ -109,11 +114,12 @@ def main(
                     file=sys.stderr,
                 )
             if inverted_page_selection:
-                all_page_nums = set(range(len(reader.pages)))
-                page_nums = set(range(*page_range.indices(len(reader.pages))))
-                inverted_page_nums = all_page_nums - page_nums
-                for page_num in inverted_page_nums:
-                    writer.add_page(reader.pages[page_num])
+                removed |= set(range(*page_range.indices(num_pages)))
+                if i + 1 == len(groups) or groups[i + 1] != groups[i]:
+                    for page_num in range(num_pages):
+                        if page_num not in removed:
+                            writer.add_page(reader.pages[page_num])
+                    removed = set()
             else:
                 for page_num in range(*page_range.indices(len(reader.pages))):
                     writer.add_page(reader.pages[page_num])
@@ -128,6 +134,23 @@ def main(
         output_fh.close()
     # In 3.0, input files must stay open until output is written.
     # Not closing the in_fs because this script exits now.
+
+
+def file_argument_groups(args: list[str]) -> list[int]:
+    """For each (file, range) pair parse_filename_page_ranges returns, the index of its file argument."""
+    groups: list[int] = []
+    file_index = -1
+    had_range = False
+    for arg in [*args, None]:
+        if PageRange.valid(arg):
+            groups.append(file_index)
+            had_range = True
+        else:
+            if file_index >= 0 and not had_range:
+                groups.append(file_index)
+            file_index += 1
+            had_range = False
+    return groups
 
 
 def parse_filepaths_and_pagerange_args(

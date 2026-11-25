@@ -42,6 +42,25 @@ def test_rm_subset_ok(capsys: CaptureFixture[str], tmp_path: Path) -> None:
     assert len(out_reader.pages) == len(inp_reader.pages) - 2
 
 
+def test_rm_several_ranges_of_one_file(tmp_path: Path) -> None:
+    with chdir(tmp_path):
+        exit_code = run_cli(
+            [
+                "rm",
+                str(RESOURCES_ROOT / "input8.pdf"),
+                "1:3",
+                "5",
+                "-o",
+                "out.pdf",
+            ]
+        )
+    assert exit_code == 0
+    texts = [
+        p.extract_text().strip() for p in PdfReader(tmp_path / "out.pdf").pages
+    ]
+    assert texts == ["1", "4", "5", "7", "8"]
+
+
 @pytest.mark.parametrize(
     "page_range",
     ["a", "-", "1-", "1-1-1", "1:1:1:1"],
