@@ -8,13 +8,8 @@ from pypdf import PdfReader, PdfWriter
 
 
 def main(pdf: Path, output: Path) -> None:
-    reader = PdfReader(pdf)
-    writer = PdfWriter()
-    for page in reader.pages:
-        writer.add_page(page)
-
-    if reader.metadata:
-        writer.add_metadata(reader.metadata)
+    # clone the whole document, so form fields, bookmarks and metadata are kept
+    writer = PdfWriter(clone_from=PdfReader(pdf))
 
     for page in writer.pages:
         page.compress_content_streams()

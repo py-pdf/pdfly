@@ -146,3 +146,22 @@ def test_rotate_invalid_pdf(
     out = "".join(capsys.readouterr().out.split())
     assert "".join(f"Error while rotating {not_a_pdf}".split()) in out
     assert not (tmp_path / "out.pdf").exists()
+
+
+def test_rotate_keeps_outline_and_form(tmp_path: Path) -> None:
+    from .test_compress import make_pdf_with_outline_and_form
+
+    in_fname = tmp_path / "in.pdf"
+    out_fname = tmp_path / "out.pdf"
+    make_pdf_with_outline_and_form(in_fname)
+
+    exit_code = run_cli(["rotate", str(in_fname), "90", "-o", str(out_fname)])
+
+    assert exit_code == 0
+    reader = PdfReader(out_fname)
+    assert [page.rotation for page in reader.pages] == [90, 90]
+    assert [item.title for item in reader.outline] == [
+        "Chapter 1",
+        "Chapter 2",
+    ]
+    assert "/AcroForm" in reader.root_object
