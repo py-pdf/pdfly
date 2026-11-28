@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 from fpdf import FPDF
 from pypdf import PdfReader, PdfWriter
+from pypdf.generic import ArrayObject, DictionaryObject, NameObject
 from typer.testing import CliRunner
 
 from pdfly.cli import entry_point
@@ -250,3 +251,37 @@ def test_compress_pdf_without_metadata(tmp_path: Path) -> None:
     reader = PdfReader(output_pdf)
     assert len(reader.pages) == 1
     assert "Some text to compress." in reader.pages[0].extract_text()
+
+
+def make_pdf_with_outline_and_form(path: Path) -> None:
+    pdf = FPDF()
+    for title in ("Chapter 1", "Chapter 2"):
+        pdf.add_page()
+        pdf.start_section(title)
+        pdf.set_font("helvetica", size=12)
+        pdf.cell(text=title)
+    pdf.output(path)
+
+    writer = PdfWriter(clone_from=path)
+    writer.root_object[NameObject("/AcroForm")] = writer._add_object(
+        DictionaryObject({NameObject("/Fields"): ArrayObject()})
+    )
+    writer.write(path)
+
+
+def test_compress_keeps_outline_and_form(tmp_path: Path) -> None:
+    input_pdf = tmp_path / "in.pdf"
+    output_pdf = tmp_path / "out.pdf"
+    make_pdf_with_outline_and_form(input_pdf)
+
+    result = runner.invoke(
+        entry_point, ["compress", str(input_pdf), str(output_pdf)]
+    )
+
+    assert result.exit_code == 0, result.output
+    reader = PdfReader(output_pdf)
+    assert [item.title for item in reader.outline] == [
+        "Chapter 1",
+        "Chapter 2",
+    ]
+    assert "/AcroForm" in reader.root_object

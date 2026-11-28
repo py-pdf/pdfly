@@ -56,17 +56,15 @@ def main(
 ) -> None:
     try:
         # set up the streams
-        reader = PdfReader(filename)
-        pages = list(reader.pages)
-        writer = PdfWriter()
+        # clone the whole document, so form fields and bookmarks are kept
+        writer = PdfWriter(clone_from=PdfReader(filename))
 
         # Convert the page range into a set of page numbers
-        pages_to_rotate = convert_range_to_pages(page_range, len(pages))
+        pages_to_rotate = convert_range_to_pages(page_range, len(writer.pages))
 
-        for page_index, page in enumerate(pages):
+        for page_index, page in enumerate(writer.pages):
             if page_index in pages_to_rotate:
-                page = page.rotate(degrees)
-            writer.add_page(page)
+                page.rotate(degrees)
 
         # Everything looks good! Write the output file.
         with open(output, "wb") as output_fh:
